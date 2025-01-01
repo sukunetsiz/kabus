@@ -3,9 +3,9 @@
 @section('content')
     <div class="error-container">
         <div class="error-code">500</div>
-        <div class="error-message">Internal Server Error</div>
+        <div class="error-message">Our Server is Having a Monday Moment</div>
         <div class="error-description">
-            Oops! Something went wrong on our end. We're working to fix the problem. Please try again later or contact our support team if the issue persists.
+            Even our mighty server sometimes needs a coffee break! Right now it's having what we call a "technical brain freeze" - you know, like when you eat ice cream too fast, but with code. Our tech team is already brewing a fresh pot of coffee and working on perking things up. Maybe try again in a bit when the server has had its caffeine fix?
         </div>
         <a href="{{ url('/') }}" class="home-button">Return to {{ config('app.name') }}</a>
     </div>

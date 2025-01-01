@@ -3,9 +3,9 @@
 @section('content')
     <div class="error-container">
         <div class="error-code">503</div>
-        <div class="error-message">Service Unavailable</div>
+        <div class="error-message">Spa Day for Our Servers!</div>
         <div class="error-description">
-            Our site is currently under maintenance or experiencing high load. We'll be back shortly. Thank you for your patience.
+            Our servers are getting their well-deserved spa treatment (aka maintenance). They're enjoying a deep tissue defrag, a memory cache facial, and a bandwidth massage. We'll be back before you can say "Have you tried turning it off and on again?"
         </div>
         <a href="{{ url('/') }}" class="home-button">Return to {{ config('app.name') }}</a>
     </div>

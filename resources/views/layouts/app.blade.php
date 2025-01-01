@@ -23,8 +23,9 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-left">
-                    <a href="{{ route('kabus-pgp-key') }}" class="footer-button">PGP Key</a>
+                <a href="{{ route('kabus-pgp-key') }}" class="footer-button">PGP Key</a>
+                <div class="javascript-warning-left js-warning-elements">
+                    <span class="javascript-warning-text-left">Please Disable JavaScript</span>
                 </div>
                 <div class="xmr-price">
                     <span class="xmr-price-label">XMR/USD:</span>
@@ -39,11 +40,22 @@
                         @endif
                     </span>
                 </div>
-                <div class="footer-right">
-                    <a href="{{ route('kabus-current-status') }}" class="footer-button">Current Status</a>
+
+                <div class="javascript-warning-right js-warning-elements">
+                    <img src="{{ asset('images/javascript-logo.png') }}" alt="JavaScript Logo" class="javascript-warning-icon">
+                    <span class="javascript-warning-text-right">Warning</span>
+                    <img src="{{ asset('images/javascript-warning.gif') }}" alt="JavaScript Warning" class="javascript-warning-gif">
                 </div>
+                <a href="{{ route('kabus-current-status') }}" class="footer-button">Current Status</a>
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.js-warning-elements').forEach(function(element) {
+                element.style.display = 'flex';
+            });
+        });
+    </script>
 </body>
 </html>
