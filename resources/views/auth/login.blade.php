@@ -1,8 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Kabus Market')
 @section('content')
 <div class="auth-container">
-    <h2>Login to Kabus Market</h2>
+    <h2>Login to {{ config('app.name') }}</h2>
     <form class="auth-form" action="{{ route('login') }}" method="POST">
         @csrf
         <div class="form-group text-center">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="update-status-container">
     <div class="update-status-card">
-        <h2 class="update-status-title">{{ __('Kabus Market Status') }}</h2>
+    <h2 class="update-status-title">{{ config('app.name') }} {{ __('Status') }}</h2>
 
         @if (session('success'))
             <div class="update-status-alert update-status-alert-success" role="alert">

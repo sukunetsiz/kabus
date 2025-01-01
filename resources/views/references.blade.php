@@ -1,7 +1,4 @@
 @extends('layouts.app')
-
-@section('title', 'Kabus Market')
-
 @section('content')
 <div class="container references-container">
     <div class="references-row">

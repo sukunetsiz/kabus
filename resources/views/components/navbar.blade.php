@@ -15,9 +15,9 @@
                         <a href="#" class="icon-btn"><span class="nav-icon">🛒</span></a>
                     @endauth
                     <span class="brand-text">
-                        Kabus
+                        {{ config('app.name') }}
                     <img src="{{ asset('favicon.ico') }}" alt="Logo" class="brand-logo">
-                        Market
+                        Script
                     </span>
                     @auth
                         <a href="{{ route('notifications.index') }}" class="icon-btn"><span class="nav-icon">🔔</span></a>

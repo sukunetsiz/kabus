@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabus Market</title>
+    <meta name="robots" content="noindex, nofollow">
+    <title>Kabus</title>
     <style>
-        /* Existing styles */
         body {
             font-family: "Arial", sans-serif;
             margin: 0;
@@ -85,7 +85,6 @@
             margin-top: 20px;
         }
 
-        /* Loading animation styles */
         .loading-animation {
             width: 50px;
             height: 50px;
@@ -129,17 +128,17 @@
         <div class="maintenance-icon">
             🔧
         </div>
-        <h1 class="maintenance-title">Kabus Market Bakımda</h1>
+        <h1 class="maintenance-title">Kabus Under Maintenance</h1>
         <p class="maintenance-message">
-            Sitemizde planlanmış bir bakım çalışması. Ekibimiz, Kabus Market'i mümkün olan en kısa sürede çevrimiçi olacak hale getirmek için çalışıyor.
+            We are currently performing scheduled maintenance. Our team is working to bring Kabus back online as soon as possible.
         </p>
         <div class="maintenance-info">
-            <strong>Ne oluyor?</strong>
-            Sistemlerimizi yükseltiyor ve temel bakım yaparak daha iyi performans ve güvenlik sağlıyoruz. Bu işlem genellikle birkaç saat sürüyor.
+            <strong>What's happening?</strong>
+            We are upgrading our systems and performing essential maintenance to ensure better performance and security. This process typically takes a few hours. Please be patient and stay calm. We are safe.
         </div>
         <div class="loading-animation"></div>
         <div class="maintenance-status">
-            ⏰ Tahmini Süre: Belirsiz
+            ⏰ Estimated Time: Undetermined
         </div>
     </div>
 </body>

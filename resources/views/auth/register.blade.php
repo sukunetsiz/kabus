@@ -1,9 +1,8 @@
 @extends('layouts.app')
-@section('title', 'Kabus Market')
 @section('content')
 <div class="register-page">
     <div class="auth-container text-center">
-        <h2>Register to Kabus Market</h2>
+        <h2>Register to {{ config('app.name') }}</h2>
         <form class="auth-form" action="{{ route('register') }}" method="POST">
             @csrf
             <div class="form-group">

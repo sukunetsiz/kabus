@@ -5,7 +5,7 @@
 <div class="admin-panel-container">
     <div class="admin-panel-card">
         <h1 class="admin-panel-title">Admin Panel</h1>
-        <p class="admin-panel-welcome">Welcome to the Admin Panel. Here you can manage various aspects of Kabus Market.</p>
+        <p class="admin-panel-welcome">Welcome to the Admin Panel. Here you can manage various aspects of {{ config('app.name') }}.</p>
         
         <div class="admin-panel-grid">
             <div class="admin-panel-item">
@@ -68,7 +68,7 @@
                 <div class="admin-panel-item-icon">
                 </div>
                 <h3 class="admin-panel-item-title">📅 Current Status 📅</h3>
-                <p class="admin-panel-item-description">Update the current status of Kabus Market.</p>
+                <p class="admin-panel-item-description">Update the current status of {{ config('app.name') }}.</p>
                 <a href="{{ route('admin.update-status') }}" class="admin-panel-item-link">Update Current Status</a>
             </div>
         </div>

@@ -334,7 +334,7 @@ class AdminController extends Controller
     public function categories()
     {
         $mainCategories = Category::mainCategories();
-        return view('admin.categories.index', compact('mainCategories'));
+        return view('admin.categories', compact('mainCategories'));
     }
 
     public function storeCategory(Request $request)

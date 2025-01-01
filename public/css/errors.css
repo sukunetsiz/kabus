@@ -8,7 +8,6 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
-
 .error-container {
     display: flex;
     flex-direction: column;
@@ -17,26 +16,22 @@ body {
     height: 100vh;
     text-align: center;
 }
-
 .error-code {
     font-size: 120px;
     color: #bb86fc;
     margin-bottom: 20px;
 }
-
 .error-message {
     font-size: 24px;
     color: #e0e0e0;
     margin-bottom: 30px;
 }
-
 .error-description {
     font-size: 18px;
     color: #a0a0a0;
     margin-bottom: 40px;
     max-width: 600px;
 }
-
 .home-button {
     display: inline-block;
     padding: 12px 24px;
@@ -47,7 +42,6 @@ body {
     font-weight: bold;
     transition: all 0.3s ease;
 }
-
 .home-button:hover {
     background-color: #9966cc;
     transform: translateY(-2px);

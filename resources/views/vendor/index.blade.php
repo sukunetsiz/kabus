@@ -3,14 +3,13 @@
 <div class="admin-panel-container">
     <div class="admin-panel-card">
         <h1 class="admin-panel-title">Vendor Panel</h1>
-        <p class="admin-panel-welcome">Welcome to the Vendor Panel. Here you can manage your products in Kabus Market.</p>
-        
+        <p class="admin-panel-welcome">Welcome to the Vendor Panel. Here you can manage your products in {{ config('app.name') }}.</p>     
         <div class="admin-panel-grid">
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
                 <h3 class="admin-panel-item-title">⛔Add Digital⛔</h3>
-                <p class="admin-panel-item-description">You can add digital products to Kabus Market.</p>
+                <p class="admin-panel-item-description">You can add digital products to {{ config('app.name') }}.</p>
                 <a href="{{ route('vendor.products.digital.create') }}" class="admin-panel-item-link">Add Digital Product</a>
             </div>
             
@@ -56,7 +55,7 @@
                 <div class="admin-panel-item-icon">
                 </div>
                 <h3 class="admin-panel-item-title">⛔My Products⛔</h3>
-                <p class="admin-panel-item-description">You can view all products you have listed for sale on Kabus Market.</p>
+                <p class="admin-panel-item-description">You can view all products you have listed for sale on {{ config('app.name') }}.</p>
                 <a href="#" class="admin-panel-item-link">View My Products</a>
             </div>
             
