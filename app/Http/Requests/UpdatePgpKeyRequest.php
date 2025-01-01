@@ -34,8 +34,8 @@ class UpdatePgpKeyRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'public_key.max' => 'PGP açık anahtarı 8000 karakteri geçmemelidir.',
-            'public_key.regex' => 'PGP açık anahtarı doğru formatta olmalıdır.',
+            'public_key.max' => 'PGP public key must not exceed 8000 characters.',
+            'public_key.regex' => 'PGP public key must be in the correct format.',
         ];
     }
 }

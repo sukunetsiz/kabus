@@ -22,10 +22,10 @@ class ForgotPasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'username.required' => 'Lütfen kullanıcı adınızı girin.',
-            'username.max' => 'Kullanıcı adı 16 karakterden uzun olamaz.',
-            'mnemonic.required' => 'Lütfen anımsatıcı cümlenizi girin.',
-            'mnemonic.max' => 'Anımsatıcı cümle 512 karakterden uzun olamaz.',
+            'username.required' => 'Please enter your username.',
+            'username.max' => 'Username cannot be longer than 16 characters.',
+            'mnemonic.required' => 'Please enter your mnemonic phrase.',
+            'mnemonic.max' => 'Mnemonic phrase cannot be longer than 512 characters.',
         ];
     }
 }

@@ -30,13 +30,13 @@ class ResetPasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'token.required' => 'Sıfırlama jetonu gereklidir.',
-            'password.required' => 'Şifre gereklidir.',
-            'password.min' => 'Şifre en az 8 karakter olmalıdır.',
-            'password.max' => 'Şifre 40 karakteri geçemez.',
-            'password.confirmed' => 'Şifre onayı eşleşmiyor.',
-            'password.regex' => 'Şifre en az bir küçük harf, bir büyük harf, bir rakam ve bir özel karakter içermelidir.',
-            'password_confirmation.required' => 'Lütfen şifrenizi onaylayın.',
+            'token.required' => 'Reset token is required.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.max' => 'Password cannot exceed 40 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.regex' => 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+            'password_confirmation.required' => 'Please confirm your password.',
         ];
     }
 }

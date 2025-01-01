@@ -26,7 +26,7 @@ class AuthRequest extends FormRequest
     private function registrationRules(): array
     {
         $captchaLength = strlen($this->session()->get('captcha_code', ''));
-        return [
+        $rules = [
             'username' => [
                 'required',
                 'string',
@@ -44,22 +44,35 @@ class AuthRequest extends FormRequest
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]])[A-Za-z\d#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]]{8,}$/',
             ],
             'password_confirmation' => ['required', 'string'],
-            'reference_code' => [
-                'required',
-                'string',
-                'size:16',
-                function ($attribute, $value, $fail) {
+            'captcha' => ['required', 'string', "size:$captchaLength"],
+        ];
+
+        // Reference code validation rules
+        $referenceCodeRules = [
+            'string',
+            'size:16',
+            function ($attribute, $value, $fail) {
+                if ($value !== null) {
                     $validReference = User::all()->contains(function ($user) use ($value) {
                         return $user->reference_id === $value;
                     });
 
                     if (!$validReference) {
-                        $fail('Geçersiz referans numarası.');
+                        $fail('Invalid reference number.');
                     }
-                },
-            ],
-            'captcha' => ['required', 'string', "size:$captchaLength"],
+                }
+            },
         ];
+
+        // Add required rule if configured
+        if (config('marketplace.require_reference_code', true)) {
+            array_unshift($referenceCodeRules, 'required');
+        } else {
+            array_unshift($referenceCodeRules, 'nullable');
+        }
+
+        $rules['reference_code'] = $referenceCodeRules;
+        return $rules;
     }
 
     private function loginRules(): array
@@ -87,19 +100,19 @@ class AuthRequest extends FormRequest
     {
         $captchaLength = strlen($this->session()->get('captcha_code', ''));
         return [
-            'username.required' => 'Kullanıcı adı gereklidir.',
-            'username.min' => 'Kullanıcı adı en az 4 karakter olmalıdır.',
-            'username.max' => 'Kullanıcı adı 16 karakteri geçemez.',
-            'username.unique' => 'Bu kullanıcı adı zaten alınmış.',
-            'username.regex' => 'Kullanıcı adı yalnızca harf ve rakam içerebilir.',
-            'password.required' => 'Şifre gereklidir.',
-            'password.min' => 'Şifre en az 8 karakter olmalıdır.',
-            'password.max' => 'Şifre 40 karakteri geçemez.',
-            'password.regex' => 'Şifre en az bir küçük harf, bir büyük harf, bir rakam ve bir özel karakter içermelidir.',
-            'reference_code.required' => 'Referans numarası gereklidir.',
-            'reference_code.size' => 'Referans numarası tam olarak 16 karakter olmalıdır.',
-            'captcha.required' => 'CAPTCHA gereklidir.',
-            'captcha.size' => "CAPTCHA tam olarak $captchaLength karakter olmalıdır.",
+            'username.required' => 'Username is required.',
+            'username.min' => 'Username must be at least 4 characters.',
+            'username.max' => 'Username cannot exceed 16 characters.',
+            'username.unique' => 'This username is already taken.',
+            'username.regex' => 'Username can only contain letters and numbers.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.max' => 'Password cannot exceed 40 characters.',
+            'password.regex' => 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+            'reference_code.required' => 'Reference number is required.',
+            'reference_code.size' => 'Reference number must be exactly 16 characters.',
+            'captcha.required' => 'CAPTCHA is required.',
+            'captcha.size' => "CAPTCHA must be exactly $captchaLength characters.",
         ];
     }
 }

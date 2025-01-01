@@ -24,8 +24,17 @@
                 <input type="password" id="password_confirmation" name="password_confirmation" required>
             </div>
             <div class="form-group">
-                <label for="reference_code">Reference Code</label>
-                <input type="text" id="reference_code" name="reference_code" value="{{ old('reference_code') }}" required>
+                <label for="reference_code">
+                    Reference Code
+                    @if(!config('marketplace.require_reference_code', true))
+                        <span class="optional-text">(Optional)</span>
+                    @endif
+                </label>
+                <input type="text" 
+                       id="reference_code" 
+                       name="reference_code" 
+                       value="{{ old('reference_code') }}"
+                       @if(config('marketplace.require_reference_code', true)) required @endif>
                 @error('reference_code')
                     <span class="error">{{ $message }}</span>
                 @enderror

@@ -34,15 +34,15 @@ class ChangePasswordRequest extends FormRequest
     public function messages()
     {
         return [
-            'current_password.required' => 'Mevcut şifre gereklidir.',
-            'password.required' => 'Yeni şifre gereklidir.',
-            'password.string' => 'Yeni şifre bir metin dizesi olmalıdır.',
-            'password.min' => 'Yeni şifre en az 8 karakter olmalıdır.',
-            'password.max' => 'Yeni şifre 40 karakteri geçemez.',
-            'password.confirmed' => 'Yeni şifre onayı eşleşmiyor.',
-            'password.regex' => 'Yeni şifre en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir.',
-            'password_confirmation.required' => 'Lütfen yeni şifrenizi onaylayın.',
-            'password_confirmation.string' => 'Şifre onayı bir metin dizesi olmalıdır.',
+            'current_password.required' => 'Current password is required.',
+            'password.required' => 'New password is required.',
+            'password.string' => 'New password must be a string.',
+            'password.min' => 'New password must be at least 8 characters.',
+            'password.max' => 'New password cannot exceed 40 characters.',
+            'password.confirmed' => 'New password confirmation does not match.',
+            'password.regex' => 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            'password_confirmation.required' => 'Please confirm your new password.',
+            'password_confirmation.string' => 'Password confirmation must be a string.',
         ];
     }
 
@@ -53,7 +53,7 @@ class ChangePasswordRequest extends FormRequest
 
             if (!Hash::check($this->current_password, Auth::user()->password)) {
                 RateLimiter::hit($this->throttleKey(), 60);
-                $validator->errors()->add('current_password', 'Girilen şifre mevcut şifrenizle eşleşmiyor.');
+                $validator->errors()->add('current_password', 'The entered password does not match your current password.');
             }
         });
     }
@@ -65,7 +65,7 @@ class ChangePasswordRequest extends FormRequest
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
             throw ValidationException::withMessages([
-                'current_password' => ["Çok fazla şifre değiştirme denemesi. Lütfen {$seconds} saniye sonra tekrar deneyin."],
+                'current_password' => ["Too many password change attempts. Please try again in {$seconds} seconds."],
             ]);
         }
 
