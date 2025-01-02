@@ -127,9 +127,8 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         Route::delete('/profile/picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.delete_picture');
         Route::get('/profile/picture/{filename}', [ProfileController::class, 'getProfilePicture'])->name('profile.picture');
 
-        // Routes for references
+        // Route for references
         Route::get('/references', [ReferencesController::class, 'index'])->name('references.index');
-        Route::post('/references', [ReferencesController::class, 'addReferral'])->name('references.add');
 
         // New routes for PGP key confirmation
         Route::middleware(CheckUnverifiedPgpKey::class)->group(function () {

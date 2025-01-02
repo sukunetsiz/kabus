@@ -173,14 +173,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the referrals associated with the user.
-     */
-    public function referrals()
-    {
-        return $this->hasMany(Referral::class);
-    }
-
-    /**
      * Get the PGP key associated with the user.
      */
     public function pgpKey()
