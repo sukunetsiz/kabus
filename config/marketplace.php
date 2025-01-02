@@ -11,5 +11,17 @@ return [
     | When false, the reference code becomes optional.
     |
     */
-    'require_reference_code' => env('MARKETPLACE_REQUIRE_REFERENCE', false),
+    'require_reference_code' => env('MARKETPLACE_REQUIRE_REFERENCE', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | JavaScript Warning Display Settings
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the visibility of the JavaScript warning in the footer.
+    | When set to true, the warning will be displayed to users.
+    | When false, the warning will be hidden.
+    |
+    */
+    'show_javascript_warning' => env('MARKETPLACE_SHOW_JS_WARNING', true),
 ];

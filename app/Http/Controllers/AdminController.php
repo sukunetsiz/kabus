@@ -121,6 +121,7 @@ class AdminController extends Controller
 
     public function userDetails(User $user)
     {
+        $user->load('referrer');
         return view('admin.users.details', compact('user'));
     }
 

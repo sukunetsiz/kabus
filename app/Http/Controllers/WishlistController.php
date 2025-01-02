@@ -18,7 +18,7 @@ class WishlistController extends Controller
                 ->with(['user:id,username', 'category:id,name'])
                 ->paginate(12);
 
-            return view('wishlist.index', [
+            return view('wishlist', [
                 'products' => $wishlistedProducts,
                 'title' => 'My Wishlist'
             ]);

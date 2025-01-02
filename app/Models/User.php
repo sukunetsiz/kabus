@@ -29,6 +29,7 @@ class User extends Authenticatable
         'password_reset_token',
         'password_reset_expires_at',
         'reference_id',
+        'referred_by',
     ];
 
     /**
@@ -274,5 +275,21 @@ class User extends Authenticatable
     public function hasWishlisted(string $productId): bool
     {
         return $this->wishlist()->where('products.id', $productId)->exists();
+    }
+
+    /**
+     * Get the user who referred this user.
+     */
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    /**
+     * Get users who were referred by this user.
+     */
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
     }
 }

@@ -7,7 +7,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 ## Milestones
 
 ### February 2nd Goals (v0.8)
-- [ ] Make the referral system optional during user registration instead of mandatory.
+- [X] Make the referral system optional during user registration instead of mandatory.
 - [ ] Finish functionality for creating digital items, as well as shipping options like cargo and dead drop.
 - [ ] Develop a shopping cart system and enable adding products to the cart.
 - [ ] Create "My Products" and "My Orders" pages, making them fully functional.

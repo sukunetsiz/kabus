@@ -51,11 +51,23 @@ class AuthController extends Controller
 
         $referenceId = $this->generateReferenceId();
 
+        // Find referrer if reference code was provided
+        $referrerId = null;
+        if ($request->has('reference_code')) {
+            $referrer = User::all()->first(function ($user) use ($request) {
+                return $user->reference_id === $request->reference_code;
+            });
+            if ($referrer) {
+                $referrerId = $referrer->id;
+            }
+        }
+
         $user = User::create([
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'mnemonic' => $mnemonic,  // Save mnemonic directly, it will be encrypted by the model
             'reference_id' => $referenceId,  // Save reference ID, it will be encrypted by the model
+            'referred_by' => $referrerId,
         ]);
 
         // Generate a unique token for accessing the mnemonic

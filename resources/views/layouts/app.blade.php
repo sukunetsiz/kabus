@@ -24,9 +24,11 @@
         <div class="container">
             <div class="footer-content">
                 <a href="{{ route('kabus-pgp-key') }}" class="footer-button">PGP Key</a>
-                <div class="javascript-warning-left js-warning-elements">
-                    <span class="javascript-warning-text-left">Please Disable JavaScript</span>
-                </div>
+                @if(config('marketplace.show_javascript_warning'))
+                    <div class="javascript-warning-left js-warning-elements">
+                        <span class="javascript-warning-text-left">Please Disable JavaScript</span>
+                    </div>
+                @endif
                 <div class="xmr-price">
                     <span class="xmr-price-label">XMR/USD:</span>
                     <span class="xmr-price-value {{ app(App\Http\Controllers\XmrPriceController::class)->getXmrPrice() === 'UNAVAILABLE' ? 'unavailable' : '' }}">
@@ -41,21 +43,25 @@
                     </span>
                 </div>
 
-                <div class="javascript-warning-right js-warning-elements">
-                    <img src="{{ asset('images/javascript-logo.png') }}" alt="JavaScript Logo" class="javascript-warning-icon">
-                    <span class="javascript-warning-text-right">Warning</span>
-                    <img src="{{ asset('images/javascript-warning.gif') }}" alt="JavaScript Warning" class="javascript-warning-gif">
-                </div>
+                @if(config('marketplace.show_javascript_warning'))
+                    <div class="javascript-warning-right js-warning-elements">
+                        <img src="{{ asset('images/javascript-logo.png') }}" alt="JavaScript Logo" class="javascript-warning-icon">
+                        <span class="javascript-warning-text-right">Warning</span>
+                        <img src="{{ asset('images/javascript-warning.gif') }}" alt="JavaScript Warning" class="javascript-warning-gif">
+                    </div>
+                @endif
                 <a href="{{ route('kabus-current-status') }}" class="footer-button">Current Status</a>
             </div>
         </div>
     </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.js-warning-elements').forEach(function(element) {
-                element.style.display = 'flex';
+    @if(config('marketplace.show_javascript_warning'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.js-warning-elements').forEach(function(element) {
+                    element.style.display = 'flex';
+                });
             });
-        });
-    </script>
+        </script>
+    @endif
 </body>
 </html>

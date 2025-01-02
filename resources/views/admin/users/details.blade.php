@@ -12,6 +12,10 @@
                 <div class="user-details-column">
                     <div class="user-details-info">
                         <p><strong>Reference ID:</strong> {{ $user->reference_id }}</p>
+                        <p><strong>Used Reference Code:</strong> {{ $user->referred_by ? 'Yes' : 'No' }}</p>
+                        @if($user->referred_by)
+                            <p><strong>Referred By:</strong> {{ $user->referrer->username }}</p>
+                        @endif
                         <p><strong>Last Login:</strong> {{ $user->last_login ? $user->last_login->format('Y-m-d H:i:s') : 'N/A' }}</p>
                         <p><strong>Account Creation Date:</strong> {{ $user->created_at->format('Y-m-d H:i:s') }}</p>
                     </div>

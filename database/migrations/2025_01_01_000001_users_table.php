@@ -20,6 +20,11 @@ return new class extends Migration
             $table->string('password_reset_token')->nullable();
             $table->timestamp('password_reset_expires_at')->nullable();
             $table->text('reference_id')->nullable();
+            $table->uuid('referred_by')->nullable();
+            $table->foreign('referred_by')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
             $table->index('username');
