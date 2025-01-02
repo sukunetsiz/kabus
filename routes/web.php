@@ -200,6 +200,9 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
             Route::get('/vendor/appearance', [VendorController::class, 'showAppearance'])->name('vendor.appearance');
             Route::post('/vendor/appearance', [VendorController::class, 'updateAppearance'])->name('vendor.appearance.update');
             
+            // My Products route
+            Route::get('/vendor/my-products', [VendorController::class, 'myProducts'])->name('vendor.my-products');
+            
             // Add Cargo Product routes
             Route::get('/vendor/products/cargo/create', [AddCargoProductController::class, 'create'])->name('vendor.products.cargo.create');
             Route::post('/vendor/products/cargo', [AddCargoProductController::class, 'store'])->name('vendor.products.cargo.store');

@@ -54,9 +54,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔My Products⛔</h3>
+                <h3 class="admin-panel-item-title">💼 My Products 💼</h3>
                 <p class="admin-panel-item-description">You can view all products you have listed for sale on {{ config('app.name') }}.</p>
-                <a href="#" class="admin-panel-item-link">View My Products</a>
+                <a href="{{ route('vendor.my-products') }}" class="admin-panel-item-link">View My Products</a>
             </div>
             
             <div class="admin-panel-item">

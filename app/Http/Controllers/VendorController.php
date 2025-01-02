@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\VendorProfile;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 class VendorController extends Controller
 {
@@ -62,5 +63,19 @@ class VendorController extends Controller
 
         return redirect()->route('vendor.appearance')
             ->with('success', 'Vendor settings updated successfully.');
+    }
+
+    /**
+     * Display the vendor's products.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function myProducts()
+    {
+        $products = Product::where('user_id', Auth::id())
+            ->select('id', 'name', 'type', 'slug')
+            ->get();
+
+        return view('vendor.my-products.index', compact('products'));
     }
 }
