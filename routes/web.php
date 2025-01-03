@@ -192,6 +192,10 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
             Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
             Route::delete('/admin/categories/{category}', [AdminController::class, 'deleteCategory'])->name('admin.categories.delete');
             Route::get('/admin/categories/list', [AdminController::class, 'listCategories'])->name('admin.categories.list');
+            
+            // Admin Products Management
+            Route::get('/admin/all-products', [AdminController::class, 'allProducts'])->name('admin.all-products');
+            Route::delete('/admin/products/{product}', [AdminController::class, 'destroyProduct'])->name('admin.products.destroy');
         });
 
         // Vendor routes
@@ -200,8 +204,9 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
             Route::get('/vendor/appearance', [VendorController::class, 'showAppearance'])->name('vendor.appearance');
             Route::post('/vendor/appearance', [VendorController::class, 'updateAppearance'])->name('vendor.appearance.update');
             
-            // My Products route
+            // My Products routes
             Route::get('/vendor/my-products', [VendorController::class, 'myProducts'])->name('vendor.my-products');
+            Route::delete('/vendor/products/{product}', [VendorController::class, 'destroy'])->name('vendor.products.destroy');
             
             // Add Cargo Product routes
             Route::get('/vendor/products/cargo/create', [AddCargoProductController::class, 'create'])->name('vendor.products.cargo.create');

@@ -25,11 +25,15 @@
                         </span>
                         <div class="my-products-index-actions">
                             <button class="my-products-index-btn my-products-index-btn-edit">
-                               ⛔ Edit ⛔
+                            ⛔ Edit ⛔
                             </button>
-                            <button class="my-products-index-btn my-products-index-btn-delete">
-                               ⛔ Delete ⛔
-                            </button>
+                            <form action="{{ route('vendor.products.destroy', $product) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="my-products-index-btn my-products-index-btn-delete">
+                                    Delete
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @endforeach

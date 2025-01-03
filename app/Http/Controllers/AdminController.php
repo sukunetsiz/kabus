@@ -13,6 +13,8 @@ use App\Models\SupportRequest;
 use App\Models\SupportMessage;
 use App\Models\Notification;
 use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -396,6 +398,102 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             Log::error('Error listing categories: ' . $e->getMessage());
             return response()->json(['error' => 'Error fetching categories'], 500);
+        }
+    }
+
+    /**
+     * Display all products for admin.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function allProducts(Request $request)
+    {
+        try {
+            // Validate inputs
+            $validated = $request->validate([
+                'search' => ['nullable', 'string', 'min:1', 'max:100'],
+                'vendor' => ['nullable', 'string', 'min:1', 'max:50'],
+                'type' => ['nullable', Rule::in([Product::TYPE_DIGITAL, Product::TYPE_CARGO, Product::TYPE_DEADDROP])],
+                'category' => ['nullable', 'integer', 'exists:categories,id'],
+                'sort_price' => ['nullable', Rule::in(['asc', 'desc'])],
+            ]);
+
+            // Get only filled parameters
+            $filters = collect($request->only(['search', 'vendor', 'type', 'category', 'sort_price']))
+                ->filter(function ($value) {
+                    return $value !== null && $value !== '';
+                })
+                ->toArray();
+
+            $query = Product::with('user')
+                ->select('products.*');
+
+            // Apply search filters
+            if (isset($filters['search'])) {
+                $searchTerm = strip_tags($filters['search']);
+                $query->where('name', 'like', '%' . addcslashes($searchTerm, '%_') . '%');
+            }
+
+            if (isset($filters['vendor'])) {
+                $vendorTerm = strip_tags($filters['vendor']);
+                $query->whereHas('user', function ($q) use ($vendorTerm) {
+                    $q->where('username', 'like', '%' . addcslashes($vendorTerm, '%_') . '%');
+                });
+            }
+
+            if (isset($filters['type'])) {
+                $query->ofType($filters['type']);
+            }
+
+            if (isset($filters['category'])) {
+                $query->where('category_id', (int) $filters['category']);
+            }
+
+            // Apply price sorting
+            if (isset($filters['sort_price'])) {
+                $query->orderBy('price', $filters['sort_price']);
+            } else {
+                $query->latest();
+            }
+
+            // Get paginated results
+            $products = $query->paginate(32)->withQueryString();
+            $categories = Category::select('id', 'name')->get();
+
+            return view('admin.all-products.index', [
+                'products' => $products,
+                'categories' => $categories,
+                'currentType' => $filters['type'] ?? null,
+                'filters' => $filters
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error fetching all products: ' . $e->getMessage());
+            return redirect()->route('admin.index')
+                ->with('error', 'Error fetching products. Please try again.');
+        }
+    }
+
+    /**
+     * Delete a product.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyProduct(Product $product)
+    {
+        try {
+            $product->delete();
+            
+            // Log the deletion
+            Log::info("Product deleted by admin: {$product->id}");
+
+            return redirect()->route('admin.all-products')
+                ->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting product: ' . $e->getMessage());
+            return redirect()->route('admin.all-products')
+                ->with('error', 'Error deleting product. Please try again.');
         }
     }
 }

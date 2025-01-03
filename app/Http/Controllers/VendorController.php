@@ -78,4 +78,23 @@ class VendorController extends Controller
 
         return view('vendor.my-products.index', compact('products'));
     }
+
+    /**
+     * Delete a product.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Product $product)
+    {
+        // Check if the authenticated user owns this product
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $product->delete();
+
+        return redirect()->route('vendor.my-products')
+            ->with('success', 'Product deleted successfully.');
+    }
 }

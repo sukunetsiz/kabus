@@ -19,9 +19,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Product Management⛔</h3>
+                <h3 class="admin-panel-item-title">📝 Manage Products 📝</h3>
                 <p class="admin-panel-item-description">Edit or remove products in the market.</p>
-                <a href="#" class="admin-panel-item-link">Manage Products</a>
+                <a href="{{ route('admin.all-products') }}" class="admin-panel-item-link">Product Management</a>
             </div>
             
             <div class="admin-panel-item">

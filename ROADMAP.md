@@ -14,7 +14,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 
 ### March 3rd Goals (v0.9)
 - [ ] Add walletless escrow mechanism for buying products, making the script fully functional.
-- [ ] Write a guide on how to buy Monero.
+- [ ] Implement a feature to allow users and vendors to create and manage disputes.
 - [ ] Write a comprehensive guide for using Tails OS.
 - [ ] Write clear and comprehensible documentation for Kabus Marketplace Script.
 
