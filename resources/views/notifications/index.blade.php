@@ -3,6 +3,18 @@
 @section('content')
 
 <div class="notifications-index-container text-center">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="notifications-index-card">
         <div class="notifications-index-header">
             <h1 class="notifications-index-title">Your Notifications</h1>
@@ -22,8 +34,24 @@
                         <p class="notifications-index-item-message">
                             {{ $notification->message }}
                         </p>
-                        <div class="notifications-index-item-time">
-                            {{ $notification->created_at->format('d.m.Y H:i') }}
+                        <div class="notifications-index-item-footer">
+                            @if($notification->pivot->read)
+                                <span class="notification-action notification-read">✅</span>
+                            @else
+                                <form method="POST" action="{{ route('notifications.mark-read', ['notification' => $notification->id]) }}" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="notification-action notification-read">👁️</button>
+                                </form>
+                            @endif
+
+                            <span class="notifications-index-item-time">
+                                {{ $notification->created_at->format('d.m.Y H:i') }}
+                            </span>
+
+                            <form method="POST" action="{{ route('notifications.destroy', ['notification' => $notification->id]) }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="notification-action notification-delete">❌</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach

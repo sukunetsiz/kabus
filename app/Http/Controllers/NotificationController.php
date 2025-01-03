@@ -24,4 +24,64 @@ class NotificationController extends Controller
                 ->with('error', 'An error occurred while loading notifications. Please try again later.');
         }
     }
+
+    /**
+     * Mark the specified notification as read.
+     */
+    public function markAsRead(Notification $notification)
+    {
+        try {
+            $user = auth()->user();
+            
+            // Check if the notification belongs to the user
+            $userNotification = $user->notifications()
+                ->where('notifications.id', $notification->id)
+                ->first();
+
+            if (!$userNotification) {
+                return redirect()->route('notifications.index')
+                    ->with('error', 'Notification not found.');
+            }
+
+            // Update the pivot table directly
+            $user->notifications()->updateExistingPivot($notification->id, ['read' => true]);
+
+            return redirect()->route('notifications.index')
+                ->with('success', 'Notification marked as read.');
+        } catch (\Exception $e) {
+            \Log::error('Failed to mark notification as read: ' . $e->getMessage());
+            return redirect()->route('notifications.index')
+                ->with('error', 'Failed to mark notification as read: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified notification from the user's list.
+     */
+    public function destroy(Notification $notification)
+    {
+        try {
+            $user = auth()->user();
+            
+            // Check if the notification belongs to the user
+            $userNotification = $user->notifications()
+                ->where('notifications.id', $notification->id)
+                ->first();
+
+            if (!$userNotification) {
+                return redirect()->route('notifications.index')
+                    ->with('error', 'Notification not found.');
+            }
+
+            // Detach the notification from the user
+            $user->notifications()->detach($notification->id);
+
+            return redirect()->route('notifications.index')
+                ->with('success', 'Notification deleted successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Failed to delete notification: ' . $e->getMessage());
+            return redirect()->route('notifications.index')
+                ->with('error', 'Failed to delete notification: ' . $e->getMessage());
+        }
+    }
 }

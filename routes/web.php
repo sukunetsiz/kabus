@@ -150,6 +150,8 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
 
         // Notification routes for all users
         Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/{notification}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+        Route::post('/notifications/{notification}/delete', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 
         // Vendor listing routes
         Route::get('/vendors', [VendorsController::class, 'index'])->name('vendors.index');

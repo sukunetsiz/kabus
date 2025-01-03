@@ -28,6 +28,15 @@ class Notification extends Model
     ];
 
     /**
+     * The attributes that should be cast on the pivot.
+     *
+     * @var array
+     */
+    protected $pivotCasts = [
+        'read' => 'boolean',
+    ];
+
+    /**
      * Validation rules for the model.
      */
     private static $rules = [
@@ -67,7 +76,8 @@ class Notification extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot('read');
     }
 
     /**

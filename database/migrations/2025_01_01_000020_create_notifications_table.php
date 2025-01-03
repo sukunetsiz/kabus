@@ -23,6 +23,7 @@ return new class extends Migration
         Schema::create('notification_user', function (Blueprint $table) {
             $table->foreignUuid('notification_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('read')->default(false); // Add read status column
             $table->timestamps(); // Add timestamps columns
             $table->primary(['notification_id', 'user_id']);
         });

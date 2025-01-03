@@ -247,13 +247,23 @@ class User extends Authenticatable
     }
 
     /**
+     * The attributes that should be cast on the pivot.
+     *
+     * @var array
+     */
+    protected $pivotCasts = [
+        'read' => 'boolean',
+    ];
+
+    /**
      * Get the notifications for the user.
      */
     public function notifications()
     {
         return $this->belongsToMany(Notification::class)
             ->withTimestamps()
-            ->orderBy('created_at', 'desc');
+            ->withPivot('read')
+            ->orderBy('notification_user.created_at', 'desc');
     }
 
     /**
