@@ -88,6 +88,15 @@
                     </div>
                 </div>
 
+                {{-- Stock Information --}}
+                <div class="bg-slate-900 rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-semibold text-slate-200 mb-3">Stock Information</h3>
+                    <div class="flex items-center space-x-2 text-slate-300">
+                        <span class="font-medium">Available:</span>
+                        <span>{{ number_format($product->stock_amount) }} {{ $product->measurement_unit }}</span>
+                    </div>
+                </div>
+
                 {{-- Product Type Specific Information --}}
                 <div class="bg-slate-900 rounded-lg p-4">
                     <h3 class="text-lg font-semibold text-slate-200 mb-3">Delivery Information</h3>

@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
 use Intervention\Image\Encoders\JpegEncoder;
@@ -34,8 +35,11 @@ class AddDigitalProductController extends Controller
     {
         // Get all categories
         $categories = Category::with('children')->get();
+        
+        // Get measurement units for the dropdown
+        $measurementUnits = Product::getMeasurementUnits();
 
-        return view('vendor.products.digital.create', compact('categories'));
+        return view('vendor.products.digital.create', compact('categories', 'measurementUnits'));
     }
 
     /**
@@ -55,6 +59,18 @@ class AddDigitalProductController extends Controller
                     'file',
                     'max:800', // 800KB max size
                 ],
+                'stock_amount' => 'required|integer|min:0',
+                'measurement_unit' => [
+                    'required',
+                    Rule::in(array_keys(Product::getMeasurementUnits()))
+                ],
+            ], [
+                'stock_amount.required' => 'The stock amount is required.',
+                'stock_amount.integer' => 'The stock amount must be a whole number.',
+                'stock_amount.min' => 'The stock amount cannot be negative.',
+                'stock_amount.max' => 'The stock amount cannot exceed 999,999 units.',
+                'measurement_unit.required' => 'Please select a measurement unit.',
+                'measurement_unit.in' => 'The selected measurement unit is invalid.'
             ]);
 
             // Handle product picture if uploaded
@@ -71,7 +87,9 @@ class AddDigitalProductController extends Controller
                 'price' => $validated['price'],
                 'category_id' => $validated['category_id'],
                 'active' => true,
-                'product_picture' => $productPicture
+                'product_picture' => $productPicture,
+                'stock_amount' => $validated['stock_amount'],
+                'measurement_unit' => $validated['measurement_unit']
             ]);
 
             return redirect()

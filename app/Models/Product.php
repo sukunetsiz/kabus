@@ -19,6 +19,47 @@ class Product extends Model
     public const TYPE_CARGO = 'cargo';
     public const TYPE_DEADDROP = 'deaddrop';
 
+    // Measurement units
+    public const UNIT_GRAM = 'g';
+    public const UNIT_KILOGRAM = 'kg';
+    public const UNIT_MILLILITER = 'ml';
+    public const UNIT_LITER = 'l';
+    public const UNIT_CENTIMETER = 'cm';
+    public const UNIT_METER = 'm';
+    public const UNIT_INCH = 'in';
+    public const UNIT_FOOT = 'ft';
+    public const UNIT_SQUARE_METER = 'm²';
+    public const UNIT_PIECE = 'piece';
+    public const UNIT_DOZEN = 'dozen';
+    public const UNIT_HOUR = 'hour';
+    public const UNIT_DAY = 'day';
+    public const UNIT_MONTH = 'month';
+
+    /**
+     * Get all available measurement units.
+     *
+     * @return array
+     */
+    public static function getMeasurementUnits(): array
+    {
+        return [
+            self::UNIT_GRAM => 'Gram (g)',
+            self::UNIT_KILOGRAM => 'Kilogram (kg)',
+            self::UNIT_MILLILITER => 'Milliliter (ml)',
+            self::UNIT_LITER => 'Liter (l)',
+            self::UNIT_CENTIMETER => 'Centimeter (cm)',
+            self::UNIT_METER => 'Meter (m)',
+            self::UNIT_INCH => 'Inch (in)',
+            self::UNIT_FOOT => 'Foot (ft)',
+            self::UNIT_SQUARE_METER => 'Square Meter (m²)',
+            self::UNIT_PIECE => 'Unit (piece)',
+            self::UNIT_DOZEN => 'Dozen (12 items)',
+            self::UNIT_HOUR => 'Hour',
+            self::UNIT_DAY => 'Day',
+            self::UNIT_MONTH => 'Month'
+        ];
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,7 +74,9 @@ class Product extends Model
         'user_id',
         'category_id',
         'slug',
-        'product_picture'
+        'product_picture',
+        'stock_amount',
+        'measurement_unit'
     ];
 
     /**

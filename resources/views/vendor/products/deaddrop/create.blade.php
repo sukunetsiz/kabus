@@ -112,6 +112,38 @@
                     @enderror
                 </div>
 
+                <!-- Stock Amount -->
+                <div>
+                    <label for="stock_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Stock Amount
+                    </label>
+                    <input type="number" name="stock_amount" id="stock_amount" required min="0" max="999999"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        value="{{ old('stock_amount', 0) }}">
+                    @error('stock_amount')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Measurement Unit -->
+                <div>
+                    <label for="measurement_unit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Measurement Unit
+                    </label>
+                    <select name="measurement_unit" id="measurement_unit" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <option value="">Select a measurement unit</option>
+                        @foreach($measurementUnits as $value => $label)
+                            <option value="{{ $value }}" {{ old('measurement_unit') == $value ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('measurement_unit')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Submit Button -->
                 <div class="flex justify-end">
                     <button type="submit"

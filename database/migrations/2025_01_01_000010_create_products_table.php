@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('type'); // 'digital', 'cargo', or 'deaddrop'
             $table->string('product_picture')->nullable(); // Added product picture field
             $table->boolean('active')->default(true);
+            $table->unsignedInteger('stock_amount')->default(0); // Track product stock
+            $table->string('measurement_unit'); // Unit of measurement (g, kg, ml, l, cm, m, in, ft, m², piece, dozen, hour, day, month)
             $table->timestamps();
             $table->softDeletes();
 

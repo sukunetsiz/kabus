@@ -10,6 +10,22 @@ use Illuminate\Support\Facades\Log;
 
 class ProductSeeder extends Seeder
 {
+    /**
+     * Get random measurement unit based on product type
+     */
+    private function getRandomMeasurementUnit(string $method): string
+    {
+        switch ($method) {
+            case 'createDigital':
+                return collect(['piece', 'unit', 'hour', 'day', 'month'])->random();
+            case 'createCargo':
+                return collect(['g', 'kg', 'cm', 'm', 'piece'])->random();
+            case 'createDeadDrop':
+                return collect(['piece', 'unit', 'hour', 'day', 'month'])->random();
+            default:
+                return 'piece';
+        }
+    }
     public function run(): void
     {
         $this->command->info('Starting to seed categories and products...');
@@ -167,7 +183,9 @@ class ProductSeeder extends Seeder
                         'description' => $product['description'],
                         'price' => $product['price'],
                         'active' => true,
-                        'product_picture' => 'default-product-picture.png'
+                        'product_picture' => 'default-product-picture.png',
+                        'stock_amount' => rand(50, 1000),
+                        'measurement_unit' => $this->getRandomMeasurementUnit($method)
                     ]);
 
                     $successCount++;
