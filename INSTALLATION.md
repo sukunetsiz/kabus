@@ -22,6 +22,10 @@ sudo apt install -y php8.3-fpm php8.3-mysql php8.3-curl php8.3-gd php8.3-mbstrin
 php8.3-xml php8.3-zip php8.3-bcmath php8.3-gnupg php8.3-intl php8.3-readline \
 php8.3-common php8.3-cli
 ```
+We also need to install unzip because composer will use it to extract packages:
+```bash
+sudo apt install -y unzip
+```
 
 ### Composer Installation
 Install Composer 2, which we'll need for managing Laravel dependencies:
@@ -137,15 +141,167 @@ SHOW DATABASES;
 
 Your database name should appear in the list. Make sure to securely store your database credentials, as they'll be required for the application's .env configuration file.
 
-## TO DO
-### Repository Setup and Laravel Configuration
-Show how to:
-- Download the latest release from GitHub
-- Copy and configure .env.example file
-- Run composer install
-- Set correct file permissions
-- Generate application key
-- Any additional Laravel-specific configurations
+## Repository Setup and Laravel Configuration
+
+Let's start by navigating to your Downloads folder:
+```bash
+cd Downloads
+```
+
+Now, we will download our repository from GitHub. This command will create a folder named "kabus" in your Downloads folder:
+```bash
+git clone https://github.com/sukunetsiz/kabus.git
+```
+
+We need to move our "kabus" repository to /var/www/ directory, as this will be the location Nginx uses to serve our application:
+```bash
+sudo mv kabus /var/www/
+```
+
+Open a new terminal and navigate to our project directory:
+```bash
+cd /var/www/kabus
+```
+
+First, let's create our environment configuration file by copying the example file:
+```bash
+cp .env.example .env
+```
+
+Now, we'll edit our .env file using nano text editor:
+```bash
+sudo nano .env
+```
+
+In this file, you'll find various configuration settings. You need to update the database settings with the credentials we created earlier. Look for these lines and modify them:
+```
+DB_DATABASE=your_database_name
+DB_USERNAME=your_user
+DB_PASSWORD=Y0ur_P@ssw0rd!23
+```
+
+To save the changes and exit the text editor, press CTRL+X, then 'y' to confirm, and finally press Enter.
+
+Next, let's install all required packages using Composer:
+```bash
+composer install
+```
+
+Generate the application encryption key:
+```bash
+php artisan key:generate
+```
+
+Now, let's create our database tables by running migrations:
+```bash
+php artisan migrate
+```
+
+Finally, we need to set proper file permissions for security. Run these commands in sequence:
+```bash
+sudo chown -R www-data:www-data /var/www/kabus
+sudo find /var/www/kabus -type f -exec chmod 644 {} \;
+sudo find /var/www/kabus -type d -exec chmod 755 {} \;
+sudo chmod -R 775 /var/www/kabus/storage
+sudo chmod -R 775 /var/www/kabus/bootstrap/cache
+sudo chmod 640 /var/www/kabus/.env
+```
+
+## Secure Nginx Configuration
+
+Now we need to configure Nginx to serve our marketplace. Let's create a new server block configuration file:
+```bash
+sudo nano /etc/nginx/sites-available/kabus
+```
+
+Copy and paste the following configuration into the file. This is a secure configuration that includes various security headers and proper PHP handling:
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    # Set root directive with your /public Laravel directory
+    root /var/www/Kabus/public;
+    # Set index directive
+    index index.php index.html index.htm;
+    # Set server_name directive with your domain
+    server_name domain.com;
+    # Remove Server header
+    server_tokens off;
+    # Security headers
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    # Add error page for maintenance mode
+    error_page 503 /maintenance.php;
+    location / {
+        # Check for maintenance file before trying normal routes
+        if (-f $document_root/../storage/framework/down) {
+            return 503;
+        }
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+    
+    # Deny access to hidden files (starting with .)
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+    
+    # Deny access to the BitKeeper directory explicitly
+    location ~* /BitKeeper {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+    
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        
+        # Pass all security headers to PHP
+        fastcgi_param HTTP_X_CONTENT_TYPE_OPTIONS $sent_http_x_content_type_options;
+        fastcgi_param HTTP_X_FRAME_OPTIONS $sent_http_x_frame_options;
+        fastcgi_param HTTP_X_XSS_PROTECTION $sent_http_x_xss_protection;
+        fastcgi_param HTTP_REFERRER_POLICY $sent_http_referrer_policy;
+        fastcgi_param HTTP_PERMISSIONS_POLICY $sent_http_permissions_policy;
+        fastcgi_param HTTP_STRICT_TRANSPORT_SECURITY $sent_http_strict_transport_security;
+    }
+}
+```
+
+After pasting the configuration, save and exit the editor by pressing CTRL+X, then 'y', and finally Enter.
+
+Now, we need to enable our site by creating a symbolic link:
+```bash
+sudo ln -s /etc/nginx/sites-available/kabus /etc/nginx/sites-enabled/
+```
+
+Let's remove the default Nginx configuration to avoid any conflicts:
+```bash
+sudo rm /etc/nginx/sites-enabled/default
+```
+
+Before we restart Nginx, let's test our configuration to make sure everything is correct:
+```bash
+sudo nginx -t
+```
+
+If you see a message saying the test is successful, we can safely restart Nginx:
+```bash
+sudo systemctl restart nginx
+```
+
+Now our Nginx server is configured with proper security settings and is ready to serve our marketplace application.
+You can visit localhost in your browser to test if your marketplace is working properly. Stay tuned for our next guide where we'll show you how to configure Tor and publish your marketplace as a hidden service on the Tor network!
 
 ### TO DO
 ### Tor Installation and Configuration
@@ -154,10 +310,5 @@ Show how to:
 - Configure Tor service
 - Set up hidden service
 - Configure marketplace to work with Tor
-
-### TO DO
-### Secure Nginx Configuration
-Show how to:
-- Configure Nginx for Laravel
 
 These sections will be completed in future updates of this guide.
