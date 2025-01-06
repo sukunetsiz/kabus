@@ -1,6 +1,4 @@
-[View the Roadmap](docs/ROADMAP.md)
-[Installation Guide](docs/INSTALLATION.md)
-[Monero Wallet RPC Guide](docs/CONNECTING-MONERO-RPC.md)
+# [Installation Guide](docs/INSTALLATION.md)
 
 # Kabus - Monero Marketplace Script
 
@@ -19,7 +17,7 @@ Built with PHP 8.3 and Laravel 11.
 - **JavaScript Warning**: Optional JavaScript disable warning for privacy-conscious users
 - **Unique Rhombus-Captcha**: Advanced anti-DDoS protection system
 
-![Rhombus Captcha System](docs/2.png)
+![Rhombus Captcha System](docs/1.png)
 
 ### Monero Integration
 - **Vendor Registration Payment**: Monero Wallet RPC integration that generates a wallet address for vendor fee payments, with support for separate transactions and a 24-hour payment window
@@ -27,7 +25,7 @@ Built with PHP 8.3 and Laravel 11.
 
 *Note: Product purchasing with Monero is planned for future updates. Currently, Monero integration is only used for vendor registration fees.*
 
-![Vendor Registration Payment](docs/1.png)
+![Vendor Registration Payment](docs/2.png)
 
 ### Marketplace Functions
 - **User Dashboard**: Comprehensive control panel for account management
@@ -41,6 +39,9 @@ Built with PHP 8.3 and Laravel 11.
 - **Reference System**: Optional referral code requirement for registration
 - **Educational Resources**: Comprehensive guides on Monero usage, KeePassXC for new users
 - **Support System**: Integrated help desk functionality
+
+# [View the Roadmap](docs/ROADMAP.md)
+# [Monero Wallet RPC Guide](docs/CONNECTING-MONERO-RPC.md)
 
 ---
 

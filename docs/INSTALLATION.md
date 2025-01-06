@@ -197,6 +197,12 @@ Now, let's create our database tables by running migrations:
 php artisan migrate
 ```
 
+If you want to create some test users and products to play around with, you can run this command:
+
+```bash
+php artisan db:seed
+```
+
 Finally, we need to set proper file permissions for security. Run these commands in sequence:
 ```bash
 sudo chown -R www-data:www-data /var/www/kabus
@@ -303,12 +309,33 @@ sudo systemctl restart nginx
 Now our Nginx server is configured with proper security settings and is ready to serve our marketplace application.
 You can visit localhost in your browser to test if your marketplace is working properly. Stay tuned for our next guide where we'll show you how to configure Tor and publish your marketplace as a hidden service on the Tor network!
 
-### TO DO
-### Tor Installation and Configuration
-Show how to:
-- Install Tor
-- Configure Tor service
-- Set up hidden service
-- Configure marketplace to work with Tor
+## Installing and Configuring Tor Hidden Service
 
-These sections will be completed in future updates of this guide.
+Install Tor to set up the hidden service functionality:
+```bash
+sudo apt install -y tor
+```
+
+Edit the Tor configuration file to specify our hidden service settings:
+```bash
+sudo nano /etc/tor/torrc
+```
+
+Add the following configuration lines at the beginning of the file to define the hidden service directory and port:
+```bash
+HiddenServiceDir /var/lib/tor/kabus_hidden_service/
+HiddenServicePort 80 127.0.0.1:80
+```
+
+Save the configuration file by pressing CTRL+X, then 'y' to confirm, and finally press Enter.
+
+Open a new terminal and restart both the Nginx and Tor services to apply the changes:
+```bash
+sudo systemctl restart tor
+sudo systemctl restart nginx
+```
+
+After the Tor service has restarted, you can retrieve your hidden service's onion address from the hostname file:
+```bash
+sudo cat /var/lib/tor/kabus_hidden_service/hostname
+```
