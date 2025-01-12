@@ -25,9 +25,7 @@ class BecomeVendorController extends Controller
             $this->walletRPC = new walletRPC(
                 $config['host'],
                 $config['port'],
-                $config['ssl'],
-                $config['username'],
-                $config['password']
+                $config['ssl']
             );
         } catch (\Exception $e) {
             Log::error('Failed to initialize Monero RPC connection: ' . $e->getMessage());
