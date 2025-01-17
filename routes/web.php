@@ -44,9 +44,9 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
     // Verify captcha route
     Route::post('/verify-captcha', [RhombusCaptchaController::class, 'verify'])->name('rhombus-captcha.verify');
 
-    Route::get('/kabus-pgp-key', function () {
-        return response()->file(storage_path('app/public/kabus_pgp_key.txt'));
-    })->name('kabus-pgp-key');
+    Route::get('/pgp-key', function () {
+        return response()->file(storage_path('app/public/pgp_key.txt'));
+    })->name('pgp-key');
 
     Route::get('/kabus-current-status', function () {
         return response()->file(storage_path('app/public/kabus_current_status.txt'));

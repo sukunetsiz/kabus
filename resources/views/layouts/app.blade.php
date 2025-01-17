@@ -23,7 +23,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <a href="{{ route('kabus-pgp-key') }}" class="footer-button">PGP Key</a>
+                <a href="{{ route('pgp-key') }}" class="footer-button">PGP Key</a>
                 @if(config('marketplace.show_javascript_warning'))
                     <div class="javascript-warning-left js-warning-elements">
                         <span class="javascript-warning-text-left">Please Disable JavaScript</span>
