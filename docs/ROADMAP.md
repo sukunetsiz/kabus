@@ -10,7 +10,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [X] Make the referral system optional during user registration instead of mandatory.
 - [X] Write clear and comprehensible documentation for Kabus Marketplace Script.
 - [ ] Develop a shopping cart system and enable adding products to the cart.
-- [ ] Write a comprehensive "How to Buy Monero" guide.
+- [X] Write a comprehensive "How to Buy Monero" guide.
 
 ### March 3rd Goals (v0.9)
 - [ ] Implement a feature to allow users and vendors to create and manage disputes.

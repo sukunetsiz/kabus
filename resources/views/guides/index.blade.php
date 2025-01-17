@@ -27,11 +27,11 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🔍 Monero Buying Guide ⛔</h3>
+                <h3 class="guides-index-item-title">🔍 Monero Buying Guide 🔎</h3>
                 <p class="guides-index-item-description">
                     Methods for buying Monero and security measures to be considered.
                 </p>
-                <a href="#" class="guides-index-item-link">View Guide</a>
+                <a href="{{ route('guides.buying-monero') }}" class="guides-index-item-link">View Guide</a>
             </div>
 
             <div class="guides-index-item">

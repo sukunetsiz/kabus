@@ -226,7 +226,7 @@ server {
     listen 80;
     listen [::]:80;
     # Set root directive with your /public Laravel directory
-    root /var/www/Kabus/public;
+    root /var/www/kabus/public;
     # Set index directive
     index index.php index.html index.htm;
     # Set server_name directive with your domain
