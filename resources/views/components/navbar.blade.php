@@ -12,7 +12,7 @@
             <div class="navbar-center">
                 <span class="navbar-brand">
                     @auth
-                        <a href="#" class="icon-btn"><span class="nav-icon">🛒</span></a>
+                        <a href="#" class="left-icon-btn"><span class="left-nav-icon">🛒</span></a>
                     @endauth
                     <span class="brand-text">
                         {{ config('app.name') }}
@@ -20,7 +20,7 @@
                         Script
                     </span>
                     @auth
-                        <a href="{{ route('notifications.index') }}" class="icon-btn"><span class="nav-icon">🔔</span></a>
+                        <a href="{{ route('notifications.index') }}" class="right-icon-btn"><span class="right-nav-icon">🔔</span></a>
                     @endauth
                 </span>
             </div>

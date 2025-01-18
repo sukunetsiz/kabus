@@ -3,7 +3,7 @@
 
 <div class="home-container">
     <div class="home-welcome-message">
-        <h1 class="home-title">Welcome to Kabus v0.7</h1>
+        <h1 class="home-title">Welcome to Kabus v0.7.2</h1>
         
         <p class="home-text">Dear users,</p>
         
@@ -18,7 +18,7 @@
         
         <div class="home-important">
             <strong>Important Note:</strong>
-            <p class="home-text" style="margin-bottom: 0;">Memberships created during this test version will be deleted before the platform launch.</p>
+            <p class="home-text" style="margin-bottom: 0;">Memberships created during this test version should be deleted before the platform launch.</p>
         </div>
         
         <p class="home-text">We kindly ask you to follow our developments closely and thank you for your patience.</p>

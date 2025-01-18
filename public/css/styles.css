@@ -119,13 +119,15 @@ body {
 .btn-logout:hover {
     background-color: #c62828;
 }
-.icon-btn,
+.left-icon-btn,
+.right-icon-btn,
 .left-bar a,
 .right-bar a {
     text-decoration: none;
     transition: all 0.3s ease;
 }
-.icon-btn {
+.left-icon-btn,
+.right-icon-btn {
     background-color: #2c2c2c;
     border: 2px solid #bb86fc;
     border-radius: 50%;
@@ -136,20 +138,24 @@ body {
     justify-content: center;
     margin: 0 10px;
 }
-.icon-btn:hover {
+.left-icon-btn:hover,
+.right-icon-btn:hover {
     background-color: #3c3c3c;
     transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(187, 134, 252, 0.3);
 }
-.nav-icon {
+.left-nav-icon,
+.right-nav-icon {
     color: #e0e0e0;
     transition: color 0.3s ease;
 }
-.icon-btn .nav-icon {
+.left-icon-btn .left-nav-icon,
+.right-icon-btn .right-nav-icon {
     margin: 0;
     font-size: 20px;
 }
-.icon-btn:hover .nav-icon,
+.left-icon-btn:hover .left-nav-icon,
+.right-icon-btn:hover .right-nav-icon,
 .rules-note strong {
     color: #bb86fc;
 }
