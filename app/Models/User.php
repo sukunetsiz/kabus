@@ -302,4 +302,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(User::class, 'referred_by');
     }
+
+    /**
+     * Get the count of unread notifications for the user
+     *
+     * @return int
+     */
+    public function getUnreadNotificationsCountAttribute(): int
+    {
+        return $this->notifications()
+            ->wherePivot('read', false)
+            ->count();
+    }
 }

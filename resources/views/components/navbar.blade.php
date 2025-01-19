@@ -20,7 +20,12 @@
                         Script
                     </span>
                     @auth
-                        <a href="{{ route('notifications.index') }}" class="right-icon-btn"><span class="right-nav-icon">🔔</span></a>
+                        <a href="{{ route('notifications.index') }}" class="right-icon-btn">
+                            <span class="right-nav-icon">🔔</span>
+                            @if(auth()->user()->unread_notifications_count > 0)
+                                <span class="right-icon-btn-notification-badge">{{ auth()->user()->unread_notifications_count }}</span>
+                            @endif
+                        </a>
                     @endauth
                 </span>
             </div>
