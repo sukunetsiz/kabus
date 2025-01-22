@@ -35,11 +35,11 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🌐 Tor OpSEC Guide ⛔</h3>
+                <h3 class="guides-index-item-title">🌐 Tor Guide 🌐</h3>
                 <p class="guides-index-item-description">
                     Detailed information about Tor Browser usage and operational security.
                 </p>
-                <a href="#" class="guides-index-item-link">View Guide</a>
+                <a href="{{ route('guides.tor') }}" class="guides-index-item-link">View Guide</a>
             </div>
 
             <div class="guides-index-item">
