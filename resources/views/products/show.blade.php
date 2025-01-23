@@ -34,6 +34,13 @@
         {{-- Product Details --}}
         <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg">
             <div class="p-6 md:p-8">
+                {{-- Product Image --}}
+                <div class="mb-6">
+                    <img src="{{ $product->product_picture_url }}" 
+                         alt="{{ $product->name }}"
+                         class="w-full max-w-md mx-auto rounded-lg shadow-lg object-cover">
+                </div>
+                
                 <div class="flex flex-col md:flex-row justify-between mb-6">
                     <div class="mb-4 md:mb-0">
                         <h1 class="text-2xl md:text-3xl font-bold text-slate-200 mb-2">{{ $product->name }}</h1>
@@ -97,16 +104,57 @@
                     </div>
                 </div>
 
-                {{-- Product Type Specific Information --}}
+                {{-- Delivery Options --}}
                 <div class="bg-slate-900 rounded-lg p-4">
-                    <h3 class="text-lg font-semibold text-slate-200 mb-3">Delivery Information</h3>
-                    @if($product->isDigital())
-                        <p class="text-slate-300">This is a digital product. After purchase, you'll receive instant access to download your files.</p>
-                    @elseif($product->isCargo())
-                        <p class="text-slate-300">This product will be shipped via secure cargo delivery. Shipping details will be provided after purchase.</p>
-                    @else
-                        <p class="text-slate-300">This is a dead drop delivery. Location coordinates will be provided after purchase completion.</p>
-                    @endif
+                    <h3 class="text-lg font-semibold text-slate-200 mb-3">
+                        @if($product->isDigital())
+                            Processing Options
+                        @elseif($product->isCargo())
+                            Shipping Options
+                        @else
+                            Pickup Options
+                        @endif
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        {{-- Product Type Information --}}
+                        <p class="text-slate-300">
+                            @if($product->isDigital())
+                                This is a digital product. Select your preferred processing time:
+                            @elseif($product->isCargo())
+                                This product will be shipped via secure cargo delivery. Select your preferred shipping method:
+                            @else
+                                This is a dead drop delivery. Select your preferred pickup window:
+                            @endif
+                        </p>
+
+                        {{-- Delivery Options Dropdown --}}
+                        <div class="mt-4">
+                            <select name="delivery_option" id="delivery_option" 
+                                class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                @foreach($product->getFormattedDeliveryOptions() as $index => $option)
+                                    <option value="{{ $index }}">
+                                        {{ $option['description'] }}
+                                        @if($option['price'] > 0)
+                                            (+${{ $option['price'] }})
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Option Details --}}
+                        <div class="mt-4 text-sm text-slate-400">
+                            <p>* Additional fees (if any) will be added to the base price</p>
+                            @if($product->isDigital())
+                                <p>* Access details will be provided after purchase</p>
+                            @elseif($product->isCargo())
+                                <p>* Shipping details will be provided after purchase</p>
+                            @else
+                                <p>* Pickup location will be provided after purchase</p>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

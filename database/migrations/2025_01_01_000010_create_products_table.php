@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug', 80)->unique();  // Added slug field for unique product URLs
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
+            $table->json('delivery_options')->nullable(false); // Store array of delivery options with description and price
             $table->string('type'); // 'digital', 'cargo', or 'deaddrop'
             $table->string('product_picture')->nullable(); // Added product picture field
             $table->boolean('active')->default(true);

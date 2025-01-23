@@ -11,6 +11,48 @@ use Illuminate\Support\Facades\Log;
 class ProductSeeder extends Seeder
 {
     /**
+     * Generate random delivery options based on product type
+     */
+    private function generateDeliveryOptions(string $method): array
+    {
+        $numOptions = rand(1, 4); // Random number of options between 1 and 4
+        $options = [];
+
+        $digitalOptions = [
+            ['description' => 'Instant Download', 'price' => 0],
+            ['description' => 'Priority Processing (1 hour)', 'price' => 4.99],
+            ['description' => 'Express Processing (30 minutes)', 'price' => 9.99],
+            ['description' => 'VIP Processing (15 minutes)', 'price' => 14.99]
+        ];
+
+        $cargoOptions = [
+            ['description' => 'Standard Shipping (5-7 days)', 'price' => 9.99],
+            ['description' => 'Express Shipping (2-3 days)', 'price' => 19.99],
+            ['description' => 'Next Day Delivery', 'price' => 29.99],
+            ['description' => 'Same Day Delivery', 'price' => 49.99]
+        ];
+
+        $deadDropOptions = [
+            ['description' => 'Standard Pickup Window (24h)', 'price' => 0],
+            ['description' => '12h Pickup Window', 'price' => 9.99],
+            ['description' => '6h Pickup Window', 'price' => 19.99],
+            ['description' => 'Flexible Pickup Time', 'price' => 29.99]
+        ];
+
+        // Select options based on product type
+        $availableOptions = match($method) {
+            'createDigital' => $digitalOptions,
+            'createCargo' => $cargoOptions,
+            'createDeadDrop' => $deadDropOptions,
+            default => $digitalOptions,
+        };
+
+        // Randomly select N unique options
+        shuffle($availableOptions);
+        return array_slice($availableOptions, 0, $numOptions);
+    }
+
+    /**
      * Get random measurement unit based on product type
      */
     private function getRandomMeasurementUnit(string $method): string
@@ -185,7 +227,8 @@ class ProductSeeder extends Seeder
                         'active' => true,
                         'product_picture' => 'default-product-picture.png',
                         'stock_amount' => rand(50, 1000),
-                        'measurement_unit' => $this->getRandomMeasurementUnit($method)
+                        'measurement_unit' => $this->getRandomMeasurementUnit($method),
+                        'delivery_options' => $this->generateDeliveryOptions($method)
                     ]);
 
                     $successCount++;

@@ -76,7 +76,8 @@ class Product extends Model
         'slug',
         'product_picture',
         'stock_amount',
-        'measurement_unit'
+        'measurement_unit',
+        'delivery_options'
     ];
 
     /**
@@ -87,7 +88,53 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'active' => 'boolean',
+        'delivery_options' => 'array'
     ];
+
+    /**
+     * Validate delivery options structure
+     *
+     * @param array $options
+     * @return bool
+     */
+    public function validateDeliveryOptions(array $options): bool
+    {
+        if (count($options) < 1 || count($options) > 4) {
+            return false;
+        }
+
+        foreach ($options as $option) {
+            if (!isset($option['description']) || !isset($option['price'])) {
+                return false;
+            }
+
+            if (!is_string($option['description']) || trim($option['description']) === '') {
+                return false;
+            }
+
+            if (!is_numeric($option['price']) || $option['price'] < 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get formatted delivery options
+     *
+     * @return array
+     */
+    public function getFormattedDeliveryOptions(): array
+    {
+        return array_map(function ($option) {
+            return [
+                'description' => $option['description'],
+                'price' => number_format($option['price'], 2),
+                'total_price' => number_format($this->price + $option['price'], 2)
+            ];
+        }, $this->delivery_options ?? []);
+    }
 
     /**
      * The accessors to append to the model's array form.
@@ -119,6 +166,11 @@ class Product extends Model
             // Set default product picture if not set
             if (empty($model->product_picture)) {
                 $model->product_picture = 'default-product-picture.png';
+            }
+
+            // Set default empty array for delivery_options if not set
+            if (!isset($model->delivery_options)) {
+                $model->delivery_options = [];
             }
         });
     }

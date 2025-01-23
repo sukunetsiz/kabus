@@ -144,6 +144,69 @@
                     @enderror
                 </div>
 
+                <!-- Delivery Options -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Delivery Options</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                        Add between 1 and 4 delivery options. At least one option is required.
+                    </p>
+                    
+                    @for ($i = 0; $i < 4; $i++)
+                        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                                Delivery Option {{ $i + 1 }}
+                            </h4>
+                            
+                            <!-- Description -->
+                            <div class="mb-4">
+                                <label for="delivery_options_{{ $i }}_description" 
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Description
+                                </label>
+                                <input type="text" 
+                                    name="delivery_options[{{ $i }}][description]" 
+                                    id="delivery_options_{{ $i }}_description"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    value="{{ old('delivery_options.'.$i.'.description') }}"
+                                    placeholder="e.g., Standard Delivery, Express Delivery"
+                                    {{ $i === 0 ? 'required' : '' }}>
+                                @error('delivery_options.'.$i.'.description')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Price -->
+                            <div>
+                                <label for="delivery_options_{{ $i }}_price" 
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Additional Price (USD)
+                                </label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500 sm:text-sm">$</span>
+                                    </div>
+                                    <input type="number" 
+                                        name="delivery_options[{{ $i }}][price]" 
+                                        id="delivery_options_{{ $i }}_price"
+                                        step="0.01" 
+                                        min="0"
+                                        class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        value="{{ old('delivery_options.'.$i.'.price') }}"
+                                        placeholder="0.00"
+                                        {{ $i === 0 ? 'required' : '' }}>
+                                    @error('delivery_options.'.$i.'.price')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    @endfor
+
+                    @error('delivery_options')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Submit Button -->
                 <div class="flex justify-end">
                     <button type="submit"
