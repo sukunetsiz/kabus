@@ -1,0 +1,22 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+I am sukunetsiz, the creator and developer of the Kabus Monero Marketplace Script. As of January 1, 2025, I am writing this message while alive, safe, with internet access, and under no pressure or influence of any substance. To prove that this message is not automated, I will mention current news. Among this week's interesting headlines are Elon Musk changing his name to Kekius Maximus on X, and Jeju Air Flight 2216 crashing at Muan International Airport in South Korea.
+
+The purpose of creating Kabus was to contribute to the Monero ecosystem and ensure its growth. It was never created for any illegal purpose, nor does it encourage such activities. The aim of this marketplace script is to facilitate the sale of legal products online as anonymously as possible.
+
+Privacy is a human right, and it can never be taken away from anyone, nor should it even be suggested.
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEWYzNWVhBYephvoH2lVR7UxN3pzAFAmd1HdcACgkQlVR7UxN3
+pzDAKAv/cgZpvPiRHc4lffOGrOcxlIB6Cqa1yMFW2pnQ/5ZhSjI1ZxQRhJhRq86c
+MtmqJ2Om/NVfbZaH7NK6EIy2xGK2CipL42qWuTPTj34xLBh3j04XZSTOL20qezHo
+O7uZ8e1ULb1lsYzgsU1NRDAaVcmSiYncmtwcCdXWfmiovPQvvHp/6D+ZSIkzu4f8
+aqto2lH28Mpzxtt28JVyG6hIDTkuHWlQBNQj54f6oYnCxszbwUXVgeY9dmxzN2YV
+KOBgFlT9Mo+gbNsVbZlMZZ7wdZORisirpAon2ckffCEGADny7qcKTooIOKTNu/q9
+G364giptONpXTubtarKR8pIwKbMIQLQm1OjCESRkeQQI7JYcl5Mss19u/mBRZNzI
+bz8cp8T5p2DQzBr5ejjXG3XHexxw6wipeO0Ks0HSu9rgWypp4GKQVa4ukHuKM1Yi
+h+SBV75zmZFSGrUFLbQ7hqWAWxlK6a3M+Ug3+aotjkvCwbLmQ3plsGKuDJR4/LXg
+wvlX4p+g
+=c3Qq
+-----END PGP SIGNATURE-----

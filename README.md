@@ -40,6 +40,14 @@ Built with PHP 8.3 and Laravel 11.
 - **Educational Resources**: Comprehensive guides on Monero usage, KeePassXC for new users
 - **Support System**: Integrated help desk functionality
 
+### Other Screenshots
+
+![Products Page](docs/3.png)
+![AdminPanel's User Page](docs/4.png)
+![Account Page](docs/5.png)
+![Support Page](docs/6.png)
+
+
 # [View the Roadmap](docs/ROADMAP.md)
 # [Monero Wallet RPC Guide](docs/CONNECTING-MONERO-RPC.md)
 

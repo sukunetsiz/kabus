@@ -50,7 +50,7 @@
                         <img src="{{ asset('images/javascript-warning.gif') }}" alt="JavaScript Warning" class="javascript-warning-gif">
                     </div>
                 @endif
-                <a href="{{ route('kabus-current-status') }}" class="footer-button">Current Status</a>
+                <a href="{{ route('canary') }}" class="footer-button">Canary</a>
             </div>
         </div>
     </footer>

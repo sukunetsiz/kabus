@@ -1446,46 +1446,46 @@ textarea.settings-index-page-form-control {
     transform: translateY(-2px);
 }
 
-.update-status-container {
+.canary-index-container {
     max-width: 800px;
     margin: 40px auto;
     padding: 0 20px;
 }
-.update-status-card {
+.canary-index-card {
     background-color: #1e1e1e;
     border-radius: 8px;
     padding: 30px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     border: 1px solid #3c3c3c;
 }
-.update-status-title {
+.canary-index-title {
     color: #bb86fc;
     font-size: 28px;
     margin-bottom: 20px;
     text-align: center;
 }
-.update-status-alert {
+.canary-index-alert {
     padding: 15px;
     border-radius: 4px;
     margin-bottom: 20px;
 }
-.update-status-alert-success {
+.canary-index-alert-success {
     background-color: #1b5e20;
     color: #e8f5e9;
 }
-.update-status-form {
+.canary-index-form {
     margin-top: 20px;
 }
-.update-status-form-group {
+.canary-index-form-group {
     margin-bottom: 20px;
 }
-.update-status-label {
+.canary-index-label {
     display: block;
     margin-bottom: 8px;
     color: #e0e0e0;
     font-weight: 700;
 }
-.update-status-textarea {
+.canary-index-textarea {
     width: 100%;
     padding: 12px 15px;
     background-color: #2c2c2c;
@@ -1496,17 +1496,17 @@ textarea.settings-index-page-form-control {
     resize: vertical;
     min-height: 350px;
 }
-.update-status-textarea:focus {
+.canary-index-textarea:focus {
     outline: 0;
     border-color: #bb86fc;
 }
-.update-status-invalid-feedback {
+.canary-index-invalid-feedback {
     color: #ff3838;
     font-size: 14px;
     margin-top: 5px;
     display: block;
 }
-.update-status-btn {
+.canary-index-btn {
     display: inline-block;
     padding: 12px 20px;
     background-color: #bb86fc;
@@ -1522,7 +1522,7 @@ textarea.settings-index-page-form-control {
     transition: all 0.3s ease;
     cursor: pointer;
 }
-.update-status-btn:hover {
+.canary-index-btn:hover {
     background-color: #9966cc;
     transform: translateY(-2px);
 }
@@ -4811,7 +4811,7 @@ textarea.settings-index-page-form-control {
     padding: 8px 15px;
     animation: warning-glow-red 1.5s infinite;
     margin-left: auto;
-    margin-right: 240px;
+    margin-right: 270px;
 }
 .javascript-warning-right {
     display: none;
@@ -4822,7 +4822,7 @@ textarea.settings-index-page-form-control {
     padding: 8px 15px;
     animation: warning-glow-orange 1.5s infinite;
     margin-left: auto;
-    margin-right: 100px;
+    margin-right: 130px;
     gap: 10px;
 }
 .javascript-warning-icon {

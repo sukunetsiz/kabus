@@ -48,9 +48,9 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         return response()->file(storage_path('app/public/pgp_key.txt'));
     })->name('pgp-key');
 
-    Route::get('/kabus-current-status', function () {
-        return response()->file(storage_path('app/public/kabus_current_status.txt'));
-    })->name('kabus-current-status');
+    Route::get('/canary', function () {
+        return response()->file(storage_path('app/public/canary.txt'));
+    })->name('canary');
 
     Route::middleware('guest')->group(function () {
         Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -162,8 +162,8 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         // Admin routes
         Route::middleware(AdminMiddleware::class)->group(function () {
             Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-            Route::get('/admin/update-status', [AdminController::class, 'showUpdateStatus'])->name('admin.update-status');
-            Route::post('/admin/update-status', [AdminController::class, 'updateStatus'])->name('admin.update-status.post');
+            Route::get('/admin/canary', [AdminController::class, 'showUpdateCanary'])->name('admin.canary');
+            Route::post('/admin/canary', [AdminController::class, 'updateCanary'])->name('admin.canary.post');
             
             // Admin logs management
             Route::get('/admin/logs', [AdminController::class, 'showLogs'])->name('admin.logs');

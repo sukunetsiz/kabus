@@ -67,9 +67,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">📅 Current Status 📅</h3>
-                <p class="admin-panel-item-description">Update the current status of {{ config('app.name') }}.</p>
-                <a href="{{ route('admin.update-status') }}" class="admin-panel-item-link">Update Current Status</a>
+                <h3 class="admin-panel-item-title">📅 Canary 📅</h3>
+                <p class="admin-panel-item-description">Update the current canary of {{ config('app.name') }} with a signed message.</p>
+                <a href="{{ route('admin.canary') }}" class="admin-panel-item-link">Update Canary</a>
             </div>
         </div>
     </div>

@@ -23,21 +23,21 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-    public function showUpdateStatus()
+    public function showUpdateCanary()
     {
-        $currentStatus = Storage::get('public/kabus_current_status.txt');
-        return view('admin.update-status', compact('currentStatus'));
+        $currentCanary = Storage::get('public/canary.txt');
+        return view('admin.canary', compact('currentCanary'));
     }
 
-    public function updateStatus(Request $request)
+    public function updateCanary(Request $request)
     {
         $request->validate([
-            'status' => 'required|string|max:3200',
+            'canary' => 'required|string|max:3200',
         ]);
 
-        Storage::put('public/kabus_current_status.txt', $request->status);
+        Storage::put('public/canary.txt', $request->canary);
 
-        return redirect()->route('admin.update-status')->with('success', 'Status updated successfully.');
+        return redirect()->route('admin.canary')->with('success', 'Canary updated successfully.');
     }
 
     public function showLogs()
