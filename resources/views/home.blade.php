@@ -3,7 +3,7 @@
 
 <div class="home-container">
     <div class="home-welcome-message">
-        <h1 class="home-title">Welcome to Kabus v0.7.2</h1>
+        <h1 class="home-title">Welcome to Kabus v0.7.3</h1>
         
         <p class="home-text">Dear users,</p>
         
