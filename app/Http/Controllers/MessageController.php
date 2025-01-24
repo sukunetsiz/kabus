@@ -12,6 +12,7 @@ use HTMLPurifier_Config;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Crypt;
+use App\Models\Notification;
 
 class MessageController extends Controller
 {
@@ -91,6 +92,27 @@ class MessageController extends Controller
         $conversation->last_message_at = now();
         $conversation->save();
 
+        // Create notification for the recipient
+        $recipientId = $conversation->user_id_1 == Auth::id() ? $conversation->user_id_2 : $conversation->user_id_1;
+        $recipient = User::find($recipientId);
+        
+        // Check if there's already an unread notification from this sender
+        $existingNotification = $recipient->notifications()
+            ->where('title', 'LIKE', 'New message from ' . Auth::user()->username)
+            ->wherePivot('read', false)
+            ->first();
+
+        if (!$existingNotification) {
+            // Create a new notification
+            $notification = new Notification([
+                'title' => 'New message from ' . Auth::user()->username,
+                'message' => 'You have received a new message from ' . Auth::user()->username,
+                'type' => 'message',
+            ]);
+            $notification->save();
+            $notification->users()->attach($recipientId, ['read' => false]);
+        }
+
         Log::info('Message sent', ['user_id' => Auth::id(), 'conversation_id' => $conversation->id]);
 
         return redirect()->route('messages.show', $conversation);
@@ -158,6 +180,15 @@ class MessageController extends Controller
 
         $conversation->last_message_at = now();
         $conversation->save();
+
+        // Create notification for new conversation
+        $notification = new Notification([
+            'title' => 'New message from ' . Auth::user()->username,
+            'message' => 'You have received a new message from ' . Auth::user()->username,
+            'type' => 'message',
+        ]);
+        $notification->save();
+        $notification->users()->attach($otherUser->id, ['read' => false]);
 
         Log::info('Conversation started or continued', ['user_id' => Auth::id(), 'with_user_id' => $otherUser->id]);
 

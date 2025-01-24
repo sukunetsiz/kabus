@@ -20,11 +20,13 @@ class Notification extends Model
         'title',
         'message',
         'target_role',
+        'type',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'type' => 'string',
     ];
 
     /**
@@ -43,6 +45,7 @@ class Notification extends Model
         'title' => 'required|string|min:3|max:255',
         'message' => 'required|string|min:10|max:5000',
         'target_role' => 'nullable|string|in:admin,vendor',
+        'type' => 'required|string|in:bulk,message',
     ];
 
     /**

@@ -28,6 +28,7 @@
                     </thead>
                     <tbody>
                         @foreach($notifications as $notification)
+                            @if($notification->type === 'bulk')
                             <tr>
                                 <td>
                                     <div class="bulk-message-list-title-text">
@@ -60,6 +61,7 @@
                                     </form>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title');
             $table->text('message');
+            $table->string('type')->default('bulk'); // 'bulk' for admin bulk messages, 'message' for user messages
             $table->string('target_role')->nullable(); // For role-specific messages (admin, vendor, or null for all users)
             $table->timestamps();
         });

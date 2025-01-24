@@ -276,6 +276,7 @@ class AdminController extends Controller
                 'title' => $sanitizedTitle,
                 'message' => $sanitizedMessage,
                 'target_role' => $request->target_role,
+                'type' => 'bulk',
             ]);
 
             $notification->sendToTargetUsers();
@@ -297,7 +298,8 @@ class AdminController extends Controller
     public function listBulkMessages()
     {
         try {
-            $notifications = Notification::orderBy('created_at', 'desc')
+            $notifications = Notification::where('type', 'bulk')
+                ->orderBy('created_at', 'desc')
                 ->withCount('users')
                 ->paginate(16);
 

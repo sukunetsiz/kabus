@@ -87,28 +87,34 @@
                 <p>You don't need to have a secret to follow privacy best practices. Preserving your anonymity is always important because privacy is a human right, and no one has the right to know what you're doing on Tor or what you're buying with your Monero. Here are some key recommendations:</p>
 
                 <div class="guides-general-highlight">
-                Withdraw Monero to a Private Wallet
-                If you acquire Monero from a centralized exchange, first transfer it to your personal wallet. This step helps remove any traceable links to the exchange.
+                    <h3>Withdraw Monero to a Private Wallet</h3>
+                    <p>If you acquire Monero from a centralized exchange, first transfer it to your personal wallet. This step helps remove any traceable links to the exchange.</p>
                 </div>
 
                 <div class="guides-general-highlight">
-                Avoid Sharing Your Main Wallet Address
-                Use subaddresses for receiving payments instead of your main wallet address. Subaddresses help protect your privacy by ensuring that each transaction remains independent.
+                    <h3>Avoid Sharing Your Main Wallet Address</h3>
+                    <p>Use subaddresses for receiving payments instead of your main wallet address. Subaddresses help protect your privacy by ensuring that each transaction remains independent.</p>
                 </div>
 
                 <div class="guides-general-highlight">
-                Don't Reuse Monero Addresses
-                Avoid using the same Monero address for multiple transactions to prevent linking activities together.
+                    <h3>Don't Reuse Monero Addresses</h3>
+                    <p>Avoid using the same Monero address for multiple transactions to prevent linking activities together.</p>
                 </div>
 
                 <div class="guides-general-highlight">
-                Use Tor or I2P Proxy with Your Wallet
-                Always connect your wallet through Tor or an I2P proxy to enhance privacy and hide your network activity.
+                    <h3>Use Tor or I2P Proxy with Your Wallet</h3>
+                    <p>Always connect your wallet through Tor or an I2P proxy to enhance privacy and hide your network activity.</p>
                 </div>
 
                 <div class="guides-general-highlight">
-                Avoid Personal Identifiers
-                Never share your real name, surname, or any personal information on websites. ALWAYS use an email address that cannot be linked to your identity to keep your activities fully anonymous.
+                    <h3>Avoid Personal Identifiers</h3>
+                    <p>Never share your real name, surname, or any personal information on websites. ALWAYS use an email address that cannot be linked to your identity to keep your activities fully anonymous.</p>
+                </div>
+
+                <div class="guides-general-highlight">
+                    <h3>Avoid HTTP Websites</h3>
+                    <p>When you visit non-secure HTTP websites, the exit node in the Tor network can see everything you do on that site. For example, if you type your email and password on an HTTP website, this information can be visible to the exit node.</p>
+                    <p>To stay secure, always avoid HTTP websites and stick to HTTPS. Remember, Tor is operated by volunteers, not professional VPN providers, so it's important to take extra precautions.</p>
                 </div>
 
                 <h2 class="guides-general-section-title">About Orbot</h2>
