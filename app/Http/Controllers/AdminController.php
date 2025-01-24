@@ -226,6 +226,16 @@ class AdminController extends Controller
             'is_admin_reply' => true
         ]);
 
+        // Create a notification for the user
+        $notification = Notification::create([
+            'title' => 'Support Request Update',
+            'message' => "An admin has replied to your support request: \"{$supportRequest->title}\"",
+            'type' => 'support'
+        ]);
+
+        // Send notification only to the support request's owner
+        $notification->users()->attach($supportRequest->user_id);
+
         // Update support request status if needed
         if ($supportRequest->status === 'open') {
             $supportRequest->update(['status' => 'in_progress']);
