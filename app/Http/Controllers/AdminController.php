@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\BannedUser;
 use App\Models\SupportRequest;
-use App\Models\SupportMessage;
 use App\Models\Notification;
 use App\Models\Category;
 use App\Models\Product;
@@ -181,7 +180,8 @@ class AdminController extends Controller
 
     public function supportRequests()
     {
-        $requests = SupportRequest::with(['user', 'latestMessage'])
+        $requests = SupportRequest::mainRequests()
+            ->with(['user', 'latestMessage'])
             ->orderBy('created_at', 'desc')
             ->paginate(16);
 
@@ -190,6 +190,12 @@ class AdminController extends Controller
 
     public function showSupportRequest(SupportRequest $supportRequest)
     {
+        // Ensure we're viewing a main request
+        if (!$supportRequest->isMainRequest()) {
+            return redirect()->route('admin.support.requests')
+                ->with('error', 'Invalid support request.');
+        }
+
         $messages = $supportRequest->messages()->with('user')->get();
         
         return view('admin.support.show', compact('supportRequest', 'messages'));
@@ -197,6 +203,12 @@ class AdminController extends Controller
 
     public function replySupportRequest(Request $request, SupportRequest $supportRequest)
     {
+        // Ensure we're replying to a main request
+        if (!$supportRequest->isMainRequest()) {
+            return redirect()->route('admin.support.requests')
+                ->with('error', 'Invalid support request.');
+        }
+
         // Add status validation check
         if ($supportRequest->status === 'closed') {
             return redirect()->route('admin.support.show', $supportRequest->ticket_id)
@@ -207,9 +219,8 @@ class AdminController extends Controller
             'message' => 'required|string|max:5000'
         ]);
 
-        // Create the admin reply
-        SupportMessage::create([
-            'support_request_id' => $supportRequest->id,
+        // Create the admin reply as a child record
+        $supportRequest->messages()->create([
             'user_id' => auth()->id(),
             'message' => $request->message,
             'is_admin_reply' => true
@@ -226,6 +237,12 @@ class AdminController extends Controller
 
     public function updateSupportStatus(Request $request, SupportRequest $supportRequest)
     {
+        // Ensure we're updating a main request
+        if (!$supportRequest->isMainRequest()) {
+            return redirect()->route('admin.support.requests')
+                ->with('error', 'Invalid support request.');
+        }
+
         $request->validate([
             'status' => 'required|in:open,in_progress,closed'
         ]);

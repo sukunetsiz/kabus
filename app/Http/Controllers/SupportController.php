@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\SupportRequest;
-use App\Models\SupportMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\CaptchaService;
@@ -22,7 +21,8 @@ class SupportController extends Controller
     public function index()
     {
         try {
-            $requests = SupportRequest::where('user_id', Auth::id())
+            $requests = SupportRequest::mainRequests()
+                ->where('user_id', Auth::id())
                 ->with('latestMessage')
                 ->orderBy('created_at', 'desc')
                 ->paginate(4);
@@ -61,14 +61,15 @@ class SupportController extends Controller
             // Clear CAPTCHA from session
             session()->forget('captcha_code');
 
+            // Create the main support request
             $supportRequest = SupportRequest::create([
                 'user_id' => Auth::id(),
                 'title' => $request->title,
                 'status' => 'open'
             ]);
 
-            SupportMessage::create([
-                'support_request_id' => $supportRequest->id,
+            // Create the initial message
+            $supportRequest->messages()->create([
                 'user_id' => Auth::id(),
                 'message' => $request->message,
                 'is_admin_reply' => false
@@ -91,6 +92,12 @@ class SupportController extends Controller
         try {
             $this->authorize('view', $supportRequest);
 
+            // Only load messages if this is a main request
+            if (!$supportRequest->isMainRequest()) {
+                return redirect()->route('support.index')
+                    ->with('error', 'Invalid support request.');
+            }
+
             $messages = $supportRequest->messages()->with('user')->get();
             $captchaCode = $this->captchaService->generateCode();
             session(['captcha_code' => $captchaCode]);
@@ -109,6 +116,12 @@ class SupportController extends Controller
     {
         try {
             $this->authorize('reply', $supportRequest);
+
+            // Ensure we're replying to a main request
+            if (!$supportRequest->isMainRequest()) {
+                return redirect()->route('support.index')
+                    ->with('error', 'Invalid support request.');
+            }
 
             // Check if ticket is closed
             if ($supportRequest->status === 'closed') {
@@ -132,8 +145,8 @@ class SupportController extends Controller
             // Clear CAPTCHA from session
             session()->forget('captcha_code');
 
-            SupportMessage::create([
-                'support_request_id' => $supportRequest->id,
+            // Create the reply message
+            $supportRequest->messages()->create([
                 'user_id' => Auth::id(),
                 'message' => $request->message,
                 'is_admin_reply' => false
