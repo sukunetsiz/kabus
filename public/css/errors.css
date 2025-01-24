@@ -1,48 +1,54 @@
 body {
-    font-family: "Arial", sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #121212;
-    color: #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+font-family:"Arial",sans-serif;
+margin:0;
+padding:0;
+background-color:#121212;
+color:#e0e0e0;
+display:flex;
+flex-direction:column;
+min-height:100vh
 }
+
 .error-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100vh;
+text-align:center
 }
+
 .error-code {
-    font-size: 120px;
-    color: #bb86fc;
-    margin-bottom: 20px;
+font-size:120px;
+color:#bb86fc;
+margin-bottom:20px
 }
+
 .error-message {
-    font-size: 24px;
-    color: #e0e0e0;
-    margin-bottom: 30px;
+font-size:24px;
+color:#e0e0e0;
+margin-bottom:30px
 }
+
 .error-description {
-    font-size: 18px;
-    color: #a0a0a0;
-    margin-bottom: 40px;
-    max-width: 600px;
+font-size:18px;
+color:#a0a0a0;
+margin-bottom:40px;
+max-width:600px
 }
+
 .home-button {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #bb86fc;
-    color: #121212;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+display:inline-block;
+padding:12px 24px;
+background-color:#bb86fc;
+color:#121212;
+text-decoration:none;
+border-radius:4px;
+font-weight:700;
+transition:all .3s ease
 }
+
 .home-button:hover {
-    background-color: #9966cc;
-    transform: translateY(-2px);
+background-color:#96c;
+transform:translateY(-2px)
 }
