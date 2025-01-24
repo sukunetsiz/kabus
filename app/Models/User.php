@@ -117,28 +117,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the conversations where the user is user1.
-     */
-    public function conversationsAsUser1()
-    {
-        return $this->hasMany(Conversation::class, 'user_id_1');
-    }
-
-    /**
-     * Get the conversations where the user is user2.
-     */
-    public function conversationsAsUser2()
-    {
-        return $this->hasMany(Conversation::class, 'user_id_2');
-    }
-
-    /**
      * Get all conversations for the user.
      */
     public function conversations()
     {
-        return Conversation::where('user_id_1', $this->id)
-            ->orWhere('user_id_2', $this->id);
+        return Message::conversation()
+            ->where(function($query) {
+                $query->where('user_id_1', $this->id)
+                    ->orWhere('user_id_2', $this->id);
+            });
     }
 
     /**
@@ -146,7 +133,7 @@ class User extends Authenticatable
      */
     public function sentMessages()
     {
-        return $this->hasMany(Message::class, 'sender_id');
+        return $this->hasMany(Message::class, 'sender_id')->regularMessage();
     }
 
     /**

@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Conversation;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Log;
 
-class ConversationPolicy
+class MessagePolicy
 {
     /**
      * Determine whether the user can view any conversations.
@@ -18,16 +18,16 @@ class ConversationPolicy
     }
 
     /**
-     * Determine whether the user can view the conversation.
+     * Determine whether the user can view the conversation or message.
      */
-    public function view(User $user, Conversation $conversation): bool
+    public function view(User $user, Message $message): bool
     {
-        $canView = $user->id === $conversation->user_id_1 || $user->id === $conversation->user_id_2;
+        $canView = $user->id === $message->user_id_1 || $user->id === $message->user_id_2;
         
         if (!$canView) {
             Log::warning('Unauthorized conversation access attempt', [
                 'user_id' => $user->id,
-                'conversation_id' => $conversation->id
+                'message_id' => $message->id
             ]);
         }
         
@@ -46,14 +46,14 @@ class ConversationPolicy
     /**
      * Determine whether the user can send a message in the conversation.
      */
-    public function sendMessage(User $user, Conversation $conversation): bool
+    public function sendMessage(User $user, Message $message): bool
     {
-        $canSend = $user->id === $conversation->user_id_1 || $user->id === $conversation->user_id_2;
+        $canSend = $user->id === $message->user_id_1 || $user->id === $message->user_id_2;
         
         if (!$canSend) {
             Log::warning('Unauthorized message send attempt', [
                 'user_id' => $user->id,
-                'conversation_id' => $conversation->id
+                'message_id' => $message->id
             ]);
         }
         
@@ -63,14 +63,14 @@ class ConversationPolicy
     /**
      * Determine whether the user can delete the conversation.
      */
-    public function delete(User $user, Conversation $conversation): bool
+    public function delete(User $user, Message $message): bool
     {
-        $canDelete = $user->id === $conversation->user_id_1 || $user->id === $conversation->user_id_2;
+        $canDelete = $user->id === $message->user_id_1 || $user->id === $message->user_id_2;
         
         if (!$canDelete) {
             Log::warning('Unauthorized conversation delete attempt', [
                 'user_id' => $user->id,
-                'conversation_id' => $conversation->id
+                'message_id' => $message->id
             ]);
         }
         
@@ -80,7 +80,7 @@ class ConversationPolicy
     /**
      * Determine whether the user can permanently delete the conversation.
      */
-    public function forceDelete(User $user, Conversation $conversation): bool
+    public function forceDelete(User $user, Message $message): bool
     {
         return false; // Disallow permanent deletion for data retention purposes
     }
@@ -88,14 +88,14 @@ class ConversationPolicy
     /**
      * Determine whether the user can restore the conversation.
      */
-    public function restore(User $user, Conversation $conversation): bool
+    public function restore(User $user, Message $message): bool
     {
-        $canRestore = $user->id === $conversation->user_id_1 || $user->id === $conversation->user_id_2;
+        $canRestore = $user->id === $message->user_id_1 || $user->id === $message->user_id_2;
         
         if (!$canRestore) {
             Log::warning('Unauthorized conversation restore attempt', [
                 'user_id' => $user->id,
-                'conversation_id' => $conversation->id
+                'message_id' => $message->id
             ]);
         }
         

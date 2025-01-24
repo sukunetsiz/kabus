@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -39,7 +38,7 @@ class MessageController extends Controller
 
     public function show($id)
     {
-        $conversation = Conversation::findOrFail($id);
+        $conversation = Message::conversation()->findOrFail($id);
 
         if (RateLimiter::tooManyAttempts('view-conversation:'.Auth::id(), $perMinute = 60)) {
             return response()->view('messages.rate-limit', [], 429);
@@ -61,7 +60,7 @@ class MessageController extends Controller
 
     public function store(Request $request, $id)
     {
-        $conversation = Conversation::findOrFail($id);
+        $conversation = Message::conversation()->findOrFail($id);
         $this->authorize('sendMessage', $conversation);
 
         // Check if the conversation has reached the 40-message limit
@@ -123,11 +122,7 @@ class MessageController extends Controller
             return redirect()->back()->withErrors(['username' => 'You cannot start a chat with yourself.'])->withInput();
         }
 
-        $existingConversation = Conversation::where(function ($query) use ($otherUser) {
-            $query->where('user_id_1', Auth::id())->where('user_id_2', $otherUser->id);
-        })->orWhere(function ($query) use ($otherUser) {
-            $query->where('user_id_1', $otherUser->id)->where('user_id_2', Auth::id());
-        })->first();
+        $existingConversation = Message::findConversation(Auth::id(), $otherUser->id);
 
         if ($existingConversation) {
             $conversation = $existingConversation;
@@ -142,11 +137,7 @@ class MessageController extends Controller
                 return redirect()->back()->with('error', 'Chat limit of 16 has been reached. Please delete other chats to create a new one.');
             }
 
-            $conversation = Conversation::create([
-                'user_id_1' => Auth::id(),
-                'user_id_2' => $otherUser->id,
-                'last_message_at' => now(),
-            ]);
+            $conversation = Message::createConversation(Auth::id(), $otherUser->id);
         }
 
         $config = HTMLPurifier_Config::createDefault();
@@ -175,7 +166,7 @@ class MessageController extends Controller
 
     public function destroy($id)
     {
-        $conversation = Conversation::findOrFail($id);
+        $conversation = Message::conversation()->findOrFail($id);
         $this->authorize('delete', $conversation);
 
         try {

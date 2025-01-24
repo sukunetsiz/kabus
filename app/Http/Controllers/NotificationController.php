@@ -18,7 +18,7 @@ class NotificationController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(16);
 
-            return view('notifications.index', compact('notifications'));
+            return view('notifications', compact('notifications'));
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'An error occurred while loading notifications. Please try again later.');
