@@ -77,7 +77,8 @@ class Product extends Model
         'product_picture',
         'stock_amount',
         'measurement_unit',
-        'delivery_options'
+        'delivery_options',
+        'bulk_options'
     ];
 
     /**
@@ -88,7 +89,8 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'active' => 'boolean',
-        'delivery_options' => 'array'
+        'delivery_options' => 'array',
+        'bulk_options' => 'array'
     ];
 
     /**
@@ -121,6 +123,41 @@ class Product extends Model
     }
 
     /**
+     * Validate bulk options structure
+     *
+     * @param array|null $options
+     * @return bool
+     */
+    public function validateBulkOptions(?array $options): bool
+    {
+        // Bulk options are optional, so null or empty array is valid
+        if ($options === null || empty($options)) {
+            return true;
+        }
+
+        if (count($options) > 4) {
+            return false;
+        }
+
+        foreach ($options as $option) {
+            if (!isset($option['amount']) || !isset($option['price'])) {
+                return false;
+            }
+
+            if (!is_numeric($option['amount']) || $option['amount'] <= 0) {
+                return false;
+            }
+
+            // Price must be greater than zero as per requirements
+            if (!is_numeric($option['price']) || $option['price'] <= 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Get formatted delivery options
      *
      * @return array
@@ -134,6 +171,26 @@ class Product extends Model
                 'total_price' => number_format($this->price + $option['price'], 2)
             ];
         }, $this->delivery_options ?? []);
+    }
+
+    /**
+     * Get formatted bulk options
+     *
+     * @return array
+     */
+    public function getFormattedBulkOptions(): array
+    {
+        return array_map(function ($option) {
+            return [
+                'amount' => $option['amount'],
+                'price' => number_format($option['price'], 2),
+                'display_text' => sprintf('%s %s for $%s',
+                    number_format($option['amount']),
+                    $this->measurement_unit,
+                    number_format($option['price'], 2)
+                )
+            ];
+        }, $this->bulk_options ?? []);
     }
 
     /**

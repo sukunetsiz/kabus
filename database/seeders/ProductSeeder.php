@@ -68,6 +68,53 @@ class ProductSeeder extends Seeder
                 return 'piece';
         }
     }
+
+    /**
+     * Generate bulk options based on product price and measurement unit
+     */
+    private function generateBulkOptions(float $basePrice, string $measurementUnit): ?array
+    {
+        // 50% chance of having bulk options
+        if (rand(0, 1) === 0) {
+            return null;
+        }
+
+        $numOptions = rand(1, 4); // Random number of options between 1 and 4
+        $options = [];
+        
+        // Define multipliers based on measurement unit
+        $amounts = match($measurementUnit) {
+            'g' => [100, 250, 500, 1000],
+            'kg' => [2, 5, 10, 20],
+            'ml' => [100, 250, 500, 1000],
+            'l' => [2, 5, 10, 20],
+            'piece', 'unit' => [5, 10, 25, 50],
+            'dozen' => [2, 5, 10, 20],
+            'hour' => [5, 10, 24, 48],
+            'day' => [3, 7, 14, 30],
+            'month' => [2, 3, 6, 12],
+            default => [2, 5, 10, 20]
+        };
+
+        // Generate bulk options with increasing amounts and discounted prices
+        shuffle($amounts);
+        $selectedAmounts = array_slice($amounts, 0, $numOptions);
+        sort($selectedAmounts); // Sort amounts in ascending order
+
+        foreach ($selectedAmounts as $index => $amount) {
+            // Calculate discounted price per unit (bigger discount for larger amounts)
+            $discountPercent = 5 + ($index * 5); // 5%, 10%, 15%, 20% discounts
+            $unitPrice = $basePrice * (1 - ($discountPercent / 100));
+            $totalPrice = round($unitPrice * $amount, 2);
+
+            $options[] = [
+                'amount' => $amount,
+                'price' => $totalPrice
+            ];
+        }
+
+        return $options;
+    }
     public function run(): void
     {
         $this->command->info('Starting to seed categories and products...');
@@ -218,6 +265,7 @@ class ProductSeeder extends Seeder
                     $method = $product['method'];
                     unset($product['method']); // Remove method from product data
 
+                    $measurementUnit = $this->getRandomMeasurementUnit($method);
                     Product::$method([
                         'user_id' => $vendor->id,
                         'category_id' => $product['category']->id,
@@ -227,8 +275,9 @@ class ProductSeeder extends Seeder
                         'active' => true,
                         'product_picture' => 'default-product-picture.png',
                         'stock_amount' => rand(50, 1000),
-                        'measurement_unit' => $this->getRandomMeasurementUnit($method),
-                        'delivery_options' => $this->generateDeliveryOptions($method)
+                        'measurement_unit' => $measurementUnit,
+                        'delivery_options' => $this->generateDeliveryOptions($method),
+                        'bulk_options' => $this->generateBulkOptions($product['price'], $measurementUnit)
                     ]);
 
                     $successCount++;

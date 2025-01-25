@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->json('delivery_options')->nullable(false); // Store array of delivery options with description and price
+            $table->json('bulk_options')->nullable(); // Store array of bulk options with amount and price (optional)
             $table->string('type'); // 'digital', 'cargo', or 'deaddrop'
             $table->string('product_picture')->nullable(); // Added product picture field
             $table->boolean('active')->default(true);

@@ -105,6 +105,40 @@ class AddCargoProductController extends Controller
                 }
             }
 
+            // Process bulk options (optional)
+            $bulkOptions = collect($request->bulk_options ?? [])->map(function ($option) {
+                return [
+                    'amount' => is_numeric($option['amount']) ? (float) $option['amount'] : null,
+                    'price' => is_numeric($option['price']) ? (float) $option['price'] : null
+                ];
+            })->filter(function ($option) {
+                return is_numeric($option['amount']) && is_numeric($option['price']);
+            })->values()->all();
+
+            // Validate bulk options
+            if (!empty($bulkOptions)) {
+                if (count($bulkOptions) > 4) {
+                    throw ValidationException::withMessages([
+                        'bulk_options' => ['No more than 4 bulk options are allowed.']
+                    ]);
+                }
+
+                // Validate each bulk option
+                foreach ($bulkOptions as $index => $option) {
+                    if ($option['amount'] <= 0) {
+                        throw ValidationException::withMessages([
+                            "bulk_options.{$index}.amount" => ['Amount must be greater than zero.']
+                        ]);
+                    }
+
+                    if ($option['price'] <= 0) {
+                        throw ValidationException::withMessages([
+                            "bulk_options.{$index}.price" => ['Price must be greater than zero.']
+                        ]);
+                    }
+                }
+            }
+
             // Handle product picture if uploaded
             $productPicture = 'default-product-picture.png';
             if ($request->hasFile('product_picture')) {
@@ -122,7 +156,8 @@ class AddCargoProductController extends Controller
                 'product_picture' => $productPicture,
                 'stock_amount' => $validated['stock_amount'],
                 'measurement_unit' => $validated['measurement_unit'],
-                'delivery_options' => $deliveryOptions
+                'delivery_options' => $deliveryOptions,
+                'bulk_options' => $bulkOptions
             ]);
 
             return redirect()

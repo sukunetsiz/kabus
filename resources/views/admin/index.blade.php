@@ -43,8 +43,8 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Disputes⛔</h3>
-                <p class="admin-panel-item-description">View and respond to user disputes.</p>
+                <h3 class="admin-panel-item-title">🥊 Disputes ⛔</h3>
+                <p class="admin-panel-item-description">View and respond to user disputes for both sides.</p>
                 <a href="#" class="admin-panel-item-link">View Disputes</a>
             </div>
 
@@ -70,6 +70,38 @@
                 <h3 class="admin-panel-item-title">📅 Canary 📅</h3>
                 <p class="admin-panel-item-description">Update the current canary of {{ config('app.name') }} with a signed message.</p>
                 <a href="{{ route('admin.canary') }}" class="admin-panel-item-link">Update Canary</a>
+            </div>
+
+            <div class="admin-panel-item">
+                <div class="admin-panel-item-icon">
+                </div>
+                <h3 class="admin-panel-item-title">📧 Vendor Applications ⛔</h3>
+                <p class="admin-panel-item-description">Review and approve/deny vendor applications requiring verification.</p>
+                <a href="#" class="admin-panel-item-link">Manage Applications</a>
+            </div>
+
+            <div class="admin-panel-item">
+                <div class="admin-panel-item-icon">
+                </div>
+                <h3 class="admin-panel-item-title">🚀 Ad Applications ⛔</h3>
+                <p class="admin-panel-item-description">Manage advertising requests and from vendors.</p>
+                <a href="#" class="admin-panel-item-link">Review Ads</a>
+            </div>
+
+            <div class="admin-panel-item">
+                <div class="admin-panel-item-icon">
+                </div>
+                <h3 class="admin-panel-item-title">🌐 Web Pop-Up ⛔</h3>
+                <p class="admin-panel-item-description">Create and manage website-wide pop-up notifications.</p>
+                <a href="#" class="admin-panel-item-link">Configure Popups</a>
+            </div>
+
+            <div class="admin-panel-item">
+                <div class="admin-panel-item-icon">
+                </div>
+                <h3 class="admin-panel-item-title">📊 Statistics ⛔</h3>
+                <p class="admin-panel-item-description">Access platform analytics and performance metrics dashboards.</p>
+                <a href="#" class="admin-panel-item-link">View Stats</a>
             </div>
         </div>
     </div>

@@ -63,8 +63,25 @@
                         </div>
                     </div>
                     <div class="flex flex-col items-end">
-                        <span class="text-3xl font-bold text-orange-400">${{ number_format($product->price, 2) }}</span>
-                        <span class="text-slate-400 text-sm mt-1">Listed by <span class="text-orange-400">{{ $product->user->username }}</span></span>
+                        <div class="space-y-1">
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-3xl font-bold text-orange-400">${{ number_format($product->price, 2) }}</span>
+                                @if(is_numeric($xmrPrice))
+                                    <span class="text-xl font-semibold text-slate-300">
+                                        ≈ ɱ{{ number_format($xmrPrice, 4) }}
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="text-sm">
+                                @if($xmrPrice === 'UNAVAILABLE')
+                                    <span class="text-red-400">XMR PRICE UNAVAILABLE</span>
+                                @else
+                                    <span class="text-slate-400">
+                                        Listed by <span class="text-orange-400">{{ $product->user->username }}</span>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                         
                         {{-- Wishlist Button --}}
                         @if(Auth::user()->hasWishlisted($product->id))
@@ -100,7 +117,7 @@
                     <h3 class="text-lg font-semibold text-slate-200 mb-3">Stock Information</h3>
                     <div class="flex items-center space-x-2 text-slate-300">
                         <span class="font-medium">Available:</span>
-                        <span>{{ number_format($product->stock_amount) }} {{ $product->measurement_unit }}</span>
+                        <span>{{ number_format($product->stock_amount) }} {{ $formattedMeasurementUnit }}</span>
                     </div>
                 </div>
 
@@ -156,6 +173,38 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Bulk Options --}}
+                @if($product->bulk_options && count($product->bulk_options) > 0)
+                    <div class="bg-slate-900 rounded-lg p-4 mt-4">
+                        <h3 class="text-lg font-semibold text-slate-200 mb-3">Bulk Purchase Options</h3>
+                        
+                        <div class="space-y-4">
+                            <p class="text-slate-300">
+                                Select a bulk purchase option to get a better price for larger quantities:
+                            </p>
+
+                            {{-- Bulk Options Dropdown --}}
+                            <div class="mt-4">
+                                <select name="bulk_option" id="bulk_option" 
+                                    class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <option value="">Select bulk option</option>
+                                    @foreach($product->getFormattedBulkOptions() as $index => $option)
+                                        <option value="{{ $index }}">
+                                            {{ $option['display_text'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            {{-- Option Details --}}
+                            <div class="mt-4 text-sm text-slate-400">
+                                <p>* Bulk prices are total prices for the specified quantity</p>
+                                <p>* Select a bulk option to save on larger purchases</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     @endif

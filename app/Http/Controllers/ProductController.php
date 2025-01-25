@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\XmrPriceController;
 
 class ProductController extends Controller
 {
@@ -108,9 +109,14 @@ class ProductController extends Controller
     /**
      * Display the specified product.
      */
-    public function show(Product $product)
+    public function show(Product $product, XmrPriceController $xmrPriceController)
     {
         try {
+            $xmrPrice = $xmrPriceController->getXmrPrice();
+            $xmrPrice = (is_numeric($xmrPrice) && $xmrPrice > 0) 
+                ? $product->price / $xmrPrice
+                : $xmrPrice; // Preserve 'UNAVAILABLE' string
+
             // Check if product is active
             if (!$product->active) {
                 abort(404);
@@ -132,10 +138,16 @@ class ProductController extends Controller
                 ]);
             }
 
+            // Get the formatted measurement unit
+            $measurementUnits = Product::getMeasurementUnits();
+            $formattedMeasurementUnit = $measurementUnits[$product->measurement_unit] ?? $product->measurement_unit;
+
             return view('products.show', [
                 'product' => $product,
                 'title' => $product->name,
-                'vendor_on_vacation' => false
+                'vendor_on_vacation' => false,
+                'xmrPrice' => $xmrPrice,
+                'formattedMeasurementUnit' => $formattedMeasurementUnit
             ]);
 
         } catch (\Exception $e) {

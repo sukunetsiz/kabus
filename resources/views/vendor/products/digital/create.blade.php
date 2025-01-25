@@ -207,6 +207,69 @@
                     @enderror
                 </div>
 
+                <!-- Bulk Options -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Bulk Options</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                        Optionally add up to 4 bulk purchase options. Leave empty if not offering bulk pricing.
+                    </p>
+                    
+                    @for ($i = 0; $i < 4; $i++)
+                        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                                Bulk Option {{ $i + 1 }}
+                            </h4>
+                            
+                            <!-- Amount -->
+                            <div class="mb-4">
+                                <label for="bulk_options_{{ $i }}_amount" 
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Bulk Amount
+                                </label>
+                                <input type="number" 
+                                    name="bulk_options[{{ $i }}][amount]" 
+                                    id="bulk_options_{{ $i }}_amount"
+                                    step="0.01"
+                                    min="0"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    value="{{ old('bulk_options.'.$i.'.amount') }}"
+                                    placeholder="Enter bulk quantity">
+                                @error('bulk_options.'.$i.'.amount')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Price -->
+                            <div>
+                                <label for="bulk_options_{{ $i }}_price" 
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Bulk Price (USD)
+                                </label>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500 sm:text-sm">$</span>
+                                    </div>
+                                    <input type="number" 
+                                        name="bulk_options[{{ $i }}][price]" 
+                                        id="bulk_options_{{ $i }}_price"
+                                        step="0.01" 
+                                        min="0"
+                                        class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        value="{{ old('bulk_options.'.$i.'.price') }}"
+                                        placeholder="Enter bulk price">
+                                    @error('bulk_options.'.$i.'.price')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    @endfor
+
+                    @error('bulk_options')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Submit Button -->
                 <div class="flex justify-end">
                     <button type="submit"

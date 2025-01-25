@@ -8,7 +8,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Add Digital⛔</h3>
+                <h3 class="admin-panel-item-title">💾 Add Digital ⛔</h3>
                 <p class="admin-panel-item-description">You can add digital products to {{ config('app.name') }}.</p>
                 <a href="{{ route('vendor.products.digital.create') }}" class="admin-panel-item-link">Add Digital Product</a>
             </div>
@@ -16,7 +16,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Add Cargo⛔</h3>
+                <h3 class="admin-panel-item-title">🚚 Add Cargo ⛔</h3>
                 <p class="admin-panel-item-description">You can add physical products that can be delivered by shipping.</p>
                 <a href="{{ route('vendor.products.cargo.create') }}" class="admin-panel-item-link">Add Cargo Product</a>
             </div>
@@ -24,7 +24,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Add Dead Drop⛔</h3>
+                <h3 class="admin-panel-item-title">🗺️ Add Dead Drop ⛔</h3>
                 <p class="admin-panel-item-description">You can add products that can be delivered via dead drop.</p>
                 <a href="{{ route('vendor.products.deaddrop.create') }}" class="admin-panel-item-link">Add Dead Drop Product</a>
             </div>
@@ -32,7 +32,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Statistics⛔</h3>
+                <h3 class="admin-panel-item-title">📈 Statistics ⛔</h3>
                 <p class="admin-panel-item-description">You can view sales data and other statistics.</p>
                 <a href="#" class="admin-panel-item-link">View Statistics</a>
             </div>
@@ -46,7 +46,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔Advertisement⛔</h3>
+                <h3 class="admin-panel-item-title">🎯 Advertisement ⛔</h3>
                 <p class="admin-panel-item-description">You can apply to promote your products with advertisements.</p>
                 <a href="#" class="admin-panel-item-link">Apply for Advertisement</a>
             </div>
@@ -62,7 +62,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">⛔My Sales⛔</h3>
+                <h3 class="admin-panel-item-title">💸 My Sales ⛔</h3>
                 <p class="admin-panel-item-description">You can view all your completed sales.</p>
                 <a href="#" class="admin-panel-item-link">View My Sales</a>
             </div>
