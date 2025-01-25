@@ -26,7 +26,9 @@
                                  alt="{{ $vendor->username }}'s Profile Picture">
                         </div>
                         <div class="vendors-show-username">
-                            <span class="vendors-show-value">{{ $vendor->username }}</span>
+                            <a href="{{ route('dashboard', $vendor->username) }}" class="vendors-show-value">
+                                {{ $vendor->username }}
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -142,12 +142,18 @@ class ProductController extends Controller
             $measurementUnits = Product::getMeasurementUnits();
             $formattedMeasurementUnit = $measurementUnits[$product->measurement_unit] ?? $product->measurement_unit;
 
+            // Get formatted options with XMR price
+            $formattedBulkOptions = $product->getFormattedBulkOptions($xmrPrice);
+            $formattedDeliveryOptions = $product->getFormattedDeliveryOptions($xmrPrice);
+
             return view('products.show', [
                 'product' => $product,
                 'title' => $product->name,
                 'vendor_on_vacation' => false,
                 'xmrPrice' => $xmrPrice,
-                'formattedMeasurementUnit' => $formattedMeasurementUnit
+                'formattedMeasurementUnit' => $formattedMeasurementUnit,
+                'formattedBulkOptions' => $formattedBulkOptions,
+                'formattedDeliveryOptions' => $formattedDeliveryOptions
             ]);
 
         } catch (\Exception $e) {

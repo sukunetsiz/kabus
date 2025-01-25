@@ -160,15 +160,34 @@ class Product extends Model
     /**
      * Get formatted delivery options
      *
+     * @param float|string|null $xmrPrice Current XMR price for conversion
      * @return array
      */
-    public function getFormattedDeliveryOptions(): array
+    public function getFormattedDeliveryOptions($xmrPrice = null): array
     {
-        return array_map(function ($option) {
+        return array_map(function ($option) use ($xmrPrice) {
+            $optionXmrPrice = is_numeric($xmrPrice) && $xmrPrice > 0 
+                ? $option['price'] / $xmrPrice 
+                : null;
+            
+            $totalXmrPrice = is_numeric($xmrPrice) && $xmrPrice > 0 
+                ? ($this->price + $option['price']) / $xmrPrice 
+                : null;
+
+            $priceDisplay = '$' . number_format($option['price'], 2);
+            if ($optionXmrPrice !== null) {
+                $priceDisplay .= sprintf(' (≈ ɱ%s)', number_format($optionXmrPrice, 4));
+            }
+
+            $totalPriceDisplay = '$' . number_format($this->price + $option['price'], 2);
+            if ($totalXmrPrice !== null) {
+                $totalPriceDisplay .= sprintf(' (≈ ɱ%s)', number_format($totalXmrPrice, 4));
+            }
+
             return [
                 'description' => $option['description'],
-                'price' => number_format($option['price'], 2),
-                'total_price' => number_format($this->price + $option['price'], 2)
+                'price' => $priceDisplay,
+                'total_price' => $totalPriceDisplay
             ];
         }, $this->delivery_options ?? []);
     }
@@ -176,18 +195,27 @@ class Product extends Model
     /**
      * Get formatted bulk options
      *
+     * @param float|string|null $xmrPrice Current XMR price for conversion
      * @return array
      */
-    public function getFormattedBulkOptions(): array
+    public function getFormattedBulkOptions($xmrPrice = null): array
     {
-        return array_map(function ($option) {
+        $measurementUnits = self::getMeasurementUnits();
+        $formattedUnit = $measurementUnits[$this->measurement_unit] ?? $this->measurement_unit;
+
+        return array_map(function ($option) use ($xmrPrice, $formattedUnit) {
+            $xmrAmount = is_numeric($xmrPrice) && $xmrPrice > 0 
+                ? $option['price'] / $xmrPrice 
+                : null;
+
             return [
                 'amount' => $option['amount'],
                 'price' => number_format($option['price'], 2),
-                'display_text' => sprintf('%s %s for $%s',
+                'display_text' => sprintf('%s %s for $%s%s',
                     number_format($option['amount']),
-                    $this->measurement_unit,
-                    number_format($option['price'], 2)
+                    $formattedUnit,
+                    number_format($option['price'], 2),
+                    $xmrAmount !== null ? sprintf(' (≈ ɱ%s)', number_format($xmrAmount, 4)) : ''
                 )
             ];
         }, $this->bulk_options ?? []);

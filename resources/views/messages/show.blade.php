@@ -10,7 +10,9 @@
                         <p class="messages-show-text">{{ $message->content }}</p>
                     </div>
                     <div class="messages-show-meta">
-                        <span class="messages-show-username">{{ $message->sender->username }}</span>
+                        <a href="{{ route('dashboard', $message->sender->username) }}" class="messages-show-username">
+                            {{ $message->sender->username }}
+                        </a>
                         <span class="messages-show-time">{{ $message->created_at->diffForHumans() }}</span>
                     </div>
                 </div>

@@ -38,8 +38,10 @@
             @foreach($messages as $message)
                 <div class="admin-support-show-message @if($message->is_admin_reply) admin-reply @endif">
                     <div class="admin-support-show-message-header">
-                        <div class="admin-support-show-message-user">
-                            {{ $message->user->username }}
+                        <div>
+                            <a href="{{ route('dashboard', $message->user->username) }}" class="admin-support-show-message-user">
+                                {{ $message->user->username }}
+                            </a>
                             @if($message->is_admin_reply)
                                 <span class="admin-support-show-admin-badge">Admin</span>
                             @endif

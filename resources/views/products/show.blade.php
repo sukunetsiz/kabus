@@ -149,11 +149,13 @@
                         <div class="mt-4">
                             <select name="delivery_option" id="delivery_option" 
                                 class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                @foreach($product->getFormattedDeliveryOptions() as $index => $option)
+                                @foreach($formattedDeliveryOptions as $index => $option)
                                     <option value="{{ $index }}">
                                         {{ $option['description'] }}
-                                        @if($option['price'] > 0)
-                                            (+${{ $option['price'] }})
+                                        @if(str_starts_with($option['price'], '$0.00'))
+                                            (Free)
+                                        @else
+                                            ({{ $option['price'] }})
                                         @endif
                                     </option>
                                 @endforeach
@@ -188,8 +190,8 @@
                             <div class="mt-4">
                                 <select name="bulk_option" id="bulk_option" 
                                     class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <option value="">Select bulk option</option>
-                                    @foreach($product->getFormattedBulkOptions() as $index => $option)
+                                    <option value="">Select Bulk Option</option>
+                                    @foreach($formattedBulkOptions as $index => $option)
                                         <option value="{{ $index }}">
                                             {{ $option['display_text'] }}
                                         </option>
