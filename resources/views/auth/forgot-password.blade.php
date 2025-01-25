@@ -4,7 +4,6 @@
 <div class="container">
     <div class="auth-container">
         <h2>Forgot Password</h2>
-        <div class="card">
             @if ($errors->has('error'))
                 <div class="alert alert-error" role="alert" style="text-align: center;">
                     {{ $errors->first('error') }}
@@ -30,7 +29,6 @@
                     Verify Mnemonic Phrase
                 </button>
             </form>
-        </div>
     </div>
 </div>
 @endsection

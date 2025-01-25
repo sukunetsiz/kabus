@@ -960,16 +960,21 @@ font-weight:700
 }
 
 .profile-update-card textarea {
-width:100%;
-padding:12px 15px;
-background-color:#2c2c2c;
-border:1px solid #3c3c3c;
-border-radius:4px;
-color:#e0e0e0;
-box-sizing:border-box;
-transition:all .3s ease;
-resize:vertical;
-height:200px
+width: 100%;
+padding: 12px 15px;
+background-color: #2c2c2c;
+border: 1px solid #3c3c3c;
+border-radius: 4px;
+color: #e0e0e0;
+box-sizing: border-box;
+transition: all 0.3s ease;
+resize: vertical;
+height: 200px
+}
+
+.profile-update-card textarea:focus {
+outline: none;
+border-color: #bb86fc
 }
 
 .update-profile-btn {
@@ -1138,7 +1143,8 @@ color:#e0e0e0;
 box-sizing:border-box;
 resize:vertical;
 margin:0 auto;
-display:block
+display:block;
+transition: all 0.3s ease
 }
 
 .pgp-confirm-textarea:focus {
@@ -1631,7 +1637,8 @@ border-radius:4px;
 color:#e0e0e0;
 box-sizing:border-box;
 resize:vertical;
-min-height:350px
+min-height:350px;
+transition: all 0.3s ease
 }
 
 .canary-index-textarea:focus {
@@ -2243,7 +2250,13 @@ border:1px solid #3c3c3c;
 border-radius:6px;
 color:#e0e0e0;
 font-size:16px;
-text-align:center
+text-align:center;
+transition: all 0.3s ease
+}
+
+.user-details-input-group input:focus {
+outline: none;
+border-color: #bb86fc
 }
 
 .user-details-btn {
@@ -4795,15 +4808,20 @@ text-align:center
 }
 
 .products-index-input,.products-index-select {
-width:80%;
-padding:12px 15px;
-background-color:#2c2c2c;
-border:1px solid #3c3c3c;
-border-radius:8px;
-color:#e0e0e0;
-font-size:14px;
-transition:all .3s ease;
-text-align:center
+width: 80%;
+padding: 12px 15px;
+background-color: #2c2c2c;
+border: 1px solid #3c3c3c;
+border-radius: 8px;
+color: #e0e0e0;
+font-size: 14px;
+transition: all 0.3s ease;
+text-align: center
+}
+
+.products-index-input:focus,.products-index-select:focus {
+outline: none;
+border-color: #bb86fc
 }
 
 .products-index-search-container {
@@ -6124,4 +6142,63 @@ margin-right:10px
 
 .notification-delete {
 margin-left:10px
+}
+
+.login-throttle-container {
+max-width: 400px;
+margin: 80px auto;
+padding: 40px;
+background-color: #1e1e1e;
+border-radius: 8px;
+border: 1px solid #3c3c3c;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3)
+}
+
+.login-throttle-heading {
+color: #bb86fc;
+text-align: center;
+margin-bottom: 25px;
+font-size: 24px;
+display: flex;
+align-items: center;
+gap: 10px;
+justify-content: center
+}
+
+.login-throttle-alert {
+color: #e0e0e0;
+text-align: center;
+line-height: 1.6;
+margin-bottom: 30px;
+padding: 15px;
+background-color: #2c2c2c;
+border-radius: 8px
+}
+
+.login-throttle-hr {
+border-color: #3c3c3c;
+margin: 15px 0
+}
+
+.login-throttle-button {
+width: 100%;
+padding: 12px;
+background-color: #bb86fc;
+color: #121212;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 16px;
+font-weight: 700;
+transition: all 0.3s ease;
+text-transform: uppercase;
+letter-spacing: 1px;
+text-decoration: none;
+display: block;
+text-align: center
+}
+
+.login-throttle-button:hover {
+background-color: #996cff;
+transform: translateY(-2px)
 }

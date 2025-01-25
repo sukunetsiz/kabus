@@ -4,7 +4,6 @@
 <div class="container">
     <div class="auth-container">
         <h2>Reset Password</h2>
-        <div class="card">
             <form method="POST" action="{{ route('password.update') }}" class="auth-form">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
@@ -29,7 +28,6 @@
                     Reset Password
                 </button>
             </form>
-        </div>
     </div>
 </div>
 @endsection
