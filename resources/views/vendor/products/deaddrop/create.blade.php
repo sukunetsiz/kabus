@@ -18,25 +18,16 @@
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Product Picture
                     </label>
-                    <div class="mt-1 flex items-center space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="h-32 w-32 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-                                <img id="preview-image" src="{{ asset('images/default-product-picture.png') }}" 
-                                    alt="Product preview" class="h-full w-full object-cover">
-                            </div>
-                        </div>
-                        <div class="flex flex-col space-y-2">
-                            <label for="product_picture" 
-                                class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
-                                Choose Picture
-                            </label>
-                            <input type="file" name="product_picture" id="product_picture" 
-                                class="hidden" accept="image/jpeg,image/png,image/gif,image/webp"
-                                onchange="document.getElementById('preview-image').src = window.URL.createObjectURL(this.files[0])">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                Optional. JPEG, PNG, GIF, WebP. Max 800KB.
-                            </p>
-                        </div>
+                    <div class="mt-1">
+                        <label for="product_picture" 
+                            class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
+                            Choose Picture
+                        </label>
+                        <input type="file" name="product_picture" id="product_picture" 
+                            class="hidden" accept="image/jpeg,image/png,image/gif,image/webp">
+                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            Optional. JPEG, PNG, GIF, WebP. Max 800KB.
+                        </p>
                     </div>
                     @error('product_picture')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

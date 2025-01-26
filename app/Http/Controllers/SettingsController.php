@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChangePasswordRequest;
-use App\Http\Requests\UpdatePgpKeyRequest;
 use App\Models\PgpKey;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Database\QueryException;
 
@@ -19,8 +21,48 @@ class SettingsController extends Controller
         return view('settings', compact('user'));
     }
 
-    public function changePassword(ChangePasswordRequest $request)
+    public function changePassword(Request $request)
     {
+        if (!Auth::check()) {
+            return back()->with('error', 'Unauthorized access.');
+        }
+
+        $this->checkRateLimit($request);
+
+        $validator = Validator::make($request->all(), [
+            'current_password' => ['required'],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:40',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]])[A-Za-z\d#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]]{8,}$/',
+            ],
+            'password_confirmation' => ['required', 'string'],
+        ], [
+            'current_password.required' => 'Current password is required.',
+            'password.required' => 'New password is required.',
+            'password.string' => 'New password must be a string.',
+            'password.min' => 'New password must be at least 8 characters.',
+            'password.max' => 'New password cannot exceed 40 characters.',
+            'password.confirmed' => 'New password confirmation does not match.',
+            'password.regex' => 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            'password_confirmation.required' => 'Please confirm your new password.',
+            'password_confirmation.string' => 'Password confirmation must be a string.',
+        ]);
+
+        $validator->after(function ($validator) use ($request) {
+            if (!Hash::check($request->current_password, Auth::user()->password)) {
+                RateLimiter::hit($this->throttleKey($request), 60);
+                $validator->errors()->add('current_password', 'The entered password does not match your current password.');
+            }
+        });
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
         $user = Auth::user();
 
         try {
@@ -43,8 +85,28 @@ class SettingsController extends Controller
         }
     }
 
-    public function updatePgpKey(UpdatePgpKeyRequest $request)
+    public function updatePgpKey(Request $request)
     {
+        if (!Auth::check()) {
+            return back()->with('error', 'Unauthorized access.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'public_key' => [
+                'required',
+                'string',
+                'max:8000',
+                'regex:/^-----BEGIN PGP PUBLIC KEY BLOCK-----.*-----END PGP PUBLIC KEY BLOCK-----$/s'
+            ],
+        ], [
+            'public_key.max' => 'PGP public key must not exceed 8000 characters.',
+            'public_key.regex' => 'PGP public key must be in the correct format.',
+        ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
         $user = Auth::user();
         $pgpKey = $user->pgpKey ?? new PgpKey();
 
@@ -65,5 +127,24 @@ class SettingsController extends Controller
             Log::error("Unexpected error updating PGP key for user {$user->id}: " . $e->getMessage());
             return back()->with('error', 'An unexpected error occurred. Please try again or contact support if the problem persists.');
         }
+    }
+
+    private function checkRateLimit(Request $request)
+    {
+        $key = $this->throttleKey($request);
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            throw ValidationException::withMessages([
+                'current_password' => ["Too many password change attempts. Please try again in {$seconds} seconds."],
+            ]);
+        }
+
+        RateLimiter::hit($key, 60);
+    }
+
+    private function throttleKey(Request $request)
+    {
+        return 'password_change|' . $request->ip();
     }
 }

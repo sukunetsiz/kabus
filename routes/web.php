@@ -26,7 +26,6 @@ use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\AddCargoProductController;
 use App\Http\Controllers\AddDigitalProductController;
 use App\Http\Controllers\AddDeadDropProductController;
-use App\Http\Controllers\ProductPictureController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -80,7 +79,7 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         // Product routes
         Route::get('/products', [ProductController::class, 'index'])->name('products.index');
         Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-        Route::get('/product/picture/{filename}', [ProductPictureController::class, 'show'])->name('product.picture');
+        Route::get('/product/picture/{filename}', [ProductController::class, 'showPicture'])->name('product.picture');
         
         // Wishlist routes
         Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
