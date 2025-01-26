@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="admin-support-show-container">
     <div class="admin-support-show-card">
         <div class="admin-support-show-header">
@@ -12,14 +13,16 @@
                     <form action="{{ route('admin.support.status', $supportRequest->ticket_id) }}" method="POST" class="admin-support-show-status-form">
                         @csrf
                         @method('PUT')
-                        <select name="status" onchange="this.form.submit()"
-                            class="admin-support-show-status-select @if($supportRequest->status === 'open') status-open
+                        <select name="status" class="admin-support-show-status-select @if($supportRequest->status === 'open') status-open
                             @elseif($supportRequest->status === 'in_progress') status-progress
                             @else status-closed @endif">
                             <option value="open" @if($supportRequest->status === 'open') selected @endif>Open</option>
                             <option value="in_progress" @if($supportRequest->status === 'in_progress') selected @endif>In Progress</option>
                             <option value="closed" @if($supportRequest->status === 'closed') selected @endif>Closed</option>
                         </select>
+                        <button type="submit" class="admin-support-show-status-btn">
+                            Update Status
+                        </button>
                     </form>
                 </div>
             </div>

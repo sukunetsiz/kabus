@@ -2831,8 +2831,17 @@ margin-bottom:8px
 }
 
 .admin-support-show-message-user {
-color:#e0e0e0;
-font-weight:700
+color: #e0e0e0;
+font-weight: 700;
+text-decoration: none !important;
+display: inline-block;
+transition: all 0.2s ease;
+position: relative
+}
+
+.admin-support-show-message-user:hover {
+color: #ffffff;
+transform: translateY(-1px)
 }
 
 .admin-support-show-admin-badge {
@@ -2933,6 +2942,32 @@ padding:12px 15px;
 border-radius:6px;
 margin-top:20px;
 text-align:center
+}
+
+.admin-support-show-status-form {
+display:flex;
+gap:10px;
+align-items:center
+}
+
+.admin-support-show-status-btn {
+background-color:#2c2c2c;
+color:#bb86fc;
+padding:8px 12px;
+border-radius:6px;
+border:1px solid #3c3c3c;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+transition:all .3s ease;
+margin:0
+}
+
+.admin-support-show-status-btn:hover {
+background-color:#bb86fc;
+color:#121212;
+transform:translateY(-2px);
+box-shadow:0 4px 10px #bb86fc33
 }
 
 .support-index-container {
@@ -3359,8 +3394,17 @@ margin-bottom:8px
 }
 
 .support-show-message-user {
-color:#e0e0e0;
-font-weight:700
+color: #e0e0e0;
+font-weight: 700;
+text-decoration: none !important;
+display: inline-block;
+transition: all 0.2s ease;
+position: relative
+}
+
+.support-show-message-user:hover {
+color: #ffffff;
+transform: translateY(-1px)
 }
 
 .support-show-admin-badge {
@@ -4496,9 +4540,17 @@ margin-left:20px
 }
 
 .vendors-show-value {
-color:#bb86fc;
-font-size:18px;
-font-weight:700
+color: #bb86fc;
+font-size: 18px;
+font-weight: 700;
+text-decoration: none !important;
+display: inline-block;
+transition: all 0.2s ease
+}
+
+.vendors-show-value:hover {
+color: #d0a4ff;
+transform: translateY(-1px)
 }
 
 .vendors-show-description {
@@ -5339,8 +5391,18 @@ font-size:12px
 }
 
 .messages-show-username {
-color:#bb86fc;
-font-weight:600
+color: #bb86fc;
+font-weight: 600;
+text-decoration: none !important;
+display: inline-block;
+transition: all 0.2s ease;
+position: relative
+}
+
+.messages-show-username:hover {
+color: #d0a4ff;
+transform: translateY(-1px);
+cursor: pointer
 }
 
 .messages-show-time {
