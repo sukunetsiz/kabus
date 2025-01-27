@@ -48,7 +48,14 @@ class CartController extends Controller
             // Validate product addition
             $validation = Cart::validateProductAddition(Auth::user(), $product);
             if (!$validation['valid']) {
-                return back()->with('error', $validation['message']);
+                $errorMessage = match($validation['reason']) {
+                    'different_vendor' => 'You can only add products from the same vendor to your cart.',
+                    'inactive' => 'This product is currently not available.',
+                    'vacation' => 'This vendor is currently on vacation.',
+                    'out_of_stock' => 'This product is out of stock.',
+                    default => 'Unable to add product to cart.'
+                };
+                return back()->with('error', $errorMessage);
             }
 
             // Get selected delivery option
@@ -79,6 +86,23 @@ class CartController extends Controller
                 // we'll store $100 as the price, and quantity as 2 (sets)
                 $price = $selectedBulk['price'];
                 $quantity = $quantity / $selectedBulk['amount'];
+            }
+
+            // Validate stock availability after processing bulk options
+            $stockValidation = Cart::validateStockAvailability(
+                $product,
+                $quantity,
+                $selectedBulk
+            );
+
+            if (!$stockValidation['valid']) {
+                return back()->with('error', sprintf(
+                    'Insufficient stock. Available: %d %s, Requested: %d %s',
+                    $stockValidation['available'],
+                    $product->measurement_unit,
+                    $stockValidation['requested'],
+                    $product->measurement_unit
+                ));
             }
 
             // Create or update cart item
@@ -119,16 +143,25 @@ class CartController extends Controller
                 'quantity' => 'required|integer|min:1'
             ]);
 
-            // If this is a bulk item, validate the quantity
-            if ($cart->selected_bulk_option) {
-                // For bulk items, quantity represents number of sets
-                $quantity = $validated['quantity'];
-            } else {
-                $quantity = $validated['quantity'];
+            // Validate stock availability
+            $stockValidation = Cart::validateStockAvailability(
+                $cart->product,
+                $validated['quantity'],
+                $cart->selected_bulk_option
+            );
+
+            if (!$stockValidation['valid']) {
+                return back()->with('error', sprintf(
+                    'Insufficient stock. Available: %d %s, Requested: %d %s',
+                    $stockValidation['available'],
+                    $cart->product->measurement_unit,
+                    $stockValidation['requested'],
+                    $cart->product->measurement_unit
+                ));
             }
 
             $cart->update([
-                'quantity' => $quantity
+                'quantity' => $validated['quantity']
             ]);
 
             return redirect()

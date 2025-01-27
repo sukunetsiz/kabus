@@ -12,7 +12,12 @@
             <div class="navbar-center">
                 <span class="navbar-brand">
                     @auth
-                        <a href="{{ route('cart.index') }}" class="left-icon-btn"><span class="left-nav-icon">🛒</span></a>
+                        <a href="{{ route('cart.index') }}" class="left-icon-btn">
+                            <span class="left-nav-icon">🛒</span>
+                            @if(auth()->user()->cartItems()->count() > 0)
+                                <span class="left-icon-btn-cart-badge">{{ auth()->user()->cartItems()->count() }}</span>
+                            @endif
+                        </a>
                     @endauth
                     <span class="brand-text">
                         {{ config('app.name') }}

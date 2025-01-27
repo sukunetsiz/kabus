@@ -66,7 +66,7 @@
                                             @if($product->type === 'digital')
                                                 Digital
                                             @elseif($product->type === 'cargo')
-                                                Shipping
+                                                Cargo
                                             @else
                                                 Dead Drop
                                             @endif

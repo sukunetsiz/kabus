@@ -77,7 +77,7 @@ class Cart extends Model
      * 
      * @param User $user
      * @param Product $product
-     * @return array ['valid' => bool, 'message' => string]
+     * @return array ['valid' => bool, 'reason' => string]
      */
     public static function validateProductAddition(User $user, Product $product): array
     {
@@ -92,7 +92,7 @@ class Cart extends Model
             if ($product->user_id !== $existingVendorId) {
                 return [
                     'valid' => false,
-                    'message' => 'You can only add products from the same vendor to your cart.'
+                    'reason' => 'different_vendor'
                 ];
             }
         }
@@ -101,7 +101,7 @@ class Cart extends Model
         if (!$product->active) {
             return [
                 'valid' => false,
-                'message' => 'This product is currently not available.'
+                'reason' => 'inactive'
             ];
         }
 
@@ -109,7 +109,7 @@ class Cart extends Model
         if ($product->user->vendorProfile && $product->user->vendorProfile->vacation_mode) {
             return [
                 'valid' => false,
-                'message' => 'This vendor is currently on vacation.'
+                'reason' => 'vacation'
             ];
         }
 
@@ -117,11 +117,40 @@ class Cart extends Model
         if ($product->stock_amount < 1) {
             return [
                 'valid' => false,
-                'message' => 'This product is out of stock.'
+                'reason' => 'out_of_stock'
             ];
         }
 
-        return ['valid' => true, 'message' => ''];
+        return ['valid' => true, 'reason' => ''];
+    }
+
+    /**
+     * Validate if requested quantity is available in stock
+     * 
+     * @param Product $product
+     * @param int $quantity
+     * @param array|null $bulkOption
+     * @return array ['valid' => bool, 'reason' => string]
+     */
+    public static function validateStockAvailability(Product $product, int $quantity, ?array $bulkOption = null): array
+    {
+        // For bulk options, quantity is already in terms of sets
+        // We only multiply by bulk amount when checking against stock
+        $totalStockNeeded = $bulkOption 
+            ? $quantity * $bulkOption['amount']  // For bulk purchases, multiply sets by amount per set
+            : $quantity;                         // For regular purchases, use quantity directly
+
+        // Check if we have sufficient stock
+        if ($totalStockNeeded > $product->stock_amount) {
+            return [
+                'valid' => false,
+                'reason' => 'insufficient_stock',
+                'available' => $product->stock_amount,
+                'requested' => $totalStockNeeded
+            ];
+        }
+
+        return ['valid' => true, 'reason' => ''];
     }
 
     /**
