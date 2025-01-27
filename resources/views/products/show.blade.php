@@ -83,27 +83,102 @@
                             </div>
                         </div>
                         
-                        {{-- Wishlist Button --}}
-                        @if(Auth::user()->hasWishlisted($product->id))
-                            <form action="{{ route('wishlist.destroy', $product) }}" method="POST" class="mt-2">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" 
-                                        class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                    Remove from Wishlist
-                                </button>
-                            </form>
-                        @else
-                            <form action="{{ route('wishlist.store', $product) }}" method="POST" class="mt-2">
-                                @csrf
-                                <button type="submit" 
-                                        class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                    Add to Wishlist
-                                </button>
-                            </form>
-                        @endif
+                        <div class="flex flex-col gap-2">
+                            {{-- Wishlist Button --}}
+                            @if(Auth::user()->hasWishlisted($product->id))
+                                <form action="{{ route('wishlist.destroy', $product) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                        Remove from Wishlist
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('wishlist.store', $product) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" 
+                                            class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                                        Add to Wishlist
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
+
+                @if(Auth::id() === $product->user_id)
+                    <div class="mt-6 border-t border-slate-700 pt-6">
+                        <div class="bg-red-900 text-red-200 p-4 rounded-lg">
+                            <p>You cannot add your own products to the cart.</p>
+                        </div>
+                    </div>
+                @else
+                    {{-- Add to Cart Form --}}
+                    <form action="{{ route('cart.store', $product) }}" method="POST" class="mt-6 border-t border-slate-700 pt-6">
+                        @csrf
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {{-- Quantity Input --}}
+                            <div>
+                                <label for="quantity" class="block text-sm font-medium text-slate-300 mb-2">Quantity</label>
+                                <div class="flex gap-2">
+                                    <input type="number" 
+                                           name="quantity" 
+                                           id="quantity" 
+                                           min="1" 
+                                           value="{{ old('quantity', 1) }}" 
+                                           class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                           required>
+                                </div>
+                            </div>
+
+                            {{-- Delivery Options Select --}}
+                            <div>
+                                <label for="delivery_option" class="block text-sm font-medium text-slate-300 mb-2">Delivery Option</label>
+                                <select name="delivery_option" 
+                                        id="delivery_option" 
+                                        class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        required>
+                                    @foreach($formattedDeliveryOptions as $index => $option)
+                                        <option value="{{ $index }}">
+                                            {{ $option['description'] }}
+                                            @if(str_starts_with($option['price'], '$0.00'))
+                                                (Free)
+                                            @else
+                                                ({{ $option['price'] }})
+                                            @endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            @if($product->bulk_options && count($product->bulk_options) > 0)
+                                {{-- Bulk Options Select --}}
+                                <div class="md:col-span-2">
+                                    <label for="bulk_option" class="block text-sm font-medium text-slate-300 mb-2">Bulk Purchase Option</label>
+                                    <select name="bulk_option" 
+                                            id="bulk_option" 
+                                            class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <option value="">Regular Price (No Bulk Discount)</option>
+                                        @foreach($formattedBulkOptions as $index => $option)
+                                            <option value="{{ $index }}">
+                                                {{ $option['display_text'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Add to Cart Button --}}
+                        <div class="mt-6">
+                            <button type="submit" 
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 text-center">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </form>
+                @endif
 
                 {{-- Product Description --}}
                 <div class="prose prose-invert max-w-none mb-8">
@@ -134,44 +209,8 @@
                     </h3>
                     
                     <div class="space-y-4">
-                        {{-- Product Type Information --}}
-                        <p class="text-slate-300">
-                            @if($product->isDigital())
-                                This is a digital product. Select your preferred processing time:
-                            @elseif($product->isCargo())
-                                This product will be shipped via secure cargo delivery. Select your preferred shipping method:
-                            @else
-                                This is a dead drop delivery. Select your preferred pickup window:
-                            @endif
-                        </p>
-
-                        {{-- Delivery Options Dropdown --}}
-                        <div class="mt-4">
-                            <select name="delivery_option" id="delivery_option" 
-                                class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                @foreach($formattedDeliveryOptions as $index => $option)
-                                    <option value="{{ $index }}">
-                                        {{ $option['description'] }}
-                                        @if(str_starts_with($option['price'], '$0.00'))
-                                            (Free)
-                                        @else
-                                            ({{ $option['price'] }})
-                                        @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        {{-- Option Details --}}
                         <div class="mt-4 text-sm text-slate-400">
                             <p>* Additional fees (if any) will be added to the base price</p>
-                            @if($product->isDigital())
-                                <p>* Access details will be provided after purchase</p>
-                            @elseif($product->isCargo())
-                                <p>* Shipping details will be provided after purchase</p>
-                            @else
-                                <p>* Pickup location will be provided after purchase</p>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -186,22 +225,7 @@
                                 Select a bulk purchase option to get a better price for larger quantities:
                             </p>
 
-                            {{-- Bulk Options Dropdown --}}
-                            <div class="mt-4">
-                                <select name="bulk_option" id="bulk_option" 
-                                    class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <option value="">Select Bulk Option</option>
-                                    @foreach($formattedBulkOptions as $index => $option)
-                                        <option value="{{ $index }}">
-                                            {{ $option['display_text'] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            {{-- Option Details --}}
                             <div class="mt-4 text-sm text-slate-400">
-                                <p>* Bulk prices are total prices for the specified quantity</p>
                                 <p>* Select a bulk option to save on larger purchases</p>
                             </div>
                         </div>

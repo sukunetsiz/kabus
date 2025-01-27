@@ -27,6 +27,7 @@ use App\Http\Controllers\AddCargoProductController;
 use App\Http\Controllers\AddDigitalProductController;
 use App\Http\Controllers\AddDeadDropProductController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\LoginThrottle;
@@ -80,6 +81,14 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         Route::get('/products', [ProductController::class, 'index'])->name('products.index');
         Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/product/picture/{filename}', [ProductController::class, 'showPicture'])->name('product.picture');
+        
+        // Cart routes
+        Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/cart/{product}', [CartController::class, 'store'])->name('cart.store');
+        Route::put('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+        Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+        Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+        Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
         
         // Wishlist routes
         Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');

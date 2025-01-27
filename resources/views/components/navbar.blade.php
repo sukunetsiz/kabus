@@ -12,7 +12,7 @@
             <div class="navbar-center">
                 <span class="navbar-brand">
                     @auth
-                        <a href="#" class="left-icon-btn"><span class="left-nav-icon">🛒</span></a>
+                        <a href="{{ route('cart.index') }}" class="left-icon-btn"><span class="left-nav-icon">🛒</span></a>
                     @endauth
                     <span class="brand-text">
                         {{ config('app.name') }}

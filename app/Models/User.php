@@ -275,6 +275,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's cart items.
+     */
+    public function cartItems()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    /**
      * Get the user who referred this user.
      */
     public function referrer()
