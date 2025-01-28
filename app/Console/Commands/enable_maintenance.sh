@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Go to your Laravel project directory
-cd /var/www/Kabus
+cd /var/www/kabus
 
 # Put Laravel into maintenance mode
 php artisan down

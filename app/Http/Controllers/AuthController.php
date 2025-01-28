@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,8 +28,98 @@ class AuthController extends Controller
         return view('auth.register', ['captchaCode' => $captchaCode]);
     }
 
-    public function register(AuthRequest $request)
+    protected function getValidationRules(string $type = 'login'): array
     {
+        $captchaLength = strlen(session('captcha_code', ''));
+        
+        $rules = [
+            'username' => [
+                'required',
+                'string',
+                'min:4',
+                'max:16',
+                'regex:/^[a-zA-Z0-9]+$/'
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:40',
+            ],
+            'captcha' => ['required', 'string', "size:$captchaLength"],
+        ];
+
+        if ($type === 'register') {
+            // Add registration-specific rules
+            $rules['username'][] = 'unique:users';
+            $rules['password'] = [
+                'required',
+                'string',
+                'min:8',
+                'max:40',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]])[A-Za-z\d#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]]{8,}$/',
+            ];
+            $rules['password_confirmation'] = ['required', 'string'];
+
+            // Reference code validation
+            $referenceCodeRules = [
+                'string',
+                'size:16',
+                function ($attribute, $value, $fail) {
+                    if ($value !== null) {
+                        $validReference = User::all()->contains(function ($user) use ($value) {
+                            return $user->reference_id === $value;
+                        });
+
+                        if (!$validReference) {
+                            $fail('Invalid reference number.');
+                        }
+                    }
+                },
+            ];
+
+            // Add required rule if configured
+            if (config('marketplace.require_reference_code', true)) {
+                array_unshift($referenceCodeRules, 'required');
+            } else {
+                array_unshift($referenceCodeRules, 'nullable');
+            }
+
+            $rules['reference_code'] = $referenceCodeRules;
+        }
+
+        return $rules;
+    }
+
+    protected function getValidationMessages(): array
+    {
+        $captchaLength = strlen(session('captcha_code', ''));
+        return [
+            'username.required' => 'Username is required.',
+            'username.min' => 'Username must be at least 4 characters.',
+            'username.max' => 'Username cannot exceed 16 characters.',
+            'username.unique' => 'This username is already taken.',
+            'username.regex' => 'Username can only contain letters and numbers.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.max' => 'Password cannot exceed 40 characters.',
+            'password.regex' => 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+            'reference_code.required' => 'Reference number is required.',
+            'reference_code.size' => 'Reference number must be exactly 16 characters.',
+            'captcha.required' => 'CAPTCHA is required.',
+            'captcha.size' => "CAPTCHA must be exactly $captchaLength characters.",
+        ];
+    }
+
+    public function register(Request $request)
+    {
+        // Validate request
+        $validated = $request->validate(
+            $this->getValidationRules('register'),
+            $this->getValidationMessages()
+        );
+
         // Validate CAPTCHA
         $captchaCode = session('captcha_code');
         if (!hash_equals(strtoupper($captchaCode), strtoupper($request->captcha))) {
@@ -89,8 +178,14 @@ class AuthController extends Controller
         return view('auth.login', ['captchaCode' => $captchaCode]);
     }
 
-    public function login(AuthRequest $request)
+    public function login(Request $request)
     {
+        // Validate request
+        $validated = $request->validate(
+            $this->getValidationRules('login'),
+            $this->getValidationMessages()
+        );
+
         // Validate CAPTCHA
         $captchaCode = session('captcha_code');
         if (!hash_equals(strtoupper($captchaCode), strtoupper($request->captcha))) {
@@ -133,6 +228,123 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
+    }
+
+    /**
+     * Show the form for requesting a password reset.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showForgotPasswordForm()
+    {
+        return view('auth.forgot-password');
+    }
+
+    /**
+     * Verify mnemonic and generate password reset token.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyMnemonic(Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required|string|max:16',
+            'mnemonic' => 'required|string|max:512',
+        ], [
+            'username.required' => 'Please enter your username.',
+            'username.max' => 'Username cannot be longer than 16 characters.',
+            'mnemonic.required' => 'Please enter your mnemonic phrase.',
+            'mnemonic.max' => 'Mnemonic phrase cannot be longer than 512 characters.',
+        ]);
+
+        $user = User::where('username', $request->username)->first();
+
+        if (!$user || !$this->verifyMnemonicPhrase($request->mnemonic, $user->mnemonic)) {
+            return back()->withErrors([
+                'error' => 'Username or mnemonic phrase is incorrect.',
+            ])->withInput($request->only('username'));
+        }
+
+        $token = Str::random(64);
+        $user->update([
+            'password_reset_token' => Hash::make($token),
+            'password_reset_expires_at' => now()->addMinutes(60),
+        ]);
+
+        return redirect()->route('password.reset', ['token' => $token])
+            ->with('status', 'Please reset your password.');
+    }
+
+    /**
+     * Verify the provided mnemonic phrase against the stored one.
+     *
+     * @param  string  $providedMnemonic
+     * @param  string  $storedMnemonic
+     * @return bool
+     */
+    private function verifyMnemonicPhrase($providedMnemonic, $storedMnemonic)
+    {
+        return hash_equals($storedMnemonic, $providedMnemonic);
+    }
+
+    /**
+     * Show the form for resetting the password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $token
+     * @return \Illuminate\View\View
+     */
+    public function showResetForm(Request $request, $token)
+    {
+        return view('auth.reset-password', ['token' => $token]);
+    }
+
+    /**
+     * Reset the user's password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function reset(Request $request)
+    {
+        $validated = $request->validate([
+            'token' => 'required',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:40',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]])[A-Za-z\d#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]]{8,}$/',
+            ],
+            'password_confirmation' => ['required', 'string'],
+        ], [
+            'token.required' => 'Reset token is required.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.max' => 'Password cannot exceed 40 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.regex' => 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+            'password_confirmation.required' => 'Please confirm your password.',
+        ]);
+
+        $user = User::where('password_reset_expires_at', '>', now())->get()
+            ->first(function ($user) use ($request) {
+                return Hash::check($request->token, $user->password_reset_token);
+            });
+
+        if (!$user) {
+            return back()->withErrors(['error' => 'This password reset token is invalid or has expired.']);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->password_reset_token = null;
+        $user->password_reset_expires_at = null;
+        $user->save();
+
+        return redirect()->route('login')
+            ->with('status', 'Your password has been successfully reset. You can now login with your new password.');
     }
 
     public function home()

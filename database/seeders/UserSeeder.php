@@ -81,7 +81,7 @@ class UserSeeder extends Seeder
     }
 
 /**
-     * Generate a valid username based on the AuthRequest rules.
+     * Generate a valid username based on the AuthController rules.
      */
     private function generateValidUsername($index): string
     {
@@ -108,7 +108,7 @@ class UserSeeder extends Seeder
     }
 
     /**
-     * Generate a valid password based on the AuthRequest rules.
+     * Generate a valid password based on the AuthController rules.
      */
     private function generateValidPassword(): string
     {

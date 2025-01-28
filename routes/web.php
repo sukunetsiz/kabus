@@ -4,8 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\RulesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -59,11 +57,11 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         Route::post('/login', [AuthController::class, 'login'])->middleware(LoginThrottle::class);
         Route::get('/mnemonic/{token}', [AuthController::class, 'showMnemonic'])->name('show.mnemonic');
 
-        // New routes for forgot password functionality using mnemonic
-        Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
-        Route::post('/forgot-password', [ForgotPasswordController::class, 'verifyMnemonic'])->name('password.verify');
-        Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-        Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+        // Password reset routes using mnemonic
+        Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+        Route::post('/forgot-password', [AuthController::class, 'verifyMnemonic'])->name('password.verify');
+        Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+        Route::post('/reset-password', [AuthController::class, 'reset'])->name('password.update');
 
         // New routes for 2FA challenge
         Route::get('/2fa/challenge', [Pgp2FAController::class, 'showChallenge'])->name('pgp.2fa.challenge');
