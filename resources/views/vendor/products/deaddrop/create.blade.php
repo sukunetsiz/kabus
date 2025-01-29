@@ -1,89 +1,112 @@
 @extends('layouts.app')
 
-@section('title', 'Add Dead Drop Product')
-
 @section('content')
-<div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6">
-            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+<div class="products-common-create-container">
+    <div class="products-common-create-card">
+        <div class="products-common-create-content">
+            <h2 class="products-common-create-title">
                 Add New Dead Drop Product
             </h2>
 
-            <form action="{{ route('vendor.products.deaddrop.store') }}" method="POST" class="space-y-6" enctype="multipart/form-data">
+            <form action="{{ route('vendor.products.deaddrop.store') }}" method="POST" class="products-common-create-form" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Product Picture -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Product Picture
-                    </label>
-                    <div class="mt-1">
-                        <label for="product_picture" 
-                            class="cursor-pointer inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
-                            Choose Picture
+                <!-- Product Pictures Section -->
+                <div class="products-common-create-section">
+                    <!-- Main Product Picture -->
+                    <div class="products-common-create-field">
+                        <label class="products-common-create-label">
+                            Main Product Picture
                         </label>
-                        <input type="file" name="product_picture" id="product_picture" 
-                            class="hidden" accept="image/jpeg,image/png,image/gif,image/webp">
-                        <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                            Optional. JPEG, PNG, GIF, WebP. Max 800KB.
-                        </p>
+                        <div class="products-common-create-upload-wrapper">
+                            <label for="product_picture" 
+                                class="products-common-create-file-btn">
+                                Choose Picture
+                            </label>
+                            <input type="file" name="product_picture" id="product_picture" 
+                                class="hidden" accept="image/jpeg,image/png,image/gif,image/webp">
+                            <p class="products-common-create-help-text">
+                                Optional. JPEG, PNG, GIF, WebP. Max 800KB.
+                            </p>
+                        </div>
+                        @error('product_picture')
+                            <p class="products-common-create-error">{{ $message }}</p>
+                        @enderror
                     </div>
-                    @error('product_picture')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+
+                    <!-- Additional Photos -->
+                    <div class="products-common-create-field">
+                        <label class="products-common-create-label">
+                            Additional Photos (Up to 3)
+                        </label>
+                        <div class="products-common-create-upload-wrapper">
+                            <label for="additional_photos" 
+                                class="products-common-create-file-btn">
+                                Choose Additional Photos
+                            </label>
+                            <input type="file" name="additional_photos[]" id="additional_photos" 
+                                class="hidden" accept="image/jpeg,image/png,image/gif,image/webp"
+                                multiple>
+                            <p class="products-common-create-help-text">
+                                Optional. Select up to 3 additional photos. JPEG, PNG, GIF, WebP. Max 800KB each.
+                            </p>
+                        </div>
+                        @error('additional_photos.*')
+                            <p class="products-common-create-error">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Name -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="products-common-create-field">
+                    <label for="name" class="products-common-create-label">
                         Product Name
                     </label>
                     <input type="text" name="name" id="name" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        class="products-common-create-input"
                         value="{{ old('name') }}">
                     @error('name')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="products-common-create-field">
+                    <label for="description" class="products-common-create-label">
                         Description
                     </label>
                     <textarea name="description" id="description" rows="4" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">{{ old('description') }}</textarea>
+                        class="products-common-create-textarea">{{ old('description') }}</textarea>
                     @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Price -->
-                <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="products-common-create-field">
+                    <label for="price" class="products-common-create-label">
                         Price (USD)
                     </label>
-                    <div class="mt-1 relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500 sm:text-sm">$</span>
+                    <div class="products-common-create-price-wrapper">
+                        <div class="products-common-create-price-symbol">
+                            <span>$</span>
                         </div>
                         <input type="number" name="price" id="price" required step="0.01" min="0"
-                            class="pl-7 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            class="products-common-create-price-input"
                             value="{{ old('price') }}">
                     </div>
                     @error('price')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Category -->
-                <div>
-                    <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="products-common-create-field">
+                    <label for="category_id" class="products-common-create-label">
                         Category
                     </label>
                     <select name="category_id" id="category_id" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        class="products-common-create-select">
                         <option value="">Select a category</option>
                         @foreach($categories as $category)
                             <!-- Main category -->
@@ -99,30 +122,30 @@
                         @endforeach
                     </select>
                     @error('category_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Stock Amount -->
-                <div>
-                    <label for="stock_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="products-common-create-field">
+                    <label for="stock_amount" class="products-common-create-label">
                         Stock Amount
                     </label>
                     <input type="number" name="stock_amount" id="stock_amount" required min="0" max="999999"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        class="products-common-create-input"
                         value="{{ old('stock_amount', 0) }}">
                     @error('stock_amount')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Measurement Unit -->
-                <div>
-                    <label for="measurement_unit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div class="products-common-create-field">
+                    <label for="measurement_unit" class="products-common-create-label">
                         Measurement Unit
                     </label>
                     <select name="measurement_unit" id="measurement_unit" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        class="products-common-create-select">
                         <option value="">Select a measurement unit</option>
                         @foreach($measurementUnits as $value => $label)
                             <option value="{{ $value }}" {{ old('measurement_unit') == $value ? 'selected' : '' }}>
@@ -131,19 +154,19 @@
                         @endforeach
                     </select>
                     @error('measurement_unit')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Shipping Locations -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="products-common-create-shipping-grid">
                     <!-- Ships From -->
-                    <div>
-                        <label for="ships_from" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <div class="products-common-create-field">
+                        <label for="ships_from" class="products-common-create-label">
                             From:
                         </label>
                         <select name="ships_from" id="ships_from" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            class="products-common-create-select">
                             @foreach($countries as $country)
                                 <option value="{{ $country }}" {{ old('ships_from', 'Worldwide') == $country ? 'selected' : '' }}>
                                     {{ $country }}
@@ -151,17 +174,17 @@
                             @endforeach
                         </select>
                         @error('ships_from')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p class="products-common-create-error">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Ships To -->
-                    <div>
-                        <label for="ships_to" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <div class="products-common-create-field">
+                        <label for="ships_to" class="products-common-create-label">
                             To:
                         </label>
                         <select name="ships_to" id="ships_to" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            class="products-common-create-select">
                             @foreach($countries as $country)
                                 <option value="{{ $country }}" {{ old('ships_to', 'Worldwide') == $country ? 'selected' : '' }}>
                                     {{ $country }}
@@ -169,61 +192,63 @@
                             @endforeach
                         </select>
                         @error('ships_to')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p class="products-common-create-error">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
                 <!-- Delivery Options -->
-                <div>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Delivery Options</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <div class="products-common-create-section">
+                    <h3 class="products-common-create-section-title">Delivery Options</h3>
+                    <p class="products-common-create-section-desc">
                         Add between 1 and 4 delivery options. At least one option is required.
                     </p>
                     
                     @for ($i = 0; $i < 4; $i++)
-                        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                        <div class="products-common-create-option-card">
+                            <h4 class="products-common-create-option-title">
                                 Delivery Option {{ $i + 1 }}
                             </h4>
                             
                             <!-- Description -->
-                            <div class="mb-4">
+                            <div class="products-common-create-field">
                                 <label for="delivery_options_{{ $i }}_description" 
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    class="products-common-create-label">
                                     Description
                                 </label>
                                 <input type="text" 
                                     name="delivery_options[{{ $i }}][description]" 
                                     id="delivery_options_{{ $i }}_description"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    class="products-common-create-input"
                                     value="{{ old('delivery_options.'.$i.'.description') }}"
-                                    placeholder="e.g., 24h Window, Same Day Pickup">
+                                    placeholder="e.g., Pickup near Central Park, NYC within 24 hours, Locker #31 at Union Station"
+                                    {{ $i === 0 ? 'required' : '' }}>
                                 @error('delivery_options.'.$i.'.description')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="products-common-create-error">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Price -->
-                            <div>
+                            <div class="products-common-create-field">
                                 <label for="delivery_options_{{ $i }}_price" 
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    class="products-common-create-label">
                                     Additional Price (USD)
                                 </label>
-                                <div class="mt-1 relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 sm:text-sm">$</span>
+                                <div class="products-common-create-price-wrapper">
+                                    <div class="products-common-create-price-symbol">
+                                        <span>$</span>
                                     </div>
                                     <input type="number" 
                                         name="delivery_options[{{ $i }}][price]" 
                                         id="delivery_options_{{ $i }}_price"
                                         step="0.01" 
                                         min="0"
-                                        class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        class="products-common-create-price-input"
                                         value="{{ old('delivery_options.'.$i.'.price') }}"
-                                        placeholder="0.00">
+                                        placeholder="0.00"
+                                        {{ $i === 0 ? 'required' : '' }}>
                                     @error('delivery_options.'.$i.'.price')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="products-common-create-error">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -231,27 +256,27 @@
                     @endfor
 
                     @error('delivery_options')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Bulk Options -->
-                <div>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Bulk Options</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <div class="products-common-create-section">
+                    <h3 class="products-common-create-section-title">Bulk Options</h3>
+                    <p class="products-common-create-section-desc">
                         Optionally add up to 4 bulk purchase options. Leave empty if not offering bulk pricing.
                     </p>
                     
                     @for ($i = 0; $i < 4; $i++)
-                        <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                        <div class="products-common-create-option-card">
+                            <h4 class="products-common-create-option-title">
                                 Bulk Option {{ $i + 1 }}
                             </h4>
                             
                             <!-- Amount -->
-                            <div class="mb-4">
+                            <div class="products-common-create-field">
                                 <label for="bulk_options_{{ $i }}_amount" 
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    class="products-common-create-label">
                                     Bulk Amount
                                 </label>
                                 <input type="number" 
@@ -259,34 +284,34 @@
                                     id="bulk_options_{{ $i }}_amount"
                                     step="0.01"
                                     min="0"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    class="products-common-create-input"
                                     value="{{ old('bulk_options.'.$i.'.amount') }}"
                                     placeholder="Enter bulk quantity">
                                 @error('bulk_options.'.$i.'.amount')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="products-common-create-error">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Price -->
-                            <div>
+                            <div class="products-common-create-field">
                                 <label for="bulk_options_{{ $i }}_price" 
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    class="products-common-create-label">
                                     Bulk Price (USD)
                                 </label>
-                                <div class="mt-1 relative rounded-md shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 sm:text-sm">$</span>
+                                <div class="products-common-create-price-wrapper">
+                                    <div class="products-common-create-price-symbol">
+                                        <span>$</span>
                                     </div>
                                     <input type="number" 
                                         name="bulk_options[{{ $i }}][price]" 
                                         id="bulk_options_{{ $i }}_price"
                                         step="0.01" 
                                         min="0"
-                                        class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        class="products-common-create-price-input"
                                         value="{{ old('bulk_options.'.$i.'.price') }}"
                                         placeholder="Enter bulk price">
                                     @error('bulk_options.'.$i.'.price')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        <p class="products-common-create-error">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -294,14 +319,13 @@
                     @endfor
 
                     @error('bulk_options')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- Submit Button -->
-                <div class="flex justify-end">
-                    <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
+                <div class="products-common-create-submit-wrapper">
+                    <button type="submit" class="products-common-create-submit-btn">
                         Create Dead Drop Product
                     </button>
                 </div>

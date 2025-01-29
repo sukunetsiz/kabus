@@ -8,7 +8,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">💾 Add Digital Item ⛔</h3>
+                <h3 class="admin-panel-item-title">💾 Add Digital Item 💾</h3>
                 <p class="admin-panel-item-description">You can add digital products to {{ config('app.name') }}.</p>
                 <a href="{{ route('vendor.products.digital.create') }}" class="admin-panel-item-link">Add Digital Product</a>
             </div>
@@ -16,7 +16,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">🚚 Add Cargo Item ⛔</h3>
+                <h3 class="admin-panel-item-title">🚚 Add Cargo Item 🚚</h3>
                 <p class="admin-panel-item-description">You can add physical products that can be delivered by shipping.</p>
                 <a href="{{ route('vendor.products.cargo.create') }}" class="admin-panel-item-link">Add Cargo Product</a>
             </div>
@@ -24,7 +24,7 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">🗺️ Add Dead Drop Item ⛔</h3>
+                <h3 class="admin-panel-item-title">🗺️ Add Dead Drop Item 🗺️</h3>
                 <p class="admin-panel-item-description">You can add products that can be delivered via dead drop.</p>
                 <a href="{{ route('vendor.products.deaddrop.create') }}" class="admin-panel-item-link">Add Dead Drop Product</a>
             </div>

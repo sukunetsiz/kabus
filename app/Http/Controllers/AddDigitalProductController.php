@@ -57,16 +57,21 @@ class AddDigitalProductController extends Controller
                 'description' => 'required|string',
                 'price' => 'required|numeric|min:0',
                 'category_id' => 'required|exists:categories,id',
-                'product_picture' => [
-                    'nullable',
-                    'file',
-                    'max:800', // 800KB max size
-                ],
-                'stock_amount' => 'required|integer|min:0',
-                'measurement_unit' => [
-                    'required',
-                    Rule::in(array_keys(Product::getMeasurementUnits()))
-                ],
+            'product_picture' => [
+                'nullable',
+                'file',
+                'max:800', // 800KB max size
+            ],
+            'additional_photos.*' => [
+                'nullable',
+                'file',
+                'max:800', // 800KB max size
+            ],
+            'stock_amount' => 'required|integer|min:0',
+            'measurement_unit' => [
+                'required',
+                Rule::in(array_keys(Product::getMeasurementUnits()))
+            ],
                 'ships_from' => [
                     'required',
                     'string',
@@ -157,6 +162,24 @@ class AddDigitalProductController extends Controller
                 $productPicture = $this->handleProductPictureUpload($request->file('product_picture'));
             }
 
+            // Handle additional photos if uploaded
+            $additionalPhotos = [];
+            if ($request->hasFile('additional_photos')) {
+                foreach ($request->file('additional_photos') as $index => $photo) {
+                    if ($index >= 3) break; // Limit to 3 additional photos
+                    try {
+                        $additionalPhotos[] = $this->handleProductPictureUpload($photo);
+                    } catch (Exception $e) {
+                        Log::warning('Failed to upload additional photo: ' . $e->getMessage(), [
+                            'user_id' => Auth::id(),
+                            'photo_index' => $index
+                        ]);
+                        // Continue with other photos if one fails
+                        continue;
+                    }
+                }
+            }
+
             // Create the digital product
             $product = Product::createDigital([
                 'user_id' => Auth::id(),
@@ -171,7 +194,8 @@ class AddDigitalProductController extends Controller
                 'delivery_options' => $deliveryOptions,
                 'bulk_options' => $bulkOptions,
                 'ships_from' => $validated['ships_from'],
-                'ships_to' => $validated['ships_to']
+                'ships_to' => $validated['ships_to'],
+                'additional_photos' => $additionalPhotos
             ]);
 
             return redirect()

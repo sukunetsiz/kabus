@@ -80,7 +80,8 @@ class Product extends Model
         'delivery_options',
         'bulk_options',
         'ships_from',
-        'ships_to'
+        'ships_to',
+        'additional_photos'
     ];
 
     /**
@@ -92,7 +93,8 @@ class Product extends Model
         'price' => 'decimal:2',
         'active' => 'boolean',
         'delivery_options' => 'array',
-        'bulk_options' => 'array'
+        'bulk_options' => 'array',
+        'additional_photos' => 'array'
     ];
 
     /**
@@ -229,8 +231,26 @@ class Product extends Model
      * @var array
      */
     protected $appends = [
-        'product_picture_url'
+        'product_picture_url',
+        'additional_photos_urls'
     ];
+
+    /**
+     * Get the additional photos URLs.
+     */
+    public function getAdditionalPhotosUrlsAttribute(): array
+    {
+        if (empty($this->additional_photos)) {
+            return [];
+        }
+
+        return array_map(function ($photo) {
+            if ($photo === 'default-product-picture.png') {
+                return asset('images/default-product-picture.png');
+            }
+            return route('product.picture', $photo);
+        }, $this->additional_photos);
+    }
 
     /**
      * Boot function from Laravel.

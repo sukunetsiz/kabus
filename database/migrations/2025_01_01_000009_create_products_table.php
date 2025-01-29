@@ -23,6 +23,7 @@ return new class extends Migration
             $table->json('bulk_options')->nullable(); // Store array of bulk options with amount and price (optional)
             $table->string('type'); // 'digital', 'cargo', or 'deaddrop'
             $table->string('product_picture')->nullable(); // Added product picture field
+            $table->json('additional_photos')->nullable(); // Store up to 3 additional photos
             $table->boolean('active')->default(true);
             $table->unsignedInteger('stock_amount')->default(0); // Track product stock
             $table->string('measurement_unit'); // Unit of measurement (g, kg, ml, l, cm, m, in, ft, m², piece, dozen, hour, day, month)

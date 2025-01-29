@@ -6747,3 +6747,215 @@ color: #ffebee
 background-color: #1b5e20;
 color: #e8f5e9
 }
+
+.products-common-create-upload-wrapper {
+margin-bottom: 8px
+}
+.products-common-create-container {
+max-width: 900px;
+margin: 20px auto;
+padding: 0 20px
+}
+
+.products-common-create-card {
+background-color: #1e1e1e;
+border-radius: 12px;
+padding: 30px;
+box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+border: 1px solid #3c3c3c
+}
+
+.products-common-create-content {
+width: 100%
+}
+
+.products-common-create-title {
+color: #bb86fc;
+font-size: 28px;
+margin-bottom: 30px;
+text-align: center;
+font-weight: 700
+}
+
+.products-common-create-form {
+display: flex;
+flex-direction: column;
+gap: 20px
+}
+
+.products-common-create-section {
+margin-bottom: 20px
+}
+
+.products-common-create-section-title {
+color: #bb86fc;
+font-size: 20px;
+margin-bottom: 15px;
+font-weight: 700
+}
+
+.products-common-create-section-desc {
+color: #a0a0a0;
+font-size: 14px;
+margin-bottom: 20px
+}
+
+.products-common-create-field {
+margin-bottom: 15px
+}
+
+.products-common-create-label {
+display: block;
+color: #e0e0e0;
+font-size: 14px;
+font-weight: 600;
+margin-bottom: 8px
+}
+
+.products-common-create-input,
+.products-common-create-select,
+.products-common-create-textarea {
+width: 96%;
+padding: 12px 15px;
+background-color: #2c2c2c;
+border: 1px solid #3c3c3c;
+border-radius: 8px;
+color: #e0e0e0;
+font-size: 15px;
+transition: all 0.3s ease
+}
+
+.products-common-create-input:focus,
+.products-common-create-select:focus,
+.products-common-create-textarea:focus {
+outline: none;
+border-color: #bb86fc;
+box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.1)
+}
+
+.products-common-create-textarea {
+min-height: 120px;
+resize: vertical
+}
+
+.products-common-create-file-btn {
+display: inline-block;
+padding: 10px 20px;
+background-color: #bb86fc;
+color: #121212;
+border-radius: 6px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s ease;
+text-transform: uppercase;
+font-size: 12px;
+letter-spacing: 1px
+}
+
+.products-common-create-container input[type="file"].hidden {
+display: none !important
+}
+
+.products-common-create-file-btn:hover {
+background-color: #96c;
+transform: translateY(-2px)
+}
+
+.products-common-create-help-text {
+color: #a0a0a0;
+font-size: 12px;
+margin-top: 8px
+}
+
+.products-common-create-error {
+color: #cf6679;
+font-size: 13px;
+margin-top: 6px
+}
+
+.products-common-create-price-wrapper {
+position: relative;
+display: flex;
+align-items: center;
+background-color: #2c2c2c;
+border: 1px solid #3c3c3c;
+border-radius: 8px;
+transition: all 0.3s ease
+}
+
+.products-common-create-price-wrapper:focus-within {
+border-color: #bb86fc;
+box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.1)
+}
+
+.products-common-create-price-symbol {
+padding: 12px 15px;
+color: #bb86fc;
+font-weight: 600;
+border-right: 1px solid #3c3c3c
+}
+
+.products-common-create-price-input {
+flex: 1;
+border: none !important;
+background: transparent !important;
+padding: 12px 15px !important;
+color: #e0e0e0;
+font-size: 15px;
+outline: none;
+width: auto !important
+}
+
+.products-common-create-shipping-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px
+}
+
+.products-common-create-option-card {
+background-color: #2c2c2c;
+border-radius: 8px;
+padding: 15px;
+margin-bottom: 12px;
+border: 1px solid #3c3c3c;
+transition: all 0.3s ease
+}
+
+.products-common-create-option-card:hover {
+border-color: #bb86fc;
+transform: translateY(-2px)
+}
+
+.products-common-create-option-title {
+color: #bb86fc;
+font-size: 16px;
+margin-bottom: 15px;
+font-weight: 600
+}
+
+.products-common-create-submit-wrapper {
+display: flex;
+justify-content: center;
+margin-top: 20px
+}
+
+.products-common-create-submit-btn {
+background-color: #bb86fc;
+color: #121212;
+padding: 14px 30px;
+border: none;
+border-radius: 8px;
+font-size: 16px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s ease;
+text-transform: uppercase;
+letter-spacing: 1px;
+min-width: 250px
+}
+
+.products-common-create-submit-btn:hover {
+background-color: #96c;
+transform: translateY(-2px);
+box-shadow: 0 4px 15px rgba(187, 134, 252, 0.3)
+}

@@ -34,11 +34,27 @@
         {{-- Product Details --}}
         <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg">
             <div class="p-6 md:p-8">
-                {{-- Product Image --}}
-                <div class="mb-6">
-                    <img src="{{ $product->product_picture_url }}" 
-                         alt="{{ $product->name }}"
-                         class="w-full max-w-md mx-auto rounded-lg shadow-lg object-cover">
+                {{-- Product Images Section --}}
+                <div class="mb-6 space-y-6">
+                    {{-- Main Product Image --}}
+                    <div>
+                        <img src="{{ $product->product_picture_url }}" 
+                             alt="{{ $product->name }}"
+                             class="w-full max-w-md mx-auto rounded-lg shadow-lg object-cover">
+                    </div>
+
+                    {{-- Additional Photos --}}
+                    @if(!empty($product->additional_photos))
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            @foreach($product->additional_photos_urls as $photoUrl)
+                                <div class="aspect-w-1 aspect-h-1">
+                                    <img src="{{ $photoUrl }}" 
+                                         alt="{{ $product->name }} - Additional Photo"
+                                         class="w-full h-full object-cover rounded-lg shadow-lg">
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
                 
                 <div class="flex flex-col md:flex-row justify-between mb-6">
