@@ -76,7 +76,7 @@ class VendorController extends Controller
             ->select('id', 'name', 'type', 'slug')
             ->get();
 
-        return view('vendor.my-products.index', compact('products'));
+        return view('vendor.my-products', compact('products'));
     }
 
     /**

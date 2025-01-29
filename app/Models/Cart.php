@@ -20,14 +20,16 @@ class Cart extends Model
         'quantity',
         'price',
         'selected_delivery_option',
-        'selected_bulk_option'
+        'selected_bulk_option',
+        'encrypted_message'
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'price' => 'decimal:2',
         'selected_delivery_option' => 'array',
-        'selected_bulk_option' => 'array'
+        'selected_bulk_option' => 'array',
+        'encrypted_message' => 'string'
     ];
 
     /**
@@ -63,6 +65,42 @@ class Cart extends Model
     /**
      * Calculate total price for this cart item including delivery option
      */
+    /**
+     * Encrypt a message using the vendor's PGP key
+     * 
+     * @param string $message The message to encrypt
+     * @return string|false The encrypted message or false on failure
+     */
+    public function encryptMessageForVendor(string $message)
+    {
+        try {
+            // Get vendor's PGP key through product relationship
+            $vendorPgpKey = $this->product->user->pgpKey;
+            
+            if (!$vendorPgpKey || !$vendorPgpKey->public_key) {
+                return false;
+            }
+
+            // Initialize GnuPG
+            putenv("GNUPGHOME=/tmp");
+            $gpg = new \gnupg();
+            $gpg->seterrormode(\gnupg::ERROR_EXCEPTION);
+
+            // Import vendor's public key
+            $info = $gpg->import($vendorPgpKey->public_key);
+            if (!$info) {
+                return false;
+            }
+
+            // Add encryption key and encrypt the message
+            $gpg->addencryptkey($info['fingerprint']);
+            return $gpg->encrypt($message);
+
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function getTotalPrice(): float
     {
         // For bulk options, quantity represents number of sets

@@ -40,7 +40,10 @@ class AddDeadDropProductController extends Controller
         // Get measurement units for the dropdown
         $measurementUnits = Product::getMeasurementUnits();
 
-        return view('vendor.products.deaddrop.create', compact('categories', 'measurementUnits'));
+        // Get countries from JSON file
+        $countries = json_decode(file_get_contents(storage_path('app/country.json')), true);
+
+        return view('vendor.products.deaddrop.create', compact('categories', 'measurementUnits', 'countries'));
     }
 
     /**
@@ -64,6 +67,16 @@ class AddDeadDropProductController extends Controller
                 'measurement_unit' => [
                     'required',
                     Rule::in(array_keys(Product::getMeasurementUnits()))
+                ],
+                'ships_from' => [
+                    'required',
+                    'string',
+                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                ],
+                'ships_to' => [
+                    'required',
+                    'string',
+                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
                 ],
             ]);
 
@@ -157,7 +170,9 @@ class AddDeadDropProductController extends Controller
                 'stock_amount' => $validated['stock_amount'],
                 'measurement_unit' => $validated['measurement_unit'],
                 'delivery_options' => $deliveryOptions,
-                'bulk_options' => $bulkOptions
+                'bulk_options' => $bulkOptions,
+                'ships_from' => $validated['ships_from'],
+                'ships_to' => $validated['ships_to']
             ]);
 
             return redirect()

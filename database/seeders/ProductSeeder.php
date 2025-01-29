@@ -59,14 +59,45 @@ class ProductSeeder extends Seeder
     {
         switch ($method) {
             case 'createDigital':
-                return collect(['piece', 'unit', 'hour', 'day', 'month'])->random();
+                return collect(['piece', 'hour', 'day', 'month'])->random();
             case 'createCargo':
                 return collect(['g', 'kg', 'cm', 'm', 'piece'])->random();
             case 'createDeadDrop':
-                return collect(['piece', 'unit', 'hour', 'day', 'month'])->random();
+                return collect(['piece', 'hour', 'day', 'month'])->random();
             default:
                 return 'piece';
         }
+    }
+
+    /**
+     * Get random shipping locations based on product type
+     */
+    private function getShippingLocations(string $method): array
+    {
+        $countries = json_decode(file_get_contents(storage_path('app/country.json')), true);
+        $worldwide = $countries[0]; // "Worldwide" is the first option
+
+        // Digital products have higher chance of worldwide shipping
+        if ($method === 'createDigital') {
+            return [
+                'ships_from' => rand(0, 100) < 80 ? $worldwide : collect($countries)->random(),
+                'ships_to' => rand(0, 100) < 80 ? $worldwide : collect($countries)->random(),
+            ];
+        }
+
+        // Cargo products have moderate chance of worldwide shipping
+        if ($method === 'createCargo') {
+            return [
+                'ships_from' => rand(0, 100) < 40 ? $worldwide : collect($countries)->random(),
+                'ships_to' => rand(0, 100) < 40 ? $worldwide : collect($countries)->random(),
+            ];
+        }
+
+        // Dead drop products are usually more location-specific
+        return [
+            'ships_from' => rand(0, 100) < 20 ? $worldwide : collect($countries)->random(),
+            'ships_to' => rand(0, 100) < 20 ? $worldwide : collect($countries)->random(),
+        ];
     }
 
     /**
@@ -88,7 +119,7 @@ class ProductSeeder extends Seeder
             'kg' => [2, 5, 10, 20],
             'ml' => [100, 250, 500, 1000],
             'l' => [2, 5, 10, 20],
-            'piece', 'unit' => [5, 10, 25, 50],
+            'piece' => [5, 10, 25, 50],
             'dozen' => [2, 5, 10, 20],
             'hour' => [5, 10, 24, 48],
             'day' => [3, 7, 14, 30],
@@ -277,7 +308,8 @@ class ProductSeeder extends Seeder
                         'stock_amount' => rand(50, 1000),
                         'measurement_unit' => $measurementUnit,
                         'delivery_options' => $this->generateDeliveryOptions($method),
-                        'bulk_options' => $this->generateBulkOptions($product['price'], $measurementUnit)
+                        'bulk_options' => $this->generateBulkOptions($product['price'], $measurementUnit),
+                        ...$this->getShippingLocations($method)
                     ]);
 
                     $successCount++;

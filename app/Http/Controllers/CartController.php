@@ -25,11 +25,15 @@ class CartController extends Controller
             ? $cartTotal / $xmrPrice 
             : null;
 
+        // Get measurement units mapping for formatting
+        $measurementUnits = Product::getMeasurementUnits();
+
         return view('cart.index', [
             'cartItems' => $cartItems,
             'cartTotal' => $cartTotal,
             'xmrTotal' => $xmrTotal,
-            'xmrPrice' => $xmrPrice
+            'xmrPrice' => $xmrPrice,
+            'measurementUnits' => $measurementUnits
         ]);
     }
 
@@ -96,12 +100,14 @@ class CartController extends Controller
             );
 
             if (!$stockValidation['valid']) {
+                $measurementUnits = Product::getMeasurementUnits();
+                $formattedUnit = $measurementUnits[$product->measurement_unit] ?? $product->measurement_unit;
                 return back()->with('error', sprintf(
                     'Insufficient stock. Available: %d %s, Requested: %d %s',
                     $stockValidation['available'],
-                    $product->measurement_unit,
+                    $formattedUnit,
                     $stockValidation['requested'],
-                    $product->measurement_unit
+                    $formattedUnit
                 ));
             }
 
@@ -151,12 +157,14 @@ class CartController extends Controller
             );
 
             if (!$stockValidation['valid']) {
+                $measurementUnits = Product::getMeasurementUnits();
+                $formattedUnit = $measurementUnits[$cart->product->measurement_unit] ?? $cart->product->measurement_unit;
                 return back()->with('error', sprintf(
                     'Insufficient stock. Available: %d %s, Requested: %d %s',
                     $stockValidation['available'],
-                    $cart->product->measurement_unit,
+                    $formattedUnit,
                     $stockValidation['requested'],
-                    $cart->product->measurement_unit
+                    $formattedUnit
                 ));
             }
 
@@ -215,6 +223,45 @@ class CartController extends Controller
     /**
      * Show checkout page (placeholder for future implementation).
      */
+    /**
+     * Save encrypted message for cart item
+     */
+    public function saveMessage(Request $request, Cart $cart)
+    {
+        try {
+            // Verify ownership
+            if ($cart->user_id !== Auth::id()) {
+                abort(403);
+            }
+
+            // Validate message
+            $validated = $request->validate([
+                'message' => 'required|string|max:10000'
+            ]);
+
+            // Check if vendor has PGP key
+            if (!$cart->product->user->pgpKey) {
+                return back()->with('error', 'Vendor does not have a PGP key set up.');
+            }
+
+            // Encrypt message
+            $encryptedMessage = $cart->encryptMessageForVendor($validated['message']);
+            if ($encryptedMessage === false) {
+                return back()->with('error', 'Failed to encrypt message. Please try again.');
+            }
+
+            // Save encrypted message
+            $cart->update([
+                'encrypted_message' => $encryptedMessage
+            ]);
+
+            return back()->with('success', 'Message encrypted and saved successfully.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to save message.');
+        }
+    }
+
     public function checkout()
     {
         return view('cart.checkout', [

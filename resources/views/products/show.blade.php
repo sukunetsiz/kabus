@@ -57,9 +57,14 @@
                                     Dead Drop
                                 @endif
                             </span>
-                            <span class="text-slate-400">
-                                Category: <span class="text-orange-400">{{ $product->category->name }}</span>
-                            </span>
+                            <div class="flex flex-col space-y-1">
+                                <span class="text-slate-400">
+                                    Category: <span class="text-orange-400">{{ $product->category->name }}</span>
+                                </span>
+                                <span class="text-slate-400">
+                                    Ships: <span class="text-orange-400">From {{ $product->ships_from }} to {{ $product->ships_to }}</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="flex flex-col items-end">
@@ -195,42 +200,6 @@
                         <span>{{ number_format($product->stock_amount) }} {{ $formattedMeasurementUnit }}</span>
                     </div>
                 </div>
-
-                {{-- Delivery Options --}}
-                <div class="bg-slate-900 rounded-lg p-4">
-                    <h3 class="text-lg font-semibold text-slate-200 mb-3">
-                        @if($product->isDigital())
-                            Processing Options
-                        @elseif($product->isCargo())
-                            Shipping Options
-                        @else
-                            Pickup Options
-                        @endif
-                    </h3>
-                    
-                    <div class="space-y-4">
-                        <div class="mt-4 text-sm text-slate-400">
-                            <p>* Additional fees (if any) will be added to the base price</p>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Bulk Options --}}
-                @if($product->bulk_options && count($product->bulk_options) > 0)
-                    <div class="bg-slate-900 rounded-lg p-4 mt-4">
-                        <h3 class="text-lg font-semibold text-slate-200 mb-3">Bulk Purchase Options</h3>
-                        
-                        <div class="space-y-4">
-                            <p class="text-slate-300">
-                                Select a bulk purchase option to get a better price for larger quantities:
-                            </p>
-
-                            <div class="mt-4 text-sm text-slate-400">
-                                <p>* Select a bulk option to save on larger purchases</p>
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     @endif

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->unsignedInteger('stock_amount')->default(0); // Track product stock
             $table->string('measurement_unit'); // Unit of measurement (g, kg, ml, l, cm, m, in, ft, m², piece, dozen, hour, day, month)
+            $table->string('ships_from')->default('Worldwide'); // Country where the product ships from
+            $table->string('ships_to')->default('Worldwide'); // Country where the product can be shipped to
             $table->timestamps();
             $table->softDeletes();
 

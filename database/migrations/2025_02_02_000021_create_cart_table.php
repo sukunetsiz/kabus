@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2); // Store the price at the time of adding to cart
             $table->json('selected_delivery_option'); // Store the selected delivery option
             $table->json('selected_bulk_option')->nullable(); // Store the selected bulk option if any
+            $table->text('encrypted_message')->nullable(); // Store PGP encrypted messages
             $table->timestamps();
 
             // Indexes for better performance

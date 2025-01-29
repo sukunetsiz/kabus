@@ -86,6 +86,7 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
         Route::put('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
         Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
         Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+        Route::post('/cart/{cart}/message', [CartController::class, 'saveMessage'])->name('cart.message.save');
         Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
         
         // Wishlist routes

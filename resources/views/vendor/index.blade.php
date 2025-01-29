@@ -66,6 +66,22 @@
                 <p class="admin-panel-item-description">You can view all your completed sales.</p>
                 <a href="#" class="admin-panel-item-link">View My Sales</a>
             </div>
+
+            <div class="admin-panel-item">
+                <div class="admin-panel-item-icon">
+                </div>
+                <h3 class="admin-panel-item-title">❗ My Disputes ⛔</h3>
+                <p class="admin-panel-item-description">View and manage customer disputes and resolution cases.</p>
+                <a href="#" class="admin-panel-item-link">View Disputes</a>
+            </div>
+
+            <div class="admin-panel-item">
+                <div class="admin-panel-item-icon">
+                </div>
+                <h3 class="admin-panel-item-title">⭐ My Reviews ⛔</h3>
+                <p class="admin-panel-item-description">Check customer feedback and ratings for your products.</p>
+                <a href="#" class="admin-panel-item-link">View Reviews</a>
+            </div>
         </div>
     </div>
 </div>

@@ -47,10 +47,10 @@
                     <div class="cart-index-item-details">
                         <div class="cart-index-item-header">
                             <div>
-                                <h3 class="cart-index-item-title">
-                                    {{ $item->product->name }}
-                                    <span>({{ $item->selected_bulk_option ? ($item->quantity * $item->selected_bulk_option['amount']) : $item->quantity }} {{ $item->product->measurement_unit }})</span>
-                                </h3>
+                            <h3 class="cart-index-item-title">
+                                {{ $item->product->name }}
+                                <span>({{ $item->selected_bulk_option ? ($item->quantity * $item->selected_bulk_option['amount']) : $item->quantity }} {{ $measurementUnits[$item->product->measurement_unit] ?? $item->product->measurement_unit }})</span>
+                            </h3>
                                 <p class="cart-index-item-vendor">
                                     Sold by: {{ $item->product->user->username }}
                                 </p>
@@ -92,30 +92,62 @@
                                 Delivery: {{ $item->selected_delivery_option['description'] }}
                                 ({{ $item->selected_delivery_option['price'] > 0 ? '+$' . number_format($item->selected_delivery_option['price'], 2) : 'Free' }})
                             </div>
+                        </div>
 
-                            {{-- Bulk Option --}}
-                            @if($item->selected_bulk_option)
-                                <div class="cart-index-option-badge">
-                                    Bulk Deal: {{ $item->quantity }} sets of {{ $item->selected_bulk_option['amount'] }} {{ $item->product->measurement_unit }}
-                                    at ${{ number_format($item->selected_bulk_option['price'], 2) }} per set
-                                </div>
-                            @endif
-
+                        {{-- Additional Controls Container --}}
+                        <div class="cart-index-additional-controls {{ $item->selected_bulk_option ? 'cart-index-additional-controls--with-bulk' : '' }}">
                             {{-- Remove Button --}}
-                            <form action="{{ route('cart.destroy', $item) }}" method="POST">
+                            <form action="{{ route('cart.destroy', $item) }}" method="POST" class="cart-index-remove-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="cart-index-remove-btn">
                                     Remove
                                 </button>
                             </form>
+
+                            {{-- Bulk Option --}}
+                            @if($item->selected_bulk_option)
+                                <div class="cart-index-bulk-badge">
+                                    Bulk Deal: {{ $item->quantity }} sets of {{ $item->selected_bulk_option['amount'] }} {{ $measurementUnits[$item->product->measurement_unit] ?? $item->product->measurement_unit }}
+                                    at ${{ number_format($item->selected_bulk_option['price'], 2) }} per set
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             @endforeach
 
-            {{-- Cart Summary --}}
-            <div class="cart-index-summary">
+            {{-- Bottom Row Container --}}
+            <div class="cart-index-bottom-row">
+                {{-- Message Section --}}
+                <div class="cart-index-message-container">
+                @foreach($cartItems as $item)
+                    @if($item->encrypted_message)
+                        <div class="cart-index-message-encrypted">
+                            <label class="cart-index-message-label">Encrypted Message for {{ $item->product->user->username }}:</label>
+                            <textarea readonly>{{ $item->encrypted_message }}</textarea>
+                        </div>
+                    @else
+                        <form action="{{ route('cart.message.save', $item) }}" method="POST" class="cart-index-message-form">
+                            @csrf
+                            <label for="message_{{ $item->id }}" class="cart-index-message-label">
+                                Message for {{ $item->product->user->username }}:
+                            </label>
+                            <textarea 
+                                id="message_{{ $item->id }}"
+                                name="message" 
+                                class="cart-index-message-textarea"
+                                placeholder="Enter your message here. It will be encrypted with the vendor's PGP key."
+                                required
+                            ></textarea>
+                            <button type="submit" class="cart-index-message-button">Encrypt & Save Message</button>
+                        </form>
+                    @endif
+                @endforeach
+                </div>
+
+                {{-- Cart Summary --}}
+                <div class="cart-index-summary">
                 <div class="cart-index-total">
                     <span class="cart-index-total-label">Total:</span>
                     <div class="cart-index-total-amount">

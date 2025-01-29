@@ -78,7 +78,9 @@ class Product extends Model
         'stock_amount',
         'measurement_unit',
         'delivery_options',
-        'bulk_options'
+        'bulk_options',
+        'ships_from',
+        'ships_to'
     ];
 
     /**
