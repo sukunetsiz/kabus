@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserListController;
 use App\Http\Controllers\MessageController;
@@ -72,7 +73,8 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
     });
 
     Route::middleware('auth')->group(function () {
-        Route::get('/home', [AuthController::class, 'home'])->name('home');
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
+        Route::post('/home', [HomeController::class, 'dismissPopup'])->name('popup.dismiss');
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         
         // Product routes
@@ -203,6 +205,13 @@ Route::middleware(VerifyRhombusCaptcha::class)->group(function () {
             Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
             Route::delete('/admin/categories/{category}', [AdminController::class, 'deleteCategory'])->name('admin.categories.delete');
             Route::get('/admin/categories/list', [AdminController::class, 'listCategories'])->name('admin.categories.list');
+            
+            // Admin Pop-up Management
+            Route::get('/admin/pop-up', [AdminController::class, 'popupIndex'])->name('admin.popup.index');
+            Route::get('/admin/pop-up/create', [AdminController::class, 'popupCreate'])->name('admin.popup.create');
+            Route::post('/admin/pop-up', [AdminController::class, 'popupStore'])->name('admin.popup.store');
+            Route::post('/admin/pop-up/{popup}/activate', [AdminController::class, 'popupActivate'])->name('admin.popup.activate');
+            Route::delete('/admin/pop-up/{popup}', [AdminController::class, 'popupDestroy'])->name('admin.popup.destroy');
             
             // Admin Products Management
             Route::get('/admin/all-products', [AdminController::class, 'allProducts'])->name('admin.all-products');

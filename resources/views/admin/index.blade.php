@@ -93,7 +93,7 @@
                 </div>
                 <h3 class="admin-panel-item-title">🌐 Web Pop-Up ⛔</h3>
                 <p class="admin-panel-item-description">Create and manage website-wide pop-up notifications.</p>
-                <a href="#" class="admin-panel-item-link">Configure Popups</a>
+                <a href="{{ route('admin.popup.index') }}" class="admin-panel-item-link">Configure Popups</a>
             </div>
 
             <div class="admin-panel-item">

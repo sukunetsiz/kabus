@@ -347,11 +347,6 @@ class AuthController extends Controller
             ->with('status', 'Your password has been successfully reset. You can now login with your new password.');
     }
 
-    public function home()
-    {
-        return view('home', ['username' => Auth::user()->username]);
-    }
-
     public function showMnemonic(Request $request, $token)
     {
         if (!session()->has('mnemonic_token') || 

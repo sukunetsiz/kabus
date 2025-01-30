@@ -13,6 +13,7 @@ use App\Models\SupportRequest;
 use App\Models\Notification;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Popup;
 use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
@@ -359,6 +360,89 @@ class AdminController extends Controller
             Log::error('Error deleting bulk message: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'An error occurred while deleting the message. Please try again later.');
+        }
+    }
+
+    /**
+     * Display a listing of popups.
+     */
+    public function popupIndex()
+    {
+        $popups = Popup::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.pop-up.index', compact('popups'));
+    }
+
+    /**
+     * Show the form for creating a new popup.
+     */
+    public function popupCreate()
+    {
+        return view('admin.pop-up.create');
+    }
+
+    /**
+     * Store a newly created popup in storage.
+     */
+    public function popupStore(Request $request)
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'message' => 'required|string|max:5000',
+                'active' => 'boolean'
+            ]);
+
+            $popup = Popup::create([
+                'title' => $request->title,
+                'message' => $request->message,
+                'active' => $request->has('active')
+            ]);
+
+            Log::info("Pop-up created by admin {$request->user()->id}");
+
+            return redirect()->route('admin.popup.index')
+                ->with('success', 'Pop-up created successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error creating pop-up: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error creating pop-up. Please try again.');
+        }
+    }
+
+    /**
+     * Activate a specific popup.
+     */
+    public function popupActivate(Popup $popup)
+    {
+        try {
+            $popup->update(['active' => true]);
+            Log::info("Pop-up {$popup->id} activated by admin " . auth()->id());
+
+            return redirect()->route('admin.popup.index')
+                ->with('success', 'Pop-up activated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error activating pop-up: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Error activating pop-up. Please try again.');
+        }
+    }
+
+    /**
+     * Remove the specified popup from storage.
+     */
+    public function popupDestroy(Popup $popup)
+    {
+        try {
+            $popup->delete();
+            Log::info("Pop-up deleted by admin: {$popup->id}");
+
+            return redirect()->route('admin.popup.index')
+                ->with('success', 'Pop-up deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error deleting pop-up: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Error deleting pop-up. Please try again.');
         }
     }
 
