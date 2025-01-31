@@ -7154,3 +7154,233 @@ justify-content: center
 padding: 0 2rem;
 margin-bottom: 1.5rem
 }
+
+.admin-pop-up-create-container {
+max-width: 800px;
+margin: 1rem auto;
+padding: 0 20px
+}
+
+.admin-pop-up-create-card {
+background: #1e1e1e;
+border: 1px solid #3c3c3c;
+border-radius: 12px;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+overflow: hidden
+}
+
+.admin-pop-up-create-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 15px;
+padding: 1rem 2rem;
+border-bottom: 2px solid #bb86fc
+}
+
+.admin-pop-up-create-title {
+color: #bb86fc;
+font-size: 28px;
+font-weight: 700;
+margin: 0
+}
+
+.admin-pop-up-create-back-btn {
+background-color: #bb86fc;
+color: #121212;
+padding: 12px 24px;
+border-radius: 8px;
+text-decoration: none;
+font-weight: 700;
+transition: all .3s ease;
+text-transform: uppercase;
+letter-spacing: 1px
+}
+
+.admin-pop-up-create-back-btn:hover {
+background-color: #96c;
+transform: translateY(-2px);
+box-shadow: 0 4px 15px #bb86fc4d
+}
+
+.admin-pop-up-create-btn-container {
+display: flex;
+justify-content: center;
+margin-top: 1rem
+}
+
+.admin-pop-up-create-body {
+padding: 1.5rem
+}
+
+.admin-pop-up-create-input {
+width: 96%;
+padding: 10px 15px;
+background: #2c2c2c;
+border: 1px solid #3c3c3c;
+border-radius: 8px;
+color: #e0e0e0;
+transition: all 0.3s ease
+}
+
+.admin-pop-up-create-input:focus {
+border-color: #bb86fc;
+box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.1);
+outline: none
+}
+
+.admin-pop-up-create-label {
+display: block;
+color: #e0e0e0;
+margin-bottom: 6px;
+font-weight: 600
+}
+
+.admin-pop-up-create-textarea {
+min-height: 120px;
+resize: vertical
+}
+
+.admin-pop-up-create-switch {
+position: relative;
+width: 52px;
+height: 26px;
+margin: 0.5rem 0
+}
+
+.admin-pop-up-create-switch input {
+opacity: 0;
+width: 0;
+height: 0
+}
+
+.admin-pop-up-create-slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #2c2c2c;
+transition: .4s;
+border-radius: 34px;
+border: 2px solid #3c3c3c
+}
+
+.admin-pop-up-create-slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 2px;
+bottom: 2px;
+background-color: #e0e0e0;
+transition: .4s;
+border-radius: 50%
+}
+
+.admin-pop-up-create-switch input:checked + .admin-pop-up-create-slider {
+background-color: #bb86fc;
+border-color: #bb86fc
+}
+
+.admin-pop-up-create-switch input:checked + .admin-pop-up-create-slider:before {
+transform: translateX(26px);
+background-color: #1e1e1e
+}
+
+.admin-pop-up-create-toggle-group {
+display: flex;
+align-items: center;
+gap: 1rem;
+margin: 1rem 0 0.5rem
+}
+
+.admin-pop-up-create-note {
+color: #a0a0a0;
+font-size: 0.9rem
+}
+
+.admin-pop-up-create-submit {
+background: #bb86fc;
+color: #121212;
+padding: 12px 24px;
+border: none;
+border-radius: 8px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s ease;
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-top: 1rem
+}
+
+.admin-pop-up-create-submit:hover {
+background: #996cff;
+transform: translateY(-2px)
+}
+
+.admin-pop-up-create-title-field {
+margin-bottom: 1.5rem
+}
+
+.pop-up-container {
+position: fixed;
+inset: 0;
+background: rgba(18, 18, 18, 0.95);
+backdrop-filter: blur(8px);
+display: none;
+place-items: center;
+z-index: 1000
+}
+
+.pop-up-card {
+background: #1e1e1e;
+border: 2px solid #bb86fc;
+border-radius: 12px;
+padding: 2rem;
+max-width: 500px;
+width: 90%;
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+position: relative
+}
+
+.pop-up-title {
+color: #bb86fc;
+font-size: 1.5rem;
+margin-bottom: 1.5rem;
+text-transform: uppercase;
+letter-spacing: 1px;
+text-align: center
+}
+
+.pop-up-content {
+color: #e0e0e0;
+line-height: 1.6;
+margin-bottom: 2rem;
+font-size: 0.95rem;
+text-align: center
+}
+
+.pop-up-close-btn {
+background: #bb86fc;
+color: #121212;
+padding: 0.75rem 1.5rem;
+border: none;
+border-radius: 6px;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.3s ease;
+text-transform: uppercase;
+letter-spacing: 1px;
+display: block;
+margin: 0 auto
+}
+
+.pop-up-close-btn:hover {
+background: #996cff;
+transform: translateY(-2px)
+}
+
+#pop-up-toggle { display: none; }
+#pop-up-toggle:checked ~ .pop-up-container { display: grid; }
