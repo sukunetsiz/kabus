@@ -1,165 +1,169 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    {{-- Breadcrumb Navigation --}}
-    <div class="mb-6">
-        <nav class="flex text-slate-400 text-sm">
-            <a href="{{ route('products.index') }}" class="hover:text-orange-400 transition-colors duration-200">Products</a>
-            <span class="mx-2">/</span>
-            <span class="text-slate-200">{{ $product->name }}</span>
-        </nav>
-    </div>
-
-    {{-- Error Messages --}}
+{{-- Error Messages --}}
     @if(session('error'))
-        <div class="bg-red-900 text-red-200 p-4 rounded-lg mb-6">
+        <div class="alert alert-error">
             <p>{{ session('error') }}</p>
         </div>
     @endif
 
     {{-- Success Messages --}}
     @if(session('success'))
-        <div class="bg-green-900 text-green-200 p-4 rounded-lg mb-6">
+        <div class="alert alert-success">
             <p>{{ session('success') }}</p>
         </div>
     @endif
 
+<div class="products-show-container">
     @if($vendor_on_vacation)
-        <div class="max-w-2xl mx-auto bg-slate-800 rounded-lg shadow-lg p-6 text-center">
-            <h2 class="text-2xl font-semibold text-slate-200 mb-3">Product Currently Unavailable</h2>
-            <p class="text-slate-300">This product is temporarily unavailable as the vendor is currently on vacation. Please check back later.</p>
+        <div class="products-show-vacation-notice">
+            <h2>Product Currently Unavailable</h2>
+            <p>This product is temporarily unavailable as the vendor is currently on vacation. Please check back later.</p>
         </div>
     @else
-        {{-- Product Details --}}
-        <div class="bg-slate-800 rounded-lg overflow-hidden shadow-lg">
-            <div class="p-6 md:p-8">
-                {{-- Product Images Section --}}
-                <div class="mb-6 space-y-6">
-                    {{-- Main Product Image --}}
-                    <div>
-                        <img src="{{ $product->product_picture_url }}" 
-                             alt="{{ $product->name }}"
-                             class="w-full max-w-md mx-auto rounded-lg shadow-lg object-cover">
-                    </div>
+        <div class="products-show-main">
+            {{-- Product Name Header --}}
+            <div class="products-show-header">
+                <h1 class="products-show-title">{{ $product->name }}</h1>
+                <div class="products-show-divider"></div>
+            </div>
 
-                    {{-- Additional Photos --}}
-                    @if(!empty($product->additional_photos))
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            @foreach($product->additional_photos_urls as $photoUrl)
-                                <div class="aspect-w-1 aspect-h-1">
-                                    <img src="{{ $photoUrl }}" 
-                                         alt="{{ $product->name }} - Additional Photo"
-                                         class="w-full h-full object-cover rounded-lg shadow-lg">
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-                
-                <div class="flex flex-col md:flex-row justify-between mb-6">
-                    <div class="mb-4 md:mb-0">
-                        <h1 class="text-2xl md:text-3xl font-bold text-slate-200 mb-2">{{ $product->name }}</h1>
-                        <div class="flex items-center space-x-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm 
-                                {{ $product->type === 'digital' ? 'bg-purple-900 text-purple-200' : 
-                                   ($product->type === 'cargo' ? 'bg-blue-900 text-blue-200' : 
-                                    'bg-green-900 text-green-200') }}">
-                                @if($product->type === 'digital')
-                                    Digital
-                                @elseif($product->type === 'cargo')
-                                    Cargo
-                                @else
-                                    Dead Drop
-                                @endif
-                            </span>
-                            <div class="flex flex-col space-y-1">
-                                <span class="text-slate-400">
-                                    Category: <span class="text-orange-400">{{ $product->category->name }}</span>
-                                </span>
-                                <span class="text-slate-400">
-                                    Ships: <span class="text-orange-400">From {{ $product->ships_from }} to {{ $product->ships_to }}</span>
-                                </span>
-                            </div>
-                        </div>
+            {{-- Three Column Layout --}}
+            <div class="products-show-columns">
+                {{-- Left Column (Empty for future use) --}}
+                <div class="products-show-column products-show-column-left"></div>
+
+                {{-- Center Column (Product Images) --}}
+<div class="products-show-column-center">
+<div class="products-show-gallery">
+    <div class="products-show-slider">
+        <div class="products-show-slides">
+            {{-- Main product image --}}
+            <div id="slide-1">
+                <img src="{{ $product->product_picture_url }}" 
+                     alt="{{ $product->name }}"
+                     class="products-show-gallery-image">
+            </div>
+
+            {{-- Additional images --}}
+            @if(!empty($product->additional_photos))
+                @foreach($product->additional_photos_urls as $index => $photoUrl)
+                    <div id="slide-{{ $index + 2 }}">
+                        <img src="{{ $photoUrl }}" 
+                             alt="{{ $product->name }} - Image {{ $index + 1 }}"
+                             class="products-show-gallery-image">
                     </div>
-                    <div class="flex flex-col items-end">
-                        <div class="space-y-1">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-3xl font-bold text-orange-400">${{ number_format($product->price, 2) }}</span>
-                                @if(is_numeric($xmrPrice))
-                                    <span class="text-xl font-semibold text-slate-300">
-                                        ≈ ɱ{{ number_format($xmrPrice, 4) }}
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="text-sm">
-                                @if($xmrPrice === 'UNAVAILABLE')
-                                    <span class="text-red-400">XMR PRICE UNAVAILABLE</span>
-                                @else
-                                    <span class="text-slate-400">
-                                        Listed by <span class="text-orange-400">{{ $product->user->username }}</span>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-col gap-2">
-                            {{-- Wishlist Button --}}
-                            @if(Auth::user()->hasWishlisted($product->id))
-                                <form action="{{ route('wishlist.destroy', $product) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                            class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                        Remove from Wishlist
-                                    </button>
-                                </form>
-                            @else
-                                <form action="{{ route('wishlist.store', $product) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                                        Add to Wishlist
-                                    </button>
-                                </form>
+                @endforeach
+            @endif
+        </div>
+</div>
+</div>
+
+        {{-- Navigation buttons --}}
+        <div class="products-show-slider-navigation">
+            <a href="#slide-1" class="products-show-image-button">M</a>
+            @if(!empty($product->additional_photos))
+                @foreach($product->additional_photos_urls as $index => $photoUrl)
+                    <a href="#slide-{{ $index + 2 }}" class="products-show-image-button">
+                        {{ $index + 1 }}
+                    </a>
+                @endforeach
+            @endif
+        </div>
+</div>
+
+                {{-- Right Column (Product Details) --}}
+                <div class="products-show-column products-show-column-right">
+                    <div class="products-show-details">
+                        <div class="products-show-price">
+                            <span class="products-show-price-fiat">${{ number_format($product->price, 2) }}</span>
+                            @if(is_numeric($xmrPrice))
+                                <span class="products-show-price-monero">≈ ɱ{{ number_format($xmrPrice, 4) }}</span>
                             @endif
                         </div>
+
+                        <div class="products-show-info">
+    <div class="products-show-type">
+        <span class="products-show-badge products-show-badge-{{ $product->type }}">
+            {{ ucfirst($product->type) }}
+        </span>
+        <span class="products-show-badge products-show-badge-category">
+            {{ $product->category->name }}
+        </span>
+    </div>
+
+    <div class="products-show-shipping">
+    <div class="products-show-shipping-badge">
+        <div class="products-show-shipping-from">From {{ $product->ships_from }}</div>
+        <div class="products-show-shipping-arrow">⬇</div>
+        <div class="products-show-shipping-to">To {{ $product->ships_to }}</div>
+    </div>
+    </div>
+
+    <div class="products-show-stock">
+    <span class="products-show-badge products-show-badge-stock">
+        Stock ➜ {{ number_format($product->stock_amount) }} {{ $formattedMeasurementUnit }}
+    </span>
+</div>
+
+     <div class="products-show-vendor">
+    <div class="products-show-avatar-username">
+        <div class="products-show-avatar">
+            <img src="{{ $product->user->profile ? $product->user->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
+                 alt="{{ $product->user->username }}'s Profile Picture">
+        </div>
+        <div class="products-show-username">
+            <a href="{{ route('dashboard', $product->user->username) }}" class="products-show-username-link">
+                {{ $product->user->username }}
+            </a>
+        </div>
+    </div>
+</div>
+<div class="products-show-vendor-button-container">
+        <a href="{{ route('vendors.show', $product->user->username) }}" class="products-show-vendor-button">
+            Visit Vendor
+        </a>
+    </div>
+</div>
                     </div>
                 </div>
+            </div>
 
-                @if(Auth::id() === $product->user_id)
-                    <div class="mt-6 border-t border-slate-700 pt-6">
-                        <div class="bg-red-900 text-red-200 p-4 rounded-lg">
-                            <p>You cannot add your own products to the cart.</p>
-                        </div>
-                    </div>
-                @else
-                    {{-- Add to Cart Form --}}
-                    <form action="{{ route('cart.store', $product) }}" method="POST" class="mt-6 border-t border-slate-700 pt-6">
+            {{-- Wishlist Button Section --}}
+            <div class="products-show-wishlist">
+                @if(Auth::user()->hasWishlisted($product->id))
+                    <form action="{{ route('wishlist.destroy', $product) }}" method="POST">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {{-- Quantity Input --}}
-                            <div>
-                                <label for="quantity" class="block text-sm font-medium text-slate-300 mb-2">Quantity</label>
-                                <div class="flex gap-2">
-                                    <input type="number" 
-                                           name="quantity" 
-                                           id="quantity" 
-                                           min="1" 
-                                           value="{{ old('quantity', 1) }}" 
-                                           class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                           required>
-                                </div>
-                            </div>
+                        @method('DELETE')
+                        <button type="submit" class="products-show-wishlist-button products-show-wishlist-remove">
+                            Remove from Wishlist
+                        </button>
+                    </form>
+                @else
+                    <form action="{{ route('wishlist.store', $product) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="products-show-wishlist-button products-show-wishlist-add">
+                            Add to Wishlist
+                        </button>
+                    </form>
+                @endif
+            </div>
 
-                            {{-- Delivery Options Select --}}
-                            <div>
-                                <label for="delivery_option" class="block text-sm font-medium text-slate-300 mb-2">Delivery Option</label>
-                                <select name="delivery_option" 
-                                        id="delivery_option" 
-                                        class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                        required>
+            {{-- Add to Cart Section --}}
+            @if(Auth::id() === $product->user_id)
+                <div class="products-show-own-product">
+                    <p>You cannot add your own products to the cart.</p>
+                </div>
+            @else
+                <div class="products-show-cart-section">
+                    <form action="{{ route('cart.store', $product) }}" method="POST">
+                        @csrf
+                        <div class="products-show-cart-grid">
+                            {{-- Delivery Options --}}
+                            <div class="products-show-cart-field">
+                                <label for="delivery_option">Delivery Option</label>
+                                <select name="delivery_option" id="delivery_option" required>
                                     @foreach($formattedDeliveryOptions as $index => $option)
                                         <option value="{{ $index }}">
                                             {{ $option['description'] }}
@@ -172,14 +176,21 @@
                                     @endforeach
                                 </select>
                             </div>
-
+                            {{-- Quantity Input --}}
+                            <div class="products-show-cart-field">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" 
+                                       name="quantity" 
+                                       id="quantity" 
+                                       min="1" 
+                                       value="{{ old('quantity', 1) }}" 
+                                       required>
+                            </div>
+                            {{-- Bulk Options --}}
                             @if($product->bulk_options && count($product->bulk_options) > 0)
-                                {{-- Bulk Options Select --}}
-                                <div class="md:col-span-2">
-                                    <label for="bulk_option" class="block text-sm font-medium text-slate-300 mb-2">Bulk Purchase Option</label>
-                                    <select name="bulk_option" 
-                                            id="bulk_option" 
-                                            class="w-full rounded-lg border-gray-600 bg-slate-700 text-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <div class="products-show-cart-field">
+                                    <label for="bulk_option">Bulk Purchase Option</label>
+                                    <select name="bulk_option" id="bulk_option">
                                         <option value="">Regular Price (No Bulk Discount)</option>
                                         @foreach($formattedBulkOptions as $index => $option)
                                             <option value="{{ $index }}">
@@ -191,33 +202,22 @@
                             @endif
                         </div>
 
-                        {{-- Add to Cart Button --}}
-                        <div class="mt-6">
-                            <button type="submit" 
-                                    class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 text-center">
-                                Add to Cart
-                            </button>
-                        </div>
+                        <button type="submit" class="products-show-cart-button">
+                            Add to Cart
+                        </button>
                     </form>
-                @endif
-
-                {{-- Product Description --}}
-                <div class="prose prose-invert max-w-none mb-8">
-                    <div class="text-slate-300">
-                        {!! nl2br(e($product->description)) !!}
-                    </div>
                 </div>
+            @endif
 
-                {{-- Stock Information --}}
-                <div class="bg-slate-900 rounded-lg p-4 mb-4">
-                    <h3 class="text-lg font-semibold text-slate-200 mb-3">Stock Information</h3>
-                    <div class="flex items-center space-x-2 text-slate-300">
-                        <span class="font-medium">Available:</span>
-                        <span>{{ number_format($product->stock_amount) }} {{ $formattedMeasurementUnit }}</span>
-                    </div>
+            {{-- Product Description --}}
+            <div class="products-show-description">
+                <h2>Product Description</h2>
+                <div class="products-show-description-content">
+                    {!! nl2br(e($product->description)) !!}
                 </div>
             </div>
         </div>
     @endif
 </div>
+
 @endsection

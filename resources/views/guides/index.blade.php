@@ -35,7 +35,7 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🌐 Tor Guide 🌐</h3>
+                <h3 class="guides-index-item-title">🧅 Tor Guide 🧅</h3>
                 <p class="guides-index-item-description">
                     Detailed information about Tor Browser usage and operational security.
                 </p>
