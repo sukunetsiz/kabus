@@ -70,6 +70,5 @@ class Kernel extends HttpKernel
         'check.unverified.pgp' => \App\Http\Middleware\CheckUnverifiedPgpKey::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'vendor' => \App\Http\Middleware\VendorMiddleware::class,
-        'verify.rhombus.captcha' => \App\Http\Middleware\VerifyRhombusCaptcha::class,
     ];
 }
