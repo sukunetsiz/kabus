@@ -14,10 +14,7 @@ Built with PHP 8.3 and Laravel 11.
 - **PGP Integration**: Optional PGP key functionality for vendors and users to verify key ownership
 - **Two-Factor Authentication**: Enhanced security through PGP-based 2FA
 - **Mnemonic Recovery**: Built-in mnemonic phrase generation for key recovery
-- **JavaScript Warning**: Optional JavaScript disable warning for privacy-conscious users
-- **Unique Rhombus-Captcha**: Advanced anti-DDoS protection system
-
-![Rhombus Captcha System](docs/1.png)
+- **No JavaScript**: Built entirely with pure PHP and does not utilize JavaScript in any capacity.
 
 ### Monero Integration
 - **Vendor Registration Payment**: Monero Wallet RPC integration that generates a wallet address for vendor fee payments, with support for separate transactions and a 24-hour payment window
@@ -42,10 +39,13 @@ Built with PHP 8.3 and Laravel 11.
 
 ### Other Screenshots
 
-![Products Page](docs/3.png)
-![AdminPanel's User Page](docs/4.png)
-![Account Page](docs/5.png)
-![Support Page](docs/6.png)
+![Products Page](docs/2.png)
+![AdminPanel's User Page](docs/3.png)
+![Account Page](docs/4.png)
+![Support Page](docs/5.png)
+![Products Page](docs/6.png)
+![Cart Page](docs/7.png)
+![Return Addresses Page](docs/8.png)
 
 
 # [View the Roadmap](docs/ROADMAP.md)

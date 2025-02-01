@@ -121,20 +121,31 @@
             <div class="cart-index-bottom-row">
                 {{-- Message Section --}}
                 <div class="cart-index-message-container">
-                @foreach($cartItems as $item)
-                    @if($item->encrypted_message)
-                        <div class="cart-index-message-encrypted">
-                            <label class="cart-index-message-label">Encrypted Message for {{ $item->product->user->username }}:</label>
-                            <textarea readonly>{{ $item->encrypted_message }}</textarea>
-                        </div>
-                    @else
-                        <form action="{{ route('cart.message.save', $item) }}" method="POST" class="cart-index-message-form">
+                    {{-- Show encrypted messages --}}
+                    @foreach($cartItems as $item)
+                        @if($item->encrypted_message)
+                            <div class="cart-index-message-encrypted">
+                                <label class="cart-index-message-label">Encrypted Message for {{ $item->product->user->username }}:</label>
+                                <textarea readonly>{{ $item->encrypted_message }}</textarea>
+                            </div>
+                        @endif
+                    @endforeach
+
+                    {{-- Show message form only for the first non-encrypted item --}}
+                    @php
+                        $firstNonEncryptedItem = $cartItems->first(function($item) {
+                            return !$item->encrypted_message;
+                        });
+                    @endphp
+
+                    @if($firstNonEncryptedItem)
+                        <form action="{{ route('cart.message.save', $firstNonEncryptedItem) }}" method="POST" class="cart-index-message-form">
                             @csrf
-                            <label for="message_{{ $item->id }}" class="cart-index-message-label">
-                                Message for {{ $item->product->user->username }}:
+                            <label for="message_{{ $firstNonEncryptedItem->id }}" class="cart-index-message-label">
+                                Message for {{ $firstNonEncryptedItem->product->user->username }}:
                             </label>
                             <textarea 
-                                id="message_{{ $item->id }}"
+                                id="message_{{ $firstNonEncryptedItem->id }}"
                                 name="message" 
                                 class="cart-index-message-textarea"
                                 placeholder="Enter your message here. It will be encrypted with the vendor's PGP key."
@@ -143,7 +154,6 @@
                             <button type="submit" class="cart-index-message-button">Encrypt & Save Message</button>
                         </form>
                     @endif
-                @endforeach
                 </div>
 
                 {{-- Cart Summary --}}
