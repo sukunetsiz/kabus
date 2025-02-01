@@ -22,7 +22,7 @@ Built with PHP 8.3 and Laravel 11.
 
 *Note: Product purchasing with Monero is planned for future updates. Currently, Monero integration is only used for vendor registration fees.*
 
-![Vendor Registration Payment](docs/2.png)
+![Vendor Registration Payment](docs/1.png)
 
 ### Marketplace Functions
 - **User Dashboard**: Comprehensive control panel for account management
