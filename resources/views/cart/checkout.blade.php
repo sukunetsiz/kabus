@@ -13,42 +13,61 @@
         </nav>
     </div>
 
-    {{-- Checkout Placeholder --}}
-    <div class="bg-slate-800 rounded-lg p-8 text-center">
+    {{-- Checkout Details --}}
+    <div class="bg-slate-800 rounded-lg p-8">
+        <h2 class="text-2xl font-semibold text-slate-200 mb-6">Checkout Details</h2>
+        
+        <div class="flex justify-between gap-8">
+            {{-- Order Details --}}
+            <div class="flex-grow">
+                <h3 class="text-lg font-semibold text-slate-200 mb-4">Order Information</h3>
+                <div class="space-y-4 mb-6">
+                    @if($cartItems->isNotEmpty())
+                        @foreach($cartItems as $item)
+                            <div class="flex justify-between text-slate-300">
+                                <span>{{ $item->product->name }} (x{{ $item->quantity }})</span>
+                                <span>${{ number_format($item->getTotalPrice(), 2) }}</span>
+                            </div>
+                        @endforeach
+                    @else
+                        <p class="text-slate-400">No items in cart.</p>
+                    @endif
+                </div>
+                {{-- Add order details form here in future updates --}}
+            </div>
 
-        <h2 class="text-2xl font-semibold text-slate-200 mb-4">Checkout Coming Soon</h2>
-        <p class="text-slate-400 mb-6 max-w-lg mx-auto">
-            The checkout functionality is currently under development. Please check back later.
-        </p>
-        <div class="flex justify-center gap-4">
-            <a href="{{ route('cart.index') }}" 
-               class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors duration-200">
-                Return to Cart
-            </a>
-            <a href="{{ route('products.index') }}" 
-               class="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors duration-200">
-                Continue Shopping
-            </a>
-        </div>
-    </div>
-
-    {{-- Cart Summary --}}
-    @if($cartItems->isNotEmpty())
-        <div class="mt-8 bg-slate-800 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-slate-200 mb-4">Order Summary</h3>
-            <div class="space-y-4">
-                @foreach($cartItems as $item)
-                    <div class="flex justify-between text-slate-300">
-                        <span>{{ $item->product->name }} (x{{ $item->quantity }})</span>
-                        <span>${{ number_format($item->getTotalPrice(), 2) }}</span>
+            {{-- Price Summary --}}
+            <div class="w-96">
+                <div class="bg-slate-700 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-slate-200 mb-4">Price Summary</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-slate-300">
+                            <span>Subtotal</span>
+                            <span>${{ number_format($subtotal, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>Commission ({{ $commissionPercentage }}%)</span>
+                            <span>${{ number_format($commission, 2) }}</span>
+                        </div>
+                        <div class="border-t border-slate-600 pt-3 flex justify-between text-lg font-semibold">
+                            <span class="text-slate-200">Total</span>
+                            <span class="text-orange-400">${{ number_format($total, 2) }}</span>
+                        </div>
                     </div>
-                @endforeach
-                <div class="border-t border-slate-700 pt-4 flex justify-between text-lg font-semibold">
-                    <span class="text-slate-200">Total</span>
-                    <span class="text-orange-400">${{ number_format($cartItems->sum(function($item) { return $item->getTotalPrice(); }), 2) }}</span>
+                </div>
+
+                <div class="mt-6 flex gap-4">
+                    <a href="{{ route('cart.index') }}" 
+                       class="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors duration-200 text-center">
+                        Back to Cart
+                    </a>
+                    <button type="submit" 
+                            class="flex-1 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors duration-200">
+                        Proceed
+                    </button>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 </div>
 @endsection

@@ -24,4 +24,16 @@ return [
     |
     */
     'show_javascript_warning' => env('MARKETPLACE_SHOW_JS_WARNING', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Marketplace Commission Percentage
+    |--------------------------------------------------------------------------
+    |
+    | This option defines the commission percentage that will be added to the
+    | total amount during checkout. The commission is calculated as a percentage
+    | of the subtotal and is added to the final price. Default is 2%.
+    |
+    */
+    'commission_percentage' => env('MARKETPLACE_COMMISSION_PERCENTAGE', 2),
 ];

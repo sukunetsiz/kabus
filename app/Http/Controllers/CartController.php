@@ -264,10 +264,21 @@ class CartController extends Controller
 
     public function checkout()
     {
+        $cartItems = Cart::where('user_id', Auth::id())
+            ->with(['product', 'product.user'])
+            ->get();
+        
+        $subtotal = Cart::getCartTotal(Auth::user());
+        $commissionPercentage = config('marketplace.commission_percentage');
+        $commission = ($subtotal * $commissionPercentage) / 100;
+        $total = $subtotal + $commission;
+
         return view('cart.checkout', [
-            'cartItems' => Cart::where('user_id', Auth::id())
-                ->with(['product', 'product.user'])
-                ->get()
+            'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
+            'commissionPercentage' => $commissionPercentage,
+            'commission' => $commission,
+            'total' => $total
         ]);
     }
 }
