@@ -131,21 +131,22 @@
                         @endif
                     @endforeach
 
-                    {{-- Show message form only for the first non-encrypted item --}}
+                    {{-- Show message form only if no items have encrypted messages --}}
                     @php
-                        $firstNonEncryptedItem = $cartItems->first(function($item) {
-                            return !$item->encrypted_message;
+                        $hasEncryptedMessage = $cartItems->contains(function($item) {
+                            return $item->encrypted_message;
                         });
+                        $firstItem = $cartItems->first();
                     @endphp
 
-                    @if($firstNonEncryptedItem)
-                        <form action="{{ route('cart.message.save', $firstNonEncryptedItem) }}" method="POST" class="cart-index-message-form">
+                    @if(!$hasEncryptedMessage && $firstItem)
+                        <form action="{{ route('cart.message.save', $firstItem) }}" method="POST" class="cart-index-message-form">
                             @csrf
-                            <label for="message_{{ $firstNonEncryptedItem->id }}" class="cart-index-message-label">
-                                Message for {{ $firstNonEncryptedItem->product->user->username }}:
+                            <label for="message_{{ $firstItem->id }}" class="cart-index-message-label">
+                                Message for {{ $firstItem->product->user->username }}:
                             </label>
                             <textarea 
-                                id="message_{{ $firstNonEncryptedItem->id }}"
+                                id="message_{{ $firstItem->id }}"
                                 name="message" 
                                 class="cart-index-message-textarea"
                                 placeholder="Enter your message here. It will be encrypted with the vendor's PGP key."

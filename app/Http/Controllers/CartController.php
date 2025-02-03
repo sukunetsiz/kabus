@@ -262,7 +262,7 @@ class CartController extends Controller
         }
     }
 
-    public function checkout()
+    public function checkout(XmrPriceController $xmrPriceController)
     {
         $cartItems = Cart::where('user_id', Auth::id())
             ->with(['product', 'product.user'])
@@ -273,12 +273,34 @@ class CartController extends Controller
         $commission = ($subtotal * $commissionPercentage) / 100;
         $total = $subtotal + $commission;
 
+        // Get XMR price for conversion
+        $xmrPrice = $xmrPriceController->getXmrPrice();
+        $xmrTotal = is_numeric($xmrPrice) && $xmrPrice > 0 
+            ? $total / $xmrPrice 
+            : null;
+
+        // Get measurement units for formatting
+        $measurementUnits = Product::getMeasurementUnits();
+
+        // Handle encrypted message logic
+        $hasEncryptedMessage = $cartItems->contains(function($item) {
+            return $item->encrypted_message;
+        });
+        $messageItem = $cartItems->first(function($item) {
+            return $item->encrypted_message;
+        });
+
         return view('cart.checkout', [
             'cartItems' => $cartItems,
             'subtotal' => $subtotal,
             'commissionPercentage' => $commissionPercentage,
             'commission' => $commission,
-            'total' => $total
+            'total' => $total,
+            'xmrPrice' => $xmrPrice,
+            'xmrTotal' => $xmrTotal,
+            'measurementUnits' => $measurementUnits,
+            'hasEncryptedMessage' => $hasEncryptedMessage,
+            'messageItem' => $messageItem
         ]);
     }
 }
