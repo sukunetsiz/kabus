@@ -25,4 +25,9 @@ class GuidesController extends Controller
     {
         return view('guides.tor-guide');
     }
+
+    public function kleopatra()
+    {
+        return view('guides.kleopatra-guide');
+    }
 }

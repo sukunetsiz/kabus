@@ -35,11 +35,11 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">📧 Kleopatra Guide ⛔</h3>
+                <h3 class="guides-index-item-title">📧 Kleopatra Guide 📧</h3>
                 <p class="guides-index-item-description">
                     Guide for using Kleopatra for PGP key management and encryption.
                 </p>
-                <a href="#" class="guides-index-item-link">View Guide</a>
+                <a href="{{ route('guides.kleopatra') }}" class="guides-index-item-link">View Guide</a>
             </div>
         </div>
     </div>

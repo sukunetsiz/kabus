@@ -111,6 +111,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/guides/keepassxc', [GuidesController::class, 'keepassxc'])->name('guides.keepassxc');
     Route::get('/guides/monero', [GuidesController::class, 'monero'])->name('guides.monero');
     Route::get('/guides/tor', [GuidesController::class, 'tor'])->name('guides.tor');
+    Route::get('/guides/kleopatra', [GuidesController::class, 'kleopatra'])->name('guides.kleopatra');
 
     // Settings routes
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
