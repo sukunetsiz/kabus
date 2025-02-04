@@ -15,11 +15,11 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 ### March 3rd Goals (v0.9)
 - [ ] Implement a feature to allow users and vendors to create and manage disputes.
 - [ ] Create "My Products" and "My Orders" pages, making them fully functional.
-- [ ] Write a comprehensive guide for using Tails OS.
+- [ ] Write a comprehensive guide for using Kleopatra.
 - [ ] Finish functionality for creating digital items, as well as shipping options like cargo and dead drop.
 
 ### April 4th Goals (v1.0)
 - [ ] Finish and implement the Moneta Chance game.
 - [ ] Add product review functionality.
-- [ ] Write a comprehensive guide for using Kleopatra.
+- [ ] Integrate optional Baklava CAPTCHA.
 - [ ] Add walletless escrow mechanism for buying products, making the script fully functional.

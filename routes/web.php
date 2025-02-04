@@ -9,7 +9,6 @@ use App\Http\Controllers\RulesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReferencesController;
-use App\Http\Controllers\PgpKeyConfirmationController;
 use App\Http\Controllers\Pgp2FAController;
 use App\Http\Controllers\BecomeVendorController;
 use App\Http\Controllers\AdminController;
@@ -111,7 +110,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/guides', [GuidesController::class, 'index'])->name('guides.index');
     Route::get('/guides/keepassxc', [GuidesController::class, 'keepassxc'])->name('guides.keepassxc');
     Route::get('/guides/monero', [GuidesController::class, 'monero'])->name('guides.monero');
-    Route::get('/guides/buying-monero', [GuidesController::class, 'buyingMonero'])->name('guides.buying-monero');
     Route::get('/guides/tor', [GuidesController::class, 'tor'])->name('guides.tor');
 
     // Settings routes
@@ -154,8 +152,8 @@ Route::middleware('auth')->group(function () {
 
     // PGP key confirmation routes
     Route::middleware(CheckUnverifiedPgpKey::class)->group(function () {
-        Route::get('/pgp/confirm', [PgpKeyConfirmationController::class, 'showConfirmationForm'])->name('pgp.confirm');
-        Route::post('/pgp/confirm', [PgpKeyConfirmationController::class, 'confirmKey'])->name('pgp.confirm.submit');
+        Route::get('/pgp/confirm', [ProfileController::class, 'showPgpConfirmationForm'])->name('pgp.confirm');
+        Route::post('/pgp/confirm', [ProfileController::class, 'confirmPgpKey'])->name('pgp.confirm.submit');
     });
 
     // PGP-based 2FA settings route

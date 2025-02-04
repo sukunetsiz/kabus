@@ -21,11 +21,6 @@ class GuidesController extends Controller
         return view('guides.monero-guide');
     }
 
-    public function buyingMonero()
-    {
-        return view('guides.buying-monero');
-    }
-
     public function tor()
     {
         return view('guides.tor-guide');

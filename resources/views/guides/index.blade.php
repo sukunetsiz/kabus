@@ -11,27 +11,11 @@
 
         <div class="guides-index-grid">
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🌑 {{ config('app.name') }} Guide ⛔</h3>
-                <p class="guides-index-item-description">
-                    Detailed information about the basic features and safe usage of {{ config('app.name') }}.
-                </p>
-                <a href="#" class="guides-index-item-link">View Guide</a>
-            </div>
-
-            <div class="guides-index-item">
                 <h3 class="guides-index-item-title">🪙 Monero Guide 🪙</h3>
                 <p class="guides-index-item-description">
                     Comprehensive information about creating and safely using a Monero wallet.
                 </p>
                 <a href="{{ route('guides.monero') }}" class="guides-index-item-link">View Guide</a>
-            </div>
-
-            <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🔍 Monero Buying Guide 🔎</h3>
-                <p class="guides-index-item-description">
-                    Methods for buying Monero and security measures to be considered.
-                </p>
-                <a href="{{ route('guides.buying-monero') }}" class="guides-index-item-link">View Guide</a>
             </div>
 
             <div class="guides-index-item">
@@ -54,22 +38,6 @@
                 <h3 class="guides-index-item-title">📧 Kleopatra Guide ⛔</h3>
                 <p class="guides-index-item-description">
                     Guide for using Kleopatra for PGP key management and encryption.
-                </p>
-                <a href="#" class="guides-index-item-link">View Guide</a>
-            </div>
-
-            <div class="guides-index-item">
-                <h3 class="guides-index-item-title">📍 Dead Drop Method ⛔</h3>
-                <p class="guides-index-item-description">
-                    Guide about the delivery method known as "dead drop".
-                </p>
-                <a href="#" class="guides-index-item-link">View Guide</a>
-            </div>
-
-            <div class="guides-index-item">
-                <h3 class="guides-index-item-title">💻 Tails Guide ⛔</h3>
-                <p class="guides-index-item-description">
-                    Guide about Tails operating system installation and secure usage.
                 </p>
                 <a href="#" class="guides-index-item-link">View Guide</a>
             </div>
