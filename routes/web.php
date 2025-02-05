@@ -9,7 +9,6 @@ use App\Http\Controllers\RulesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReferencesController;
-use App\Http\Controllers\Pgp2FAController;
 use App\Http\Controllers\BecomeVendorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VendorController;
@@ -29,7 +28,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\LoginThrottle;
-use App\Http\Middleware\CheckUnverifiedPgpKey;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\VendorMiddleware;
 
@@ -69,9 +67,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'reset'])->name('password.update');
 
-    // New routes for 2FA challenge
-    Route::get('/2fa/challenge', [Pgp2FAController::class, 'showChallenge'])->name('pgp.2fa.challenge');
-    Route::post('/2fa/verify', [Pgp2FAController::class, 'verifyChallenge'])->name('pgp.2fa.verify');
+    // PGP 2FA challenge routes
+    Route::get('/2fa/challenge', [AuthController::class, 'showPgp2FAChallenge'])->name('pgp.2fa.challenge');
+    Route::post('/2fa/verify', [AuthController::class, 'verifyPgp2FAChallenge'])->name('pgp.2fa.verify');
 
     // New route for banned users
     Route::get('/banned', [AuthController::class, 'showBanned'])->name('banned');
@@ -152,13 +150,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/references', [ReferencesController::class, 'index'])->name('references.index');
 
     // PGP key confirmation routes
-    Route::middleware(CheckUnverifiedPgpKey::class)->group(function () {
-        Route::get('/pgp/confirm', [ProfileController::class, 'showPgpConfirmationForm'])->name('pgp.confirm');
-        Route::post('/pgp/confirm', [ProfileController::class, 'confirmPgpKey'])->name('pgp.confirm.submit');
-    });
+    Route::get('/pgp/confirm', [ProfileController::class, 'showPgpConfirmationForm'])->name('pgp.confirm');
+    Route::post('/pgp/confirm', [ProfileController::class, 'confirmPgpKey'])->name('pgp.confirm.submit');
 
-    // PGP-based 2FA settings route
-    Route::put('/pgp/2fa', [Pgp2FAController::class, 'updateSettings'])->name('pgp.2fa.update');
+    // PGP 2FA settings route
+    Route::put('/pgp/2fa', [AuthController::class, 'updatePgp2FASettings'])->name('pgp.2fa.update');
 
     // Becoming a vendor routes
     Route::get('/become-vendor', [BecomeVendorController::class, 'index'])->name('become.vendor');

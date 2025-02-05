@@ -17,7 +17,6 @@
                 </div>
             </div>
 
-            @if($showFullInfo)
             <div class="dashboard-pgp-status">
                 <h3 class="dashboard-section-title">PGP Key Status</h3>
                 @if($pgpKey)
@@ -33,7 +32,6 @@
                     <p>No PGP key added yet.</p>
                 @endif
             </div>
-            @endif
         </div>
 
         <div class="dashboard-main">
@@ -44,7 +42,6 @@
                 </div>
             </div>
 
-            @if($showFullInfo)
             <div class="dashboard-pgp-key-wrapper">
                 <div class="dashboard-pgp-key">
                     <h3 class="dashboard-section-title">Current PGP Key</h3>
@@ -61,7 +58,6 @@
                     </div>
                 </div>
             </div>
-            @endif
         </div>
     </div>
 </div>

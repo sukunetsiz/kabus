@@ -227,17 +227,12 @@ class ProfileController extends Controller
         $user = Auth::user();
         $pgpKey = $user->pgpKey;
 
+        // Check for unverified PGP key
+        if (!$pgpKey || $pgpKey->verified) {
+            return redirect()->route('profile')->with('info', 'You do not have an unverified PGP key to confirm.');
+        }
+
         Log::info('User ID: ' . $user->id);
-        Log::info('PGP Key: ' . ($pgpKey ? 'Found' : 'Not Found'));
-
-        if (!$pgpKey) {
-            return redirect()->route('profile')->with('error', 'You need to add a PGP key before verification.');
-        }
-
-        if ($pgpKey->verified) {
-            return redirect()->route('profile')->with('info', 'Your PGP key is already verified.');
-        }
-
         Log::info('PGP Key ID: ' . $pgpKey->id);
         Log::info('PGP Key User ID: ' . $pgpKey->user_id);
 
@@ -299,12 +294,9 @@ class ProfileController extends Controller
         $user = Auth::user();
         $pgpKey = $user->pgpKey;
 
-        if (!$pgpKey) {
-            return redirect()->route('profile')->with('error', 'You need to add a PGP key before verification.');
-        }
-
-        if ($pgpKey->verified) {
-            return redirect()->route('profile')->with('info', 'Your PGP key is already verified.');
+        // Check for unverified PGP key
+        if (!$pgpKey || $pgpKey->verified) {
+            return redirect()->route('profile')->with('info', 'You do not have an unverified PGP key to confirm.');
         }
 
         $request->validate([
