@@ -387,7 +387,7 @@ class AuthController extends Controller
         session()->forget('captcha_code');
 
         $credentials = $request->only('username', 'password');
-        $user = User::where('username', $credentials['username'])->first();
+        $user = User::whereRaw('BINARY username = ?', [$credentials['username']])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return back()->withErrors([
@@ -447,7 +447,7 @@ class AuthController extends Controller
             'mnemonic.max' => 'Mnemonic phrase cannot be longer than 512 characters.',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::whereRaw('BINARY username = ?', [$request->username])->first();
 
         if (!$user || !$this->verifyMnemonicPhrase($request->mnemonic, $user->mnemonic)) {
             return back()->withErrors([
