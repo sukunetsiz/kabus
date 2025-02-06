@@ -1,15 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="products-common-create-container">
     <div class="products-common-create-card">
         <div class="products-common-create-content">
             <h2 class="products-common-create-title">
-                Add New Digital Product
+                Add New {{ ucfirst($type) }} Product
             </h2>
 
-            <form action="{{ route('vendor.products.digital.store') }}" method="POST" class="products-common-create-form" enctype="multipart/form-data">
+            <form action="{{ route('vendor.products.store', $type) }}" method="POST" class="products-common-create-form" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Product Pictures Section -->
@@ -200,15 +199,21 @@
 
                 <!-- Delivery Options -->
                 <div class="products-common-create-section">
-                    <h3 class="products-common-create-section-title">Delivery Options</h3>
+                    <h3 class="products-common-create-section-title">
+                        @if($type === 'deaddrop')
+                            Pickup Options
+                        @else
+                            Delivery Options
+                        @endif
+                    </h3>
                     <p class="products-common-create-section-desc">
-                        Add between 1 and 4 delivery options. At least one option is required.
+                        Add between 1 and 4 {{ $type === 'deaddrop' ? 'pickup' : 'delivery' }} options. At least one option is required.
                     </p>
                     
                     @for ($i = 0; $i < 4; $i++)
                         <div class="products-common-create-option-card">
                             <h4 class="products-common-create-option-title">
-                                Delivery Option {{ $i + 1 }}
+                                {{ $type === 'deaddrop' ? 'Pickup' : 'Delivery' }} Option {{ $i + 1 }}
                             </h4>
                             
                             <!-- Description -->
@@ -222,7 +227,11 @@
                                     id="delivery_options_{{ $i }}_description"
                                     class="products-common-create-input"
                                     value="{{ old('delivery_options.'.$i.'.description') }}"
-                                    placeholder="e.g., Instant download for free after purchase, Delivered within 24 hours, Access provided after 1 business day"
+                                    placeholder="{{ $type === 'digital' 
+                                        ? 'e.g., Instant download for free after purchase, Delivered within 24 hours'
+                                        : ($type === 'cargo' 
+                                            ? 'e.g., Standard Delivery (3-5 business days via UPS), Express Shipping (1-2 business days via FedEx)'
+                                            : 'e.g., Pickup near Central Park, NYC within 24 hours, Locker #31 at Union Station') }}"
                                     {{ $i === 0 ? 'required' : '' }}>
                                 @error('delivery_options.'.$i.'.description')
                                     <p class="products-common-create-error">{{ $message }}</p>
@@ -327,7 +336,7 @@
                 <!-- Submit Button -->
                 <div class="products-common-create-submit-wrapper">
                     <button type="submit" class="products-common-create-submit-btn">
-                        Create Digital Product
+                        Create {{ ucfirst($type) }} Product
                     </button>
                 </div>
             </form>

@@ -19,9 +19,6 @@ use App\Http\Controllers\GuidesController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorsController;
-use App\Http\Controllers\AddCargoProductController;
-use App\Http\Controllers\AddDigitalProductController;
-use App\Http\Controllers\AddDeadDropProductController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
@@ -238,17 +235,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/vendor/my-products', [VendorController::class, 'myProducts'])->name('vendor.my-products');
         Route::delete('/vendor/products/{product}', [VendorController::class, 'destroy'])->name('vendor.products.destroy');
         
-        // Add Cargo Product routes
-        Route::get('/vendor/products/cargo/create', [AddCargoProductController::class, 'create'])->name('vendor.products.cargo.create');
-        Route::post('/vendor/products/cargo', [AddCargoProductController::class, 'store'])->name('vendor.products.cargo.store');
-
-        // Add Digital Product routes
-        Route::get('/vendor/products/digital/create', [AddDigitalProductController::class, 'create'])->name('vendor.products.digital.create');
-        Route::post('/vendor/products/digital', [AddDigitalProductController::class, 'store'])->name('vendor.products.digital.store');
-
-        // Add Dead Drop Product routes
-        Route::get('/vendor/products/deaddrop/create', [AddDeadDropProductController::class, 'create'])->name('vendor.products.deaddrop.create');
-        Route::post('/vendor/products/deaddrop', [AddDeadDropProductController::class, 'store'])->name('vendor.products.deaddrop.store');
+        // Product creation routes
+        Route::get('/vendor/products/{type}/create', [VendorController::class, 'create'])
+            ->name('vendor.products.create')
+            ->where('type', 'cargo|digital|deaddrop');
+        Route::post('/vendor/products/{type}', [VendorController::class, 'store'])
+            ->name('vendor.products.store')
+            ->where('type', 'cargo|digital|deaddrop');
     });
 });
 

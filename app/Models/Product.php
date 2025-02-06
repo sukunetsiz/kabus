@@ -43,20 +43,20 @@ class Product extends Model
     public static function getMeasurementUnits(): array
     {
         return [
-            self::UNIT_GRAM => 'Gram (g)',
-            self::UNIT_KILOGRAM => 'Kilogram (kg)',
-            self::UNIT_MILLILITER => 'Milliliter (ml)',
-            self::UNIT_LITER => 'Liter (l)',
-            self::UNIT_CENTIMETER => 'Centimeter (cm)',
-            self::UNIT_METER => 'Meter (m)',
-            self::UNIT_INCH => 'Inch (in)',
-            self::UNIT_FOOT => 'Foot (ft)',
-            self::UNIT_SQUARE_METER => 'Square Meter (m²)',
-            self::UNIT_PIECE => 'Unit (piece)',
-            self::UNIT_DOZEN => 'Dozen (12 items)',
-            self::UNIT_HOUR => 'Hour',
-            self::UNIT_DAY => 'Day',
-            self::UNIT_MONTH => 'Month'
+            self::UNIT_GRAM => 'Grams (g)',
+            self::UNIT_KILOGRAM => 'Kilograms (kg)',
+            self::UNIT_MILLILITER => 'Milliliters (ml)',
+            self::UNIT_LITER => 'Liters (l)',
+            self::UNIT_CENTIMETER => 'Centimeters (cm)',
+            self::UNIT_METER => 'Meters (m)',
+            self::UNIT_INCH => 'Inches (in)',
+            self::UNIT_FOOT => 'Feet (ft)',
+            self::UNIT_SQUARE_METER => 'Square Meters (m²)',
+            self::UNIT_PIECE => 'Units (pieces)',
+            self::UNIT_DOZEN => 'Dozens (12 items)',
+            self::UNIT_HOUR => 'Hours',
+            self::UNIT_DAY => 'Days',
+            self::UNIT_MONTH => 'Months'
         ];
     }
 
