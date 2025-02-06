@@ -479,13 +479,59 @@ class AdminController extends Controller
     {
         try {
             $categoryName = $category->getFormattedName();
-            $category->delete();
+            
+            // Begin transaction to ensure all operations complete successfully
+            \DB::beginTransaction();
+            
+            $totalProductsCount = 0;
+            $deletedCategoriesCount = 0;
+            $categoryIds = [];
+            $productsToDelete = [];
 
-            Log::info("Category deleted: {$categoryName} by admin " . auth()->id());
+            // Function to recursively collect category IDs and products
+            $collectCategoryInfo = function ($cat) use (&$collectCategoryInfo, &$totalProductsCount, &$categoryIds, &$productsToDelete) {
+                // Get all products (including soft-deleted ones) and store them
+                $products = $cat->products()->withTrashed()->get();
+                $totalProductsCount += $products->count();
+                $productsToDelete = array_merge($productsToDelete, $products->all());
+                
+                $categoryIds[] = $cat->id;
+
+                // Recursively process child categories
+                $cat->children()->get()->each(function ($child) use ($collectCategoryInfo) {
+                    $collectCategoryInfo($child);
+                });
+            };
+
+            // First collect all category IDs and products
+            $collectCategoryInfo($category);
+
+            // Delete all collected products
+            foreach ($productsToDelete as $product) {
+                $product->forceDelete();
+            }
+
+            // Delete categories from bottom up (children first)
+            Category::whereIn('id', $categoryIds)
+                ->orderBy('id', 'desc')
+                ->get()
+                ->each(function ($cat) use (&$deletedCategoriesCount) {
+                    $cat->delete();
+                    $deletedCategoriesCount++;
+                });
+            
+            \DB::commit();
+
+            // Log the deletion with counts
+            $logMessage = "Category tree deleted: {$categoryName} by admin " . auth()->id() . 
+                         ". {$totalProductsCount} products and {$deletedCategoriesCount} categories were permanently deleted.";
+            Log::info($logMessage);
 
             return redirect()->route('admin.categories')
-                ->with('success', 'Category deleted successfully.');
+                ->with('success', "Category tree deleted successfully. {$totalProductsCount} products and " . 
+                       ($deletedCategoriesCount - 1) . " subcategories were permanently deleted.");
         } catch (\Exception $e) {
+            \DB::rollBack();
             Log::error('Error deleting category: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Error deleting category. Please try again.');
