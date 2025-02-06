@@ -328,6 +328,172 @@ class VendorController extends Controller
     }
 
     /**
+     * Show the form for editing a product.
+     */
+    public function edit(Product $product)
+    {
+        // Check if the authenticated user owns this product
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Get all categories
+        $categories = Category::with('children')->get();
+        
+        // Get measurement units for the dropdown
+        $measurementUnits = Product::getMeasurementUnits();
+
+        // Get countries from JSON file
+        $countries = json_decode(file_get_contents(storage_path('app/country.json')), true);
+
+        return view('vendor.products.edit', compact('product', 'categories', 'measurementUnits', 'countries'));
+    }
+
+    /**
+     * Update the specified product.
+     */
+    public function update(Request $request, Product $product)
+    {
+        // Check if the authenticated user owns this product
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'stock_amount' => 'required|integer|min:0|max:999999',
+                'measurement_unit' => [
+                    'required',
+                    Rule::in(array_keys(Product::getMeasurementUnits()))
+                ],
+                'ships_from' => [
+                    'required',
+                    'string',
+                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                ],
+                'ships_to' => [
+                    'required',
+                    'string',
+                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                ],
+            ]);
+
+            // Process delivery options
+            $deliveryOptions = collect($request->delivery_options ?? [])->map(function ($option) {
+                return [
+                    'description' => trim($option['description'] ?? ''),
+                    'price' => is_numeric($option['price']) ? (float) $option['price'] : null
+                ];
+            })->filter(function ($option) {
+                return !empty($option['description']) && is_numeric($option['price']);
+            })->values()->all();
+
+            // Get appropriate error messages based on product type
+            $deliveryOptionName = $product->type === Product::TYPE_DEADDROP ? 'pickup window' : 'delivery';
+
+            // Validate delivery options
+            if (empty($deliveryOptions)) {
+                throw ValidationException::withMessages([
+                    'delivery_options' => ["At least one {$deliveryOptionName} option is required."]
+                ]);
+            }
+
+            if (count($deliveryOptions) > 4) {
+                throw ValidationException::withMessages([
+                    'delivery_options' => ["No more than 4 {$deliveryOptionName} options are allowed."]
+                ]);
+            }
+
+            // Validate each delivery option
+            foreach ($deliveryOptions as $index => $option) {
+                if (strlen($option['description']) > 255) {
+                    throw ValidationException::withMessages([
+                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description cannot exceed 255 characters."]
+                    ]);
+                }
+
+                if ($option['price'] < 0) {
+                    throw ValidationException::withMessages([
+                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price cannot be negative."]
+                    ]);
+                }
+            }
+
+            // Process bulk options (optional)
+            $bulkOptions = collect($request->bulk_options ?? [])->map(function ($option) {
+                return [
+                    'amount' => is_numeric($option['amount']) ? (float) $option['amount'] : null,
+                    'price' => is_numeric($option['price']) ? (float) $option['price'] : null
+                ];
+            })->filter(function ($option) {
+                return is_numeric($option['amount']) && is_numeric($option['price']);
+            })->values()->all();
+
+            // Validate bulk options
+            if (!empty($bulkOptions)) {
+                if (count($bulkOptions) > 4) {
+                    throw ValidationException::withMessages([
+                        'bulk_options' => ['No more than 4 bulk options are allowed.']
+                    ]);
+                }
+
+                // Validate each bulk option
+                foreach ($bulkOptions as $index => $option) {
+                    if ($option['amount'] <= 0) {
+                        throw ValidationException::withMessages([
+                            "bulk_options.{$index}.amount" => ['Amount must be greater than zero.']
+                        ]);
+                    }
+
+                    if ($option['price'] <= 0) {
+                        throw ValidationException::withMessages([
+                            "bulk_options.{$index}.price" => ['Price must be greater than zero.']
+                        ]);
+                    }
+                }
+            }
+
+            // Update product data
+            $product->update([
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+                'stock_amount' => $validated['stock_amount'],
+                'measurement_unit' => $validated['measurement_unit'],
+                'delivery_options' => $deliveryOptions,
+                'bulk_options' => $bulkOptions,
+                'ships_from' => $validated['ships_from'],
+                'ships_to' => $validated['ships_to'],
+            ]);
+
+            // Get appropriate success message
+            $productTypeName = match($product->type) {
+                Product::TYPE_CARGO => 'Cargo',
+                Product::TYPE_DIGITAL => 'Digital',
+                Product::TYPE_DEADDROP => 'Dead Drop',
+            };
+
+            return redirect()
+                ->route('vendor.my-products')
+                ->with('success', "{$productTypeName} product updated successfully.");
+
+        } catch (Exception $e) {
+            Log::error("Failed to update product: " . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'product_id' => $product->id
+            ]);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Failed to update product. Please try again.');
+        }
+    }
+
+    /**
      * Handle the product picture upload.
      */
     private function handleProductPictureUpload($file)

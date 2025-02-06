@@ -235,13 +235,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/vendor/my-products', [VendorController::class, 'myProducts'])->name('vendor.my-products');
         Route::delete('/vendor/products/{product}', [VendorController::class, 'destroy'])->name('vendor.products.destroy');
         
-        // Product creation routes
+        // Product creation and editing routes
         Route::get('/vendor/products/{type}/create', [VendorController::class, 'create'])
             ->name('vendor.products.create')
             ->where('type', 'cargo|digital|deaddrop');
         Route::post('/vendor/products/{type}', [VendorController::class, 'store'])
             ->name('vendor.products.store')
             ->where('type', 'cargo|digital|deaddrop');
+        Route::get('/vendor/products/{product}/edit', [VendorController::class, 'edit'])
+            ->name('vendor.products.edit');
+        Route::patch('/vendor/products/{product}', [VendorController::class, 'update'])
+            ->name('vendor.products.update');
     });
 });
 

@@ -24,9 +24,10 @@
                             {{ $product->type === 'deaddrop' ? 'Dead Drop' : ucfirst($product->type) }}
                         </span>
                         <div class="my-products-index-actions">
-                            <button class="my-products-index-btn my-products-index-btn-edit">
-                            ⛔ Edit ⛔
-                            </button>
+                            <a href="{{ route('vendor.products.edit', $product) }}" 
+                               class="my-products-index-btn my-products-index-btn-edit">
+                                Edit
+                            </a>
                             <form action="{{ route('vendor.products.destroy', $product) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')

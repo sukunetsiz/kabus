@@ -8145,3 +8145,31 @@ background-color:#45a049;
 transform:translateY(-2px);
 box-shadow:0 4px 15px #4caf504d
 }
+
+.products-common-edit-photos-container {
+display:flex;
+flex-direction:row;
+gap:10px;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap
+}
+
+.products-common-edit-photo {
+width:160px;
+height:160px;
+border:4px solid #3c3c3c;
+border-radius:4px
+}
+
+.products-common-edit-photo img {
+width:100%;
+height:100%;
+object-fit:cover
+}
+
+.products-common-edit-photos-title {
+text-align:center;
+color:#bb86fc!important;
+font-size:20px!important
+}
