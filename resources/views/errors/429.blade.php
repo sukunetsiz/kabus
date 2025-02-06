@@ -7,6 +7,6 @@
         <div class="error-description">
             You're clicking faster than a caffeinated squirrel on a sugar rush! Our servers need a moment to catch their breath. Why not take a sip of water, do a little stretch, or count to ten? We'll be ready for more of your enthusiasm in just a moment.
         </div>
-        <a href="{{ url('/') }}" class="home-button">Return to {{ config('app.name') }}</a>
+        <a href="{{ route('home') }}" class="home-button">Return to {{ config('app.name') }}</a>
     </div>
 @endsection

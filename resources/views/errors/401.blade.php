@@ -7,6 +7,6 @@
         <div class="error-description">
             Looks like you're trying to sneak in without showing your digital ID! It's like trying to enter a spy movie without knowing the secret handshake. Maybe try logging in first? Our security guard is very particular about these things.
         </div>
-        <a href="{{ url('/') }}" class="home-button">Return to {{ config('app.name') }}</a>
+        <a href="{{ route('login') }}" class="home-button">Return to {{ config('app.name') }}</a>
     </div>
 @endsection
