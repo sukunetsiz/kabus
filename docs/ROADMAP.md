@@ -16,7 +16,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [ ] Implement a feature to allow users and vendors to create and manage disputes.
 - [ ] Create "My Products" and "My Orders" pages, making them fully functional.
 - [X] Write a comprehensive guide for using Kleopatra.
-- [ ] Finish functionality for creating and editing digital, cargo and dead drop products.
+- [X] Finish functionality for creating and editing digital, cargo and dead drop products.
 
 ### April 4th Goals (v1.0)
 - [ ] Finish and implement the Moneta Chance game.

@@ -138,7 +138,7 @@
                                     <span class="all-products-index-owner-badge">{{ $product->user->username }}</span>
                                 </td>
                                 <td class="all-products-index-actions">
-                                    <button class="all-products-index-btn all-products-index-btn-edit">⛔ Edit ⛔</button>
+                                    <a href="{{ route('admin.products.edit', $product) }}" class="all-products-index-btn all-products-index-btn-edit">Edit</a>
                                     <form action="{{ route('admin.products.destroy', $product) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')

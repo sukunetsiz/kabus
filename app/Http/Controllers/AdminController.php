@@ -15,6 +15,14 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Popup;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\PngEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\Encoders\GifEncoder;
+use Intervention\Image\Exceptions\NotReadableException;
 
 class AdminController extends Controller
 {
@@ -653,6 +661,297 @@ class AdminController extends Controller
             Log::error('Error deleting product: ' . $e->getMessage());
             return redirect()->route('admin.all-products')
                 ->with('error', 'Error deleting product. Please try again.');
+        }
+    }
+
+    /**
+     * Show the form for editing a product.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\View\View
+     */
+    public function editProduct(Product $product)
+    {
+        try {
+            // Get all categories
+            $categories = Category::with('children')->get();
+            
+            // Get measurement units for the dropdown
+            $measurementUnits = Product::getMeasurementUnits();
+
+            // Get countries from JSON file
+            $countries = json_decode(file_get_contents(storage_path('app/country.json')), true);
+
+            return view('admin.all-products.edit', compact('product', 'categories', 'measurementUnits', 'countries'));
+        } catch (\Exception $e) {
+            Log::error('Error showing product edit form: ' . $e->getMessage());
+            return redirect()->route('admin.all-products')
+                ->with('error', 'Error loading product edit form. Please try again.');
+        }
+    }
+
+    /**
+     * Update the specified product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProduct(Request $request, Product $product)
+    {
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'product_picture' => [
+                    'nullable',
+                    'file',
+                    'max:800', // 800KB max size
+                ],
+                'additional_photos.*' => [
+                    'nullable',
+                    'file',
+                    'max:800', // 800KB max size
+                ],
+                'stock_amount' => 'required|integer|min:0|max:999999',
+                'measurement_unit' => [
+                    'required',
+                    Rule::in(array_keys(Product::getMeasurementUnits()))
+                ],
+                'ships_from' => [
+                    'required',
+                    'string',
+                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                ],
+                'ships_to' => [
+                    'required',
+                    'string',
+                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                ],
+            ]);
+
+            // Process delivery options
+            $deliveryOptions = collect($request->delivery_options ?? [])->map(function ($option) {
+                return [
+                    'description' => trim($option['description'] ?? ''),
+                    'price' => is_numeric($option['price']) ? (float) $option['price'] : null
+                ];
+            })->filter(function ($option) {
+                return !empty($option['description']) && is_numeric($option['price']);
+            })->values()->all();
+
+            // Get appropriate error messages based on product type
+            $deliveryOptionName = $product->type === Product::TYPE_DEADDROP ? 'pickup window' : 'delivery';
+
+            // Validate delivery options
+            if (empty($deliveryOptions)) {
+                throw ValidationException::withMessages([
+                    'delivery_options' => ["At least one {$deliveryOptionName} option is required."]
+                ]);
+            }
+
+            if (count($deliveryOptions) > 4) {
+                throw ValidationException::withMessages([
+                    'delivery_options' => ["No more than 4 {$deliveryOptionName} options are allowed."]
+                ]);
+            }
+
+            // Validate each delivery option
+            foreach ($deliveryOptions as $index => $option) {
+                if (strlen($option['description']) > 255) {
+                    throw ValidationException::withMessages([
+                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description cannot exceed 255 characters."]
+                    ]);
+                }
+
+                if ($option['price'] < 0) {
+                    throw ValidationException::withMessages([
+                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price cannot be negative."]
+                    ]);
+                }
+            }
+
+            // Process bulk options (optional)
+            $bulkOptions = collect($request->bulk_options ?? [])->map(function ($option) {
+                return [
+                    'amount' => is_numeric($option['amount']) ? (float) $option['amount'] : null,
+                    'price' => is_numeric($option['price']) ? (float) $option['price'] : null
+                ];
+            })->filter(function ($option) {
+                return is_numeric($option['amount']) && is_numeric($option['price']);
+            })->values()->all();
+
+            // Validate bulk options
+            if (!empty($bulkOptions)) {
+                if (count($bulkOptions) > 4) {
+                    throw ValidationException::withMessages([
+                        'bulk_options' => ['No more than 4 bulk options are allowed.']
+                    ]);
+                }
+
+                // Validate each bulk option
+                foreach ($bulkOptions as $index => $option) {
+                    if ($option['amount'] <= 0) {
+                        throw ValidationException::withMessages([
+                            "bulk_options.{$index}.amount" => ['Amount must be greater than zero.']
+                        ]);
+                    }
+
+                    if ($option['price'] <= 0) {
+                        throw ValidationException::withMessages([
+                            "bulk_options.{$index}.price" => ['Price must be greater than zero.']
+                        ]);
+                    }
+                }
+            }
+
+            // Handle photo deletion requests
+            if ($request->has('delete_main_photo') && $product->product_picture !== 'default-product-picture.png') {
+                Storage::disk('private')->delete('product_pictures/' . $product->product_picture);
+                $product->product_picture = 'default-product-picture.png';
+            }
+
+            if ($request->has('delete_additional_photo')) {
+                $index = (int) $request->delete_additional_photo;
+                if (isset($product->additional_photos[$index])) {
+                    Storage::disk('private')->delete('product_pictures/' . $product->additional_photos[$index]);
+                    $additionalPhotos = $product->additional_photos;
+                    unset($additionalPhotos[$index]);
+                    $product->additional_photos = array_values($additionalPhotos);
+                }
+            }
+
+            // Handle new product picture if uploaded
+            if ($request->hasFile('product_picture')) {
+                // Delete old picture if it's not the default
+                if ($product->product_picture !== 'default-product-picture.png') {
+                    Storage::disk('private')->delete('product_pictures/' . $product->product_picture);
+                }
+                $product->product_picture = $this->handleProductPictureUpload($request->file('product_picture'));
+            }
+
+            // Handle additional photos if uploaded
+            if ($request->hasFile('additional_photos')) {
+                $currentCount = count($product->additional_photos ?? []);
+                foreach ($request->file('additional_photos') as $index => $photo) {
+                    if ($currentCount + $index >= 3) break; // Limit to 3 additional photos
+                    try {
+                        $product->additional_photos = array_merge(
+                            $product->additional_photos ?? [],
+                            [$this->handleProductPictureUpload($photo)]
+                        );
+                    } catch (Exception $e) {
+                        Log::warning('Failed to upload additional photo: ' . $e->getMessage(), [
+                            'product_id' => $product->id,
+                            'photo_index' => $index
+                        ]);
+                        continue;
+                    }
+                }
+            }
+
+            // Update product data
+            $product->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'category_id' => $validated['category_id'],
+                'stock_amount' => $validated['stock_amount'],
+                'measurement_unit' => $validated['measurement_unit'],
+                'delivery_options' => $deliveryOptions,
+                'bulk_options' => $bulkOptions,
+                'ships_from' => $validated['ships_from'],
+                'ships_to' => $validated['ships_to'],
+            ]);
+
+            // Get appropriate success message
+            $productTypeName = match($product->type) {
+                Product::TYPE_CARGO => 'Cargo',
+                Product::TYPE_DIGITAL => 'Digital',
+                Product::TYPE_DEADDROP => 'Dead Drop',
+            };
+
+            Log::info("Product updated by admin: {$product->id}");
+
+            return redirect()
+                ->route('admin.all-products')
+                ->with('success', "{$productTypeName} product updated successfully.");
+
+        } catch (Exception $e) {
+            Log::error("Failed to update product: " . $e->getMessage(), [
+                'product_id' => $product->id
+            ]);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Failed to update product. Please try again.');
+        }
+    }
+
+    /**
+     * Handle the product picture upload.
+     */
+    private function handleProductPictureUpload($file)
+    {
+        try {
+            // Verify file type using finfo
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->file($file->getPathname());
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/webp'
+            ];
+
+            if (!in_array($mimeType, $allowedMimeTypes)) {
+                throw new Exception('Invalid file type. Allowed types are JPEG, PNG, GIF, and WebP.');
+            }
+
+            $extension = match($mimeType) {
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/gif' => 'gif',
+                'image/webp' => 'webp',
+                default => 'jpg'
+            };
+
+            $filename = time() . '_' . \Str::uuid() . '.' . $extension;
+
+            // Create a new ImageManager instance
+            $manager = new ImageManager(new GdDriver());
+
+            // Resize the image
+            $image = $manager->read($file)
+                ->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+            // Encode the image based on its MIME type
+            $encodedImage = match($mimeType) {
+                'image/png' => $image->encode(new PngEncoder()),
+                'image/webp' => $image->encode(new WebpEncoder()),
+                'image/gif' => $image->encode(new GifEncoder()),
+                default => $image->encode(new JpegEncoder(80))
+            };
+
+            // Save the image to private storage
+            if (!Storage::disk('private')->put('product_pictures/' . $filename, $encodedImage)) {
+                throw new Exception('Failed to save product picture to storage');
+            }
+
+            return $filename;
+        } catch (NotReadableException $e) {
+            Log::error('Image processing failed: ' . $e->getMessage());
+            throw new Exception('Failed to process uploaded image. Please try a different image.');
+        } catch (Exception $e) {
+            Log::error('Product picture upload failed: ' . $e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 }

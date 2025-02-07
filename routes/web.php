@@ -220,6 +220,8 @@ Route::middleware('auth')->group(function () {
         
         // Admin Products Management
         Route::get('/admin/all-products', [AdminController::class, 'allProducts'])->name('admin.all-products');
+        Route::get('/admin/products/{product}/edit', [AdminController::class, 'editProduct'])->name('admin.products.edit');
+        Route::patch('/admin/products/{product}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
         Route::delete('/admin/products/{product}', [AdminController::class, 'destroyProduct'])->name('admin.products.destroy');
     });
 

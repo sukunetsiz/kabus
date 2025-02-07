@@ -8173,3 +8173,26 @@ text-align:center;
 color:#bb86fc!important;
 font-size:20px!important
 }
+
+.products-common-admin-edit-delete-btn {
+background:none;
+border:none;
+color:#cf6679;
+cursor:pointer;
+font-weight:700;
+transition:all .3s ease;
+padding:6px 12px;
+border-radius:4px;
+margin:12px auto 15px;
+display:block
+}
+
+.products-common-admin-edit-delete-btn:hover {
+background-color:#cf66791a;
+color:#ff4d6b
+}
+
+.products-common-admin-edit-photo-wrapper {
+margin-bottom:44px;
+text-align:center
+}
