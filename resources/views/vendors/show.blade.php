@@ -92,6 +92,21 @@
                     </div>
                 @endif
             </div>
+
+            {{-- PGP Key Status (Simple Display) --}}
+            <div>
+                <hr>
+                <h3>PGP Key Status:</h3>
+                @if($vendor->pgpKey)
+                    @if($vendor->pgpKey->verified)
+                        <p>✅ Verified PGP Public Key</p>
+                    @else
+                        <p>⚠️ Unverified PGP Public Key</p>
+                    @endif
+                @else
+                    <p>❌ No PGP Key Added</p>
+                @endif
+            </div>
         </div>
     @endif
 </div>

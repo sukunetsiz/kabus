@@ -45,7 +45,7 @@ class VendorsController extends Controller
             $vendor = User::whereHas('roles', function($query) {
                 $query->where('name', 'vendor');
             })
-            ->with(['vendorProfile', 'profile']) // Include both profiles
+            ->with(['vendorProfile', 'profile', 'pgpKey']) // Include profiles and pgp key
             ->where('username', $username)
             ->firstOrFail(['id', 'username']);
 

@@ -33,9 +33,22 @@ class BecomeVendorController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('become.index');
+        $user = $request->user();
+        $hasPgpVerified = false;
+        $hasMoneroAddress = false;
+
+        if ($user->pgpKey) {
+            $hasPgpVerified = $user->pgpKey->verified;
+        }
+
+        // Check if user has at least one verified monero return address
+        $hasMoneroAddress = $user->returnAddresses()
+            ->where('is_verified', true)
+            ->exists();
+
+        return view('become-vendor.index', compact('hasPgpVerified', 'hasMoneroAddress'));
     }
 
     public function payment(Request $request)
@@ -44,17 +57,17 @@ class BecomeVendorController extends Controller
 
         // Check if the user is already a vendor
         if ($user->isVendor()) {
-            return view('become.payment', ['alreadyVendor' => true]);
+            return view('become-vendor.payment', ['alreadyVendor' => true]);
         }
 
         try {
             $vendorPayment = $this->getCurrentVendorPayment($user);
             $qrCodeDataUri = $vendorPayment ? $this->generateQrCode($vendorPayment->address) : null;
 
-            return view('become.payment', compact('vendorPayment', 'qrCodeDataUri'));
+            return view('become-vendor.payment', compact('vendorPayment', 'qrCodeDataUri'));
         } catch (\Exception $e) {
             Log::error('Error in payment process: ' . $e->getMessage());
-            return view('become.payment', ['error' => 'An error occurred while processing your payment. Please try again later.']);
+            return view('become-vendor.payment', ['error' => 'An error occurred while processing your payment. Please try again later.']);
         }
     }
 
