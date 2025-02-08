@@ -29,7 +29,7 @@ class BecomeVendorController extends Controller
             );
         } catch (\Exception $e) {
             Log::error('Failed to initialize Monero RPC connection: ' . $e->getMessage());
-            // You might want to set a flag or use a different approach to handle this error throughout the controller
+            // Optionally, handle the error more gracefully here.
         }
     }
 
@@ -43,7 +43,7 @@ class BecomeVendorController extends Controller
             $hasPgpVerified = $user->pgpKey->verified;
         }
 
-        // Check if user has at least one verified monero return address
+        // Check if the user has at least one verified Monero return address.
         $hasMoneroAddress = $user->returnAddresses()
             ->where('is_verified', true)
             ->exists();
@@ -55,19 +55,44 @@ class BecomeVendorController extends Controller
     {
         $user = $request->user();
 
-        // Check if the user is already a vendor
+        // Determine verification statuses.
+        $hasPgpVerified = false;
+        $hasMoneroAddress = false;
+
+        if ($user->pgpKey) {
+            $hasPgpVerified = $user->pgpKey->verified;
+        }
+
+        $hasMoneroAddress = $user->returnAddresses()
+            ->where('is_verified', true)
+            ->exists();
+
+        // If the user is already a vendor, pass the verification variables.
         if ($user->isVendor()) {
-            return view('become-vendor.payment', ['alreadyVendor' => true]);
+            return view('become-vendor.payment', [
+                'alreadyVendor'   => true,
+                'hasPgpVerified'  => $hasPgpVerified,
+                'hasMoneroAddress'=> $hasMoneroAddress
+            ]);
         }
 
         try {
             $vendorPayment = $this->getCurrentVendorPayment($user);
             $qrCodeDataUri = $vendorPayment ? $this->generateQrCode($vendorPayment->address) : null;
 
-            return view('become-vendor.payment', compact('vendorPayment', 'qrCodeDataUri'));
+            return view('become-vendor.payment', [
+                'vendorPayment'   => $vendorPayment,
+                'qrCodeDataUri'   => $qrCodeDataUri,
+                'hasPgpVerified'  => $hasPgpVerified,
+                'hasMoneroAddress'=> $hasMoneroAddress
+            ]);
         } catch (\Exception $e) {
             Log::error('Error in payment process: ' . $e->getMessage());
-            return view('become-vendor.payment', ['error' => 'An error occurred while processing your payment. Please try again later.']);
+            return view('become-vendor.payment', [
+                'error'           => 'An error occurred while processing your payment. Please try again later.',
+                'hasPgpVerified'  => $hasPgpVerified,
+                'hasMoneroAddress'=> $hasMoneroAddress
+            ]);
         }
     }
 
@@ -97,10 +122,10 @@ class BecomeVendorController extends Controller
             $result = $this->walletRPC->create_address(0, "Vendor Payment " . $user->id . "_" . time());
             
             $vendorPayment = new VendorPayment([
-                'address' => $result['address'],
+                'address'       => $result['address'],
                 'address_index' => $result['address_index'],
-                'user_id' => $user->id,
-                'expires_at' => Carbon::now()->addMinutes((int)config('monero.address_expiration_time')),
+                'user_id'       => $user->id,
+                'expires_at'    => Carbon::now()->addMinutes((int) config('monero.address_expiration_time')),
             ]);
             $vendorPayment->save();
 
@@ -117,9 +142,9 @@ class BecomeVendorController extends Controller
         try {
             $config = config('monero');
             $transfers = $this->walletRPC->get_transfers([
-                'in' => true,
-                'pool' => true,
-                'subaddr_indices' => [$vendorPayment->address_index]
+                'in'             => true,
+                'pool'           => true,
+                'subaddr_indices'=> [$vendorPayment->address_index]
             ]);
             
             $totalReceived = 0;
@@ -187,3 +212,4 @@ class BecomeVendorController extends Controller
         }
     }
 }
+
