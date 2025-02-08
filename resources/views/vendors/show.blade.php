@@ -16,19 +16,28 @@
                     Back to Vendors
                 </a>
             </div>
-            
+
             {{-- Vendor Profile Section --}}
             <div class="vendors-show-profile">
                 <div class="vendors-show-profile-header">
                     <div class="vendors-show-avatar-username">
-                        <div class="vendors-show-avatar">
-                            <img src="{{ $vendor->profile ? $vendor->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
-                                 alt="{{ $vendor->username }}'s Profile Picture">
-                        </div>
                         <div class="vendors-show-username">
                             <a href="{{ route('dashboard', $vendor->username) }}" class="vendors-show-value">
                                 {{ $vendor->username }}
                             </a>
+                        </div>
+                        <div class="vendors-show-avatar">
+                            <img src="{{ $vendor->profile ? $vendor->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
+                                 alt="{{ $vendor->username }}'s Profile Picture">
+                        </div>
+                        <div class="vendors-show-pgp-badge @if(!$vendor->pgpKey) vendors-show-pgp-badge--none @elseif($vendor->pgpKey->verified) vendors-show-pgp-badge--confirmed @else vendors-show-pgp-badge--unconfirmed @endif">
+                            @if(!$vendor->pgpKey)
+                                No PGP Key
+                            @elseif($vendor->pgpKey->verified)
+                                Verified PGP Key
+                            @else
+                                Unverified PGP Key
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -92,23 +101,7 @@
                     </div>
                 @endif
             </div>
-
-            {{-- PGP Key Status (Simple Display) --}}
-            <div>
-                <hr>
-                <h3>PGP Key Status:</h3>
-                @if($vendor->pgpKey)
-                    @if($vendor->pgpKey->verified)
-                        <p>✅ Verified PGP Public Key</p>
-                    @else
-                        <p>⚠️ Unverified PGP Public Key</p>
-                    @endif
-                @else
-                    <p>❌ No PGP Key Added</p>
-                @endif
-            </div>
         </div>
     @endif
 </div>
-
 @endsection
