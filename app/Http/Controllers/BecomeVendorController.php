@@ -13,6 +13,14 @@ use App\Models\User;
 use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver as GdDriver;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\PngEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
+use Intervention\Image\Encoders\GifEncoder;
+use Intervention\Image\Exceptions\NotReadableException;
 
 class BecomeVendorController extends Controller
 {
@@ -48,7 +56,12 @@ class BecomeVendorController extends Controller
             ->where('is_verified', true)
             ->exists();
 
-        return view('become-vendor.index', compact('hasPgpVerified', 'hasMoneroAddress'));
+        // Get the latest vendor payment
+        $vendorPayment = VendorPayment::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        return view('become-vendor.index', compact('hasPgpVerified', 'hasMoneroAddress', 'vendorPayment'));
     }
 
     public function payment(Request $request)
@@ -66,6 +79,16 @@ class BecomeVendorController extends Controller
         $hasMoneroAddress = $user->returnAddresses()
             ->where('is_verified', true)
             ->exists();
+
+        // Check if user has a processed application
+        $existingPayment = VendorPayment::where('user_id', $user->id)
+            ->whereNotNull('application_status')
+            ->first();
+
+        if ($existingPayment) {
+            return redirect()->route('become.vendor')
+                ->with('info', 'You already have a processed vendor application.');
+        }
 
         // If the user is already a vendor, pass the verification variables.
         if ($user->isVendor()) {
@@ -162,8 +185,9 @@ class BecomeVendorController extends Controller
             $vendorPayment->total_received = $totalReceived;
             $vendorPayment->save();
             
-            if ($totalReceived >= $config['vendor_payment_required_amount']) {
-                $this->upgradeToVendor($vendorPayment->user);
+            if ($totalReceived >= $config['vendor_payment_required_amount'] && !$vendorPayment->payment_completed) {
+                $vendorPayment->payment_completed = true;
+                $vendorPayment->save();
             }
 
             Log::info('Updated incoming transaction for user ' . $vendorPayment->user_id . '. Total received: ' . $totalReceived);
@@ -173,22 +197,170 @@ class BecomeVendorController extends Controller
         }
     }
 
-    private function upgradeToVendor(User $user)
+    public function showApplication()
+    {
+        // Check if user has a processed application
+        $processedApplication = VendorPayment::where('user_id', auth()->id())
+            ->whereNotNull('application_status')
+            ->first();
+
+        if ($processedApplication) {
+            return redirect()->route('become.vendor')
+                ->with('info', 'You already have a processed vendor application.');
+        }
+
+        $vendorPayment = VendorPayment::where('user_id', auth()->id())
+            ->where('payment_completed', true)
+            ->whereNull('application_status')
+            ->first();
+
+        if (!$vendorPayment) {
+            return redirect()->route('become.vendor')
+                ->with('error', 'You must complete the payment before submitting an application.');
+        }
+
+        return view('become-vendor.application', compact('vendorPayment'));
+    }
+
+    public function submitApplication(Request $request)
+    {
+        // Check if user has a processed application
+        $processedApplication = VendorPayment::where('user_id', auth()->id())
+            ->whereNotNull('application_status')
+            ->first();
+
+        if ($processedApplication) {
+            return redirect()->route('become.vendor')
+                ->with('info', 'You already have a processed vendor application.');
+        }
+
+        $vendorPayment = VendorPayment::where('user_id', auth()->id())
+            ->where('payment_completed', true)
+            ->whereNull('application_status')
+            ->first();
+
+        if (!$vendorPayment) {
+            return redirect()->route('become.vendor')
+                ->with('error', 'You must complete the payment before submitting an application.');
+        }
+
+        $request->validate([
+            'application_text' => 'required|string|min:100|max:5000',
+            'product_images.*' => [
+                'required',
+                'file',
+                'image',
+                'max:800', // 800KB max size
+                'mimes:jpeg,png,gif,webp'
+            ],
+            'product_images' => 'max:4' // Maximum 4 images
+        ]);
+
+        try {
+            $images = [];
+            if ($request->hasFile('product_images')) {
+                foreach ($request->file('product_images') as $image) {
+                    try {
+                        $images[] = $this->handleApplicationPictureUpload($image);
+                    } catch (\Exception $e) {
+                        // Clean up any images that were successfully uploaded
+                        foreach ($images as $uploadedImage) {
+                            Storage::disk('private')->delete('vendor_applications_pictures/' . $uploadedImage);
+                        }
+                        Log::error('Failed to upload application image: ' . $e->getMessage());
+                        return redirect()->back()
+                            ->withInput()
+                            ->with('error', 'Failed to upload images. Please try again.');
+                    }
+                }
+            }
+
+            try {
+                $vendorPayment->update([
+                    'application_text' => $request->application_text,
+                    'application_images' => json_encode($images),
+                    'application_status' => 'waiting',
+                    'application_submitted_at' => now()
+                ]);
+            } catch (\Exception $e) {
+                // Clean up uploaded images if the update fails
+                foreach ($images as $image) {
+                    Storage::disk('private')->delete('vendor_applications_pictures/' . $image);
+                }
+                throw $e;
+            }
+
+            Log::info("Vendor application submitted for user {$vendorPayment->user_id}");
+
+            return redirect()->route('become.vendor')
+                ->with('success', 'Your application has been submitted successfully and is now under review.');
+
+        } catch (\Exception $e) {
+            Log::error('Error submitting vendor application: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'An error occurred while submitting your application. Please try again.');
+        }
+    }
+
+    private function handleApplicationPictureUpload($file)
     {
         try {
-            $vendorRole = Role::where('name', 'vendor')->first();
-            if ($vendorRole) {
-                if (!$user->roles->contains($vendorRole->id)) {
-                    $user->roles()->attach($vendorRole->id);
-                    Log::info("User {$user->id} upgraded to Vendor role.");
-                }
-            } else {
-                Log::error('Vendor role not found in the database.');
-                throw new \Exception('Vendor role not found');
+            // Verify file type using finfo
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->file($file->getPathname());
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/webp'
+            ];
+
+            if (!in_array($mimeType, $allowedMimeTypes)) {
+                throw new \Exception('Invalid file type. Allowed types are JPEG, PNG, GIF, and WebP.');
             }
+
+            $extension = match($mimeType) {
+                'image/jpeg' => 'jpg',
+                'image/png' => 'png',
+                'image/gif' => 'gif',
+                'image/webp' => 'webp',
+                default => 'jpg'
+            };
+
+            $filename = time() . '_' . \Str::uuid() . '.' . $extension;
+
+            // Create a new ImageManager instance
+            $manager = new ImageManager(new GdDriver());
+
+            // Resize the image
+            $image = $manager->read($file)
+                ->resize(800, 800, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+            // Encode the image based on its MIME type
+            $encodedImage = match($mimeType) {
+                'image/png' => $image->encode(new PngEncoder()),
+                'image/webp' => $image->encode(new WebpEncoder()),
+                'image/gif' => $image->encode(new GifEncoder()),
+                default => $image->encode(new JpegEncoder(80))
+            };
+
+            // Save the image to private storage in vendor_applications_pictures directory
+            if (!Storage::disk('private')->put('vendor_applications_pictures/' . $filename, $encodedImage)) {
+                throw new \Exception('Failed to save application picture to storage');
+            }
+
+            return $filename;
+        } catch (NotReadableException $e) {
+            Log::error('Image processing failed: ' . $e->getMessage());
+            throw new \Exception('Failed to process uploaded image. Please try a different image.');
         } catch (\Exception $e) {
-            Log::error('Error upgrading user to vendor: ' . $e->getMessage());
-            throw $e;
+            Log::error('Application picture upload failed: ' . $e->getMessage());
+            throw new \Exception($e->getMessage());
         }
     }
 
@@ -212,4 +384,3 @@ class BecomeVendorController extends Controller
         }
     }
 }
-

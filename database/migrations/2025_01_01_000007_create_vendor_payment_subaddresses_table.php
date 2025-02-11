@@ -16,6 +16,14 @@ class CreateVendorPaymentSubaddressesTable extends Migration
             $table->decimal('total_received', 18, 12)->default(0);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('expires_at');
+            
+            // Application fields
+            $table->text('application_text')->nullable();
+            $table->enum('application_status', ['waiting', 'accepted', 'denied'])->nullable();
+            $table->json('application_images')->nullable(); // Store up to 4 image paths
+            $table->timestamp('application_submitted_at')->nullable();
+            $table->timestamp('admin_response_at')->nullable();
+            $table->boolean('payment_completed')->default(false);
         });
     }
 

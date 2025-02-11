@@ -17,14 +17,34 @@ class VendorPayment extends Model
         'user_id',
         'total_received',
         'expires_at',
+        'payment_completed',
+        'application_text',
+        'application_status',
+        'application_images',
+        'application_submitted_at',
+        'admin_response_at'
     ];
 
     protected $casts = [
         'total_received' => 'decimal:12',
         'expires_at' => 'datetime',
+        'payment_completed' => 'boolean',
+        'application_images' => 'json',
+        'application_submitted_at' => 'datetime',
+        'admin_response_at' => 'datetime'
     ];
 
     public $timestamps = false;
+
+    public function isApplicationSubmitted()
+    {
+        return !is_null($this->application_status);
+    }
+
+    public function canSubmitApplication()
+    {
+        return $this->payment_completed && !$this->isApplicationSubmitted();
+    }
 
     public function user()
     {

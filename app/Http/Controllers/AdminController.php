@@ -14,6 +14,7 @@ use App\Models\Notification;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Popup;
+use App\Models\VendorPayment;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\ImageManager;
@@ -894,6 +895,103 @@ class AdminController extends Controller
     /**
      * Handle the product picture upload.
      */
+    // Vendor Application Management Methods
+    public function vendorApplications()
+    {
+        $applications = VendorPayment::whereNotNull('application_status')
+            ->with('user')
+            ->orderBy('application_submitted_at', 'desc')
+            ->paginate(20);
+
+        return view('admin.vendor-applications.index', compact('applications'));
+    }
+
+    public function showVendorApplication(VendorPayment $application)
+    {
+        if (!$application->application_status) {
+            return redirect()->route('admin.vendor-applications.index')
+                ->with('error', 'Invalid application.');
+        }
+
+        return view('admin.vendor-applications.show', compact('application'));
+    }
+
+    public function acceptVendorApplication(VendorPayment $application)
+    {
+        if ($application->application_status !== 'waiting') {
+            return redirect()->route('admin.vendor-applications.show', $application)
+                ->with('error', 'This application has already been processed.');
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            // Update application status
+            $application->update([
+                'application_status' => 'accepted',
+                'admin_response_at' => now()
+            ]);
+
+            // Assign vendor role
+            $vendorRole = Role::where('name', 'vendor')->firstOrFail();
+            $application->user->roles()->syncWithoutDetaching([$vendorRole->id]);
+
+            \DB::commit();
+
+            Log::info("Vendor application accepted for user {$application->user_id}");
+
+            return redirect()->route('admin.vendor-applications.show', $application)
+                ->with('success', 'Application accepted successfully.');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Log::error('Error accepting vendor application: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'An error occurred while processing the application.');
+        }
+    }
+
+    public function denyVendorApplication(VendorPayment $application)
+    {
+        if ($application->application_status !== 'waiting') {
+            return redirect()->route('admin.vendor-applications.show', $application)
+                ->with('error', 'This application has already been processed.');
+        }
+
+        try {
+            $application->update([
+                'application_status' => 'denied',
+                'admin_response_at' => now()
+            ]);
+
+            Log::info("Vendor application denied for user {$application->user_id}");
+
+            return redirect()->route('admin.vendor-applications.show', $application)
+                ->with('success', 'Application denied successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('Error denying vendor application: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'An error occurred while processing the application.');
+        }
+    }
+
+    public function showVendorApplicationImage($filename)
+    {
+        try {
+            $path = 'vendor_applications_pictures/' . $filename;
+            
+            if (!Storage::disk('private')->exists($path)) {
+                abort(404);
+            }
+
+            return response()->file(Storage::disk('private')->path($path));
+        } catch (\Exception $e) {
+            Log::error('Error serving vendor application image: ' . $e->getMessage());
+            abort(404);
+        }
+    }
+
     private function handleProductPictureUpload($file)
     {
         try {

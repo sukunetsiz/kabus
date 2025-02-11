@@ -156,6 +156,8 @@ Route::middleware('auth')->group(function () {
     // Becoming a vendor routes
     Route::get('/become-vendor', [BecomeVendorController::class, 'index'])->name('become.vendor');
     Route::get('/become-vendor/payment', [BecomeVendorController::class, 'payment'])->name('become.payment');
+    Route::get('/become-vendor/application', [BecomeVendorController::class, 'showApplication'])->name('become.vendor.application');
+    Route::post('/become-vendor/application', [BecomeVendorController::class, 'submitApplication'])->name('become.vendor.submit-application');
 
     // Return addresses routes
     Route::get('/return-addresses', [ReturnAddressController::class, 'index'])->name('return-addresses.index');
@@ -206,6 +208,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/admin/bulk-message/{notification}', [AdminController::class, 'deleteBulkMessage'])->name('admin.bulk-message.delete');
 
         // Category Management Routes
+        // Vendor Application Management Routes
+        Route::get('/admin/vendor-applications', [AdminController::class, 'vendorApplications'])->name('admin.vendor-applications.index');
+        Route::get('/admin/vendor-applications/{application}', [AdminController::class, 'showVendorApplication'])->name('admin.vendor-applications.show');
+        Route::post('/admin/vendor-applications/{application}/accept', [AdminController::class, 'acceptVendorApplication'])->name('admin.vendor-applications.accept');
+        Route::post('/admin/vendor-applications/{application}/deny', [AdminController::class, 'denyVendorApplication'])->name('admin.vendor-applications.deny');
+        Route::get('/admin/vendor-applications/image/{filename}', [AdminController::class, 'showVendorApplicationImage'])->name('admin.vendor-applications.image');
+
         Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
         Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');
         Route::delete('/admin/categories/{category}', [AdminController::class, 'deleteCategory'])->name('admin.categories.delete');

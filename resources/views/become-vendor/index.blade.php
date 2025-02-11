@@ -5,9 +5,9 @@
     <div class="become-vendor-index-card">
         <h1 class="become-vendor-index-title">Become a Vendor</h1>
         
-        <p class="become-vendor-index-text">You can also sell on {{ config('app.name') }}! All you need to do is pay the vendor fee and inform us about the products you will sell. You can contact us by opening a support ticket or sending a direct message to administrator.</p>
+        <p class="become-vendor-index-text">You can also sell on {{ config('app.name') }}! The process involves paying a vendor fee and submitting an application for review. Your application will be carefully reviewed by our administrators.</p>
         
-        <p class="become-vendor-index-text">Before making this purchase, make sure you have thoroughly read <a href="{{ route('rules') }}" class="become-vendor-index-link">{{ config('app.name') }}'s rules</a>. We have zero tolerance for prohibited products. The purchase process is instant and irreversible, no refunds will be made. If you accept these terms and site rules, welcome to {{ config('app.name') }}!</p>
+        <p class="become-vendor-index-text">Before proceeding, make sure you have thoroughly read <a href="{{ route('rules') }}" class="become-vendor-index-link">{{ config('app.name') }}'s rules</a>. We have zero tolerance for prohibited products. The payment process is irreversible, and no refunds will be made. If you accept these terms and site rules, you may proceed with your application.</p>
         
         @if(!$hasPgpVerified)
             <div class="become-vendor-index-highlight" role="alert">
@@ -33,7 +33,39 @@
             </div>
         @endif
         
-        <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
+        @if(isset($vendorPayment))
+            @if($vendorPayment->payment_completed)
+                @if($vendorPayment->application_status === null)
+                    <div class="application-actions">
+                        <p class="application-info">Your payment has been received. You can now submit your vendor application.</p>
+                        <a href="{{ route('become.vendor.application') }}" class="become-vendor-index-btn">Create Application</a>
+                    </div>
+                @else
+                    <div class="application-status">
+                        <h3>Application Status: 
+                            @if($vendorPayment->application_status === 'waiting')
+                                <span class="status-waiting">Waiting for Review</span>
+                            @elseif($vendorPayment->application_status === 'accepted')
+                                <span class="status-accepted">Accepted - You are now a vendor!</span>
+                            @else
+                                <span class="status-denied">Denied</span>
+                            @endif
+                        </h3>
+                        @if($vendorPayment->application_status === 'waiting')
+                            <p>Your application is currently being reviewed by our administrators.</p>
+                        @elseif($vendorPayment->application_status === 'accepted')
+                            <p>Congratulations! Your application has been accepted. You can now access the vendor features.</p>
+                        @else
+                            <p>Unfortunately, your application has been denied. You cannot submit a new application at this time.</p>
+                        @endif
+                    </div>
+                @endif
+            @else
+                <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
+            @endif
+        @else
+            <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
+        @endif
     </div>
 </div>
 @endsection
