@@ -195,7 +195,7 @@ class AdminController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(16);
 
-        return view('admin.support.index', compact('requests'));
+        return view('admin.support.list', compact('requests'));
     }
 
     public function showSupportRequest(SupportRequest $supportRequest)
@@ -378,7 +378,7 @@ class AdminController extends Controller
     public function popupIndex()
     {
         $popups = Popup::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.pop-up.index', compact('popups'));
+        return view('admin.pop-up.list', compact('popups'));
     }
 
     /**
@@ -628,7 +628,7 @@ class AdminController extends Controller
             $products = $query->paginate(32)->withQueryString();
             $categories = Category::select('id', 'name')->get();
 
-            return view('admin.all-products.index', [
+            return view('admin.all-products.list', [
                 'products' => $products,
                 'categories' => $categories,
                 'currentType' => $filters['type'] ?? null,
@@ -903,13 +903,13 @@ class AdminController extends Controller
             ->orderBy('application_submitted_at', 'desc')
             ->paginate(20);
 
-        return view('admin.vendor-applications.index', compact('applications'));
+        return view('admin.vendor-applications.list', compact('applications'));
     }
 
     public function showVendorApplication(VendorPayment $application)
     {
         if (!$application->application_status) {
-            return redirect()->route('admin.vendor-applications.index')
+            return redirect()->route('admin.vendor-applications.list')
                 ->with('error', 'Invalid application.');
         }
 
@@ -979,7 +979,7 @@ class AdminController extends Controller
     public function showVendorApplicationImage($filename)
     {
         try {
-            $path = 'vendor_applications_pictures/' . $filename;
+            $path = 'vendor_application_pictures/' . $filename;
             
             if (!Storage::disk('private')->exists($path)) {
                 abort(404);

@@ -33,39 +33,39 @@
             </div>
         @endif
         
-        @if(isset($vendorPayment))
-            @if($vendorPayment->payment_completed)
-                @if($vendorPayment->application_status === null)
-                    <div class="application-actions">
-                        <p class="application-info">Your payment has been received. You can now submit your vendor application.</p>
-                        <a href="{{ route('become.vendor.application') }}" class="become-vendor-index-btn">Create Application</a>
-                    </div>
-                @else
-                    <div class="application-status">
-                        <h3>Application Status: 
-                            @if($vendorPayment->application_status === 'waiting')
-                                <span class="status-waiting">Waiting for Review</span>
-                            @elseif($vendorPayment->application_status === 'accepted')
-                                <span class="status-accepted">Accepted - You are now a vendor!</span>
-                            @else
-                                <span class="status-denied">Denied</span>
-                            @endif
-                        </h3>
-                        @if($vendorPayment->application_status === 'waiting')
-                            <p>Your application is currently being reviewed by our administrators.</p>
-                        @elseif($vendorPayment->application_status === 'accepted')
-                            <p>Congratulations! Your application has been accepted. You can now access the vendor features.</p>
-                        @else
-                            <p>Unfortunately, your application has been denied. You cannot submit a new application at this time.</p>
-                        @endif
-                    </div>
-                @endif
-            @else
-                <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
-            @endif
+@if(isset($vendorPayment))
+    @if($vendorPayment->payment_completed)
+        @if($vendorPayment->application_status === null)
+            <div class="become-vendor-index-action-container">
+                <p class="become-vendor-index-action-text">Your payment has been received. You can now submit your vendor application.</p>
+                <a href="{{ route('become.vendor.application') }}" class="become-vendor-index-btn">Create Application</a>
+            </div>
         @else
-            <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
+            <div class="become-vendor-index-status-container">
+                <h3 class="become-vendor-index-status-title">Application Status: 
+                    @if($vendorPayment->application_status === 'waiting')
+                        <span class="become-vendor-index-status become-vendor-index-status-waiting">Waiting for Review</span>
+                    @elseif($vendorPayment->application_status === 'accepted')
+                        <span class="become-vendor-index-status become-vendor-index-status-accepted">Accepted - You are now a vendor!</span>
+                    @else
+                        <span class="become-vendor-index-status become-vendor-index-status-denied">Denied</span>
+                    @endif
+                </h3>
+                @if($vendorPayment->application_status === 'waiting')
+                    <p class="become-vendor-index-status-message">Your application is currently being reviewed by our administrators.</p>
+                @elseif($vendorPayment->application_status === 'accepted')
+                    <p class="become-vendor-index-status-message">Congratulations! Your application has been accepted. You can now access the vendor features.</p>
+                @else
+                    <p class="become-vendor-index-status-message">Unfortunately, your application has been denied. You cannot submit a new application at this time.</p>
+                @endif
+            </div>
         @endif
+    @else
+        <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
+    @endif
+@else
+    <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
+@endif
     </div>
 </div>
 @endsection

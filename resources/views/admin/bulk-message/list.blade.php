@@ -46,7 +46,7 @@
                                 </td>
                                 <td>
                                     <div class="bulk-message-list-date">
-                                        {{ $notification->created_at->format('d.m.Y H:i') }}
+                                        {{ $notification->created_at->format('Y-m-d / H:i') }}
                                     </div>
                                 </td>
                                 <td>

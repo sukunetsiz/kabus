@@ -265,7 +265,7 @@ class BecomeVendorController extends Controller
                     } catch (\Exception $e) {
                         // Clean up any images that were successfully uploaded
                         foreach ($images as $uploadedImage) {
-                            Storage::disk('private')->delete('vendor_applications_pictures/' . $uploadedImage);
+                            Storage::disk('private')->delete('vendor_application_pictures/' . $uploadedImage);
                         }
                         Log::error('Failed to upload application image: ' . $e->getMessage());
                         return redirect()->back()
@@ -285,7 +285,7 @@ class BecomeVendorController extends Controller
             } catch (\Exception $e) {
                 // Clean up uploaded images if the update fails
                 foreach ($images as $image) {
-                    Storage::disk('private')->delete('vendor_applications_pictures/' . $image);
+                    Storage::disk('private')->delete('vendor_application_pictures/' . $image);
                 }
                 throw $e;
             }
@@ -349,8 +349,8 @@ class BecomeVendorController extends Controller
                 default => $image->encode(new JpegEncoder(80))
             };
 
-            // Save the image to private storage in vendor_applications_pictures directory
-            if (!Storage::disk('private')->put('vendor_applications_pictures/' . $filename, $encodedImage)) {
+            // Save the image to private storage in vendor_application_pictures directory
+            if (!Storage::disk('private')->put('vendor_application_pictures/' . $filename, $encodedImage)) {
                 throw new \Exception('Failed to save application picture to storage');
             }
 

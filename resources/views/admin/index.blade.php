@@ -75,9 +75,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">📧 Vendor Applications ⛔</h3>
+                <h3 class="admin-panel-item-title">📧 Vendor Applications 📧</h3>
                 <p class="admin-panel-item-description">Review and approve/deny vendor applications requiring verification.</p>
-                <a href="#" class="admin-panel-item-link">Manage Applications</a>
+                <a href="{{ route('admin.vendor-applications.index') }}" class="admin-panel-item-link">Manage Applications</a>
             </div>
 
             <div class="admin-panel-item">

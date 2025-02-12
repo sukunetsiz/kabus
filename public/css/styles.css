@@ -1429,6 +1429,59 @@ margin:15px 0
 margin-bottom:0
 }
 
+.become-vendor-index-action-container {
+text-align:center;
+margin:30px 0
+}
+
+.become-vendor-index-action-text {
+color:#e0e0e0;
+font-size:18px;
+margin-bottom:20px
+}
+
+.become-vendor-index-status-container {
+text-align:center;
+padding:10px;
+background-color:#2c2c2c;
+border-radius:8px
+}
+
+.become-vendor-index-status-title {
+color:#e0e0e0;
+font-size:24px;
+margin-bottom:20px;
+font-weight:600
+}
+
+.become-vendor-index-status {
+display:inline-block;
+padding:8px 16px;
+border-radius:4px;
+font-weight:600
+}
+
+.become-vendor-index-status-waiting {
+background-color:#ffd700;
+color:#121212
+}
+
+.become-vendor-index-status-accepted {
+background-color:#4caf50;
+color:#fff
+}
+
+.become-vendor-index-status-denied {
+background-color:#f44336;
+color:#fff
+}
+
+.become-vendor-index-status-message {
+color:#e0e0e0;
+font-size:16px;
+line-height:1.6
+}
+
 .become-vendor-payment-container {
 max-width:1200px;
 margin:40px auto;
@@ -1549,7 +1602,8 @@ background-color:#1e1e1e;
 border-radius:8px;
 padding:30px;
 box-shadow:0 4px 20px #0000004d;
-border:1px solid #3c3c3c
+border:1px solid #3c3c3c;
+margin-top:-40px
 }
 
 .admin-panel-title {
@@ -1918,20 +1972,32 @@ color:#a0a0a0
 
 .user-list-container {
 max-width:1200px;
-margin:auto;
+margin:40px auto;
 padding:0 20px
 }
 
 .user-list-card {
 background-color:#1e1e1e;
-border-radius:8px;
+border-radius:12px;
 padding:30px;
-box-shadow:0 4px 20px #0000004d;
-border:1px solid #3c3c3c
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c;
+margin-top:-40px
+}
+
+.user-list-title {
+color:#bb86fc;
+font-size:28px;
+margin-bottom:20px;
+text-align:center;
+font-weight:700;
+border-bottom:2px solid #bb86fc;
+padding-bottom:15px
 }
 
 .user-list-table-container {
-overflow-x:auto
+overflow-x:auto;
+margin-bottom:-30px
 }
 
 .user-list-table {
@@ -1942,7 +2008,7 @@ border-spacing:0 10px
 
 .user-list-table th,.user-list-table td {
 padding:15px;
-text-align:left
+text-align:center
 }
 
 .user-list-table th {
@@ -1968,10 +2034,7 @@ padding:8px 16px;
 border-radius:4px;
 font-weight:700;
 text-decoration:none;
-transition:all .3s ease
-}
-
-.user-list-btn-details {
+transition:all .3s ease;
 background-color:#bb86fc;
 color:#121212
 }
@@ -3921,7 +3984,8 @@ background-color:#1e1e1e;
 border-radius:12px;
 padding:25px;
 box-shadow:0 6px 25px #0000004d;
-border:1px solid #3c3c3c
+border:1px solid #3c3c3c;
+margin-top:-20px
 }
 
 .bulk-message-list-header {
@@ -8252,4 +8316,122 @@ color:#ff4d6b
 .products-common-admin-edit-photo-wrapper {
 margin-bottom:44px;
 text-align:center
+}
+
+.vendor-applications-index-container {
+max-width:1200px;
+margin:40px auto;
+padding:0 20px
+}
+
+.vendor-applications-index-card {
+background-color:#1e1e1e;
+border-radius:12px;
+padding:30px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c;
+margin-top:-40px
+}
+
+.vendor-applications-index-title {
+color:#bb86fc;
+font-size:28px;
+margin-bottom:30px;
+text-align:center;
+font-weight:700;
+border-bottom:2px solid #bb86fc;
+padding-bottom:15px
+}
+
+.vendor-applications-index-table-container {
+overflow-x:auto;
+margin-bottom:-40px
+}
+
+.vendor-applications-index-table {
+width:100%;
+border-collapse:separate;
+border-spacing:0 10px
+}
+
+.vendor-applications-index-table th {
+background-color:#2c2c2c;
+color:#bb86fc;
+font-weight:700;
+padding:15px;
+text-transform:uppercase;
+font-size:14px;
+text-align:center
+}
+
+.vendor-applications-index-table td {
+padding:15px;
+color:#e0e0e0;
+background-color:#2c2c2c;
+text-align:center
+}
+
+.vendor-applications-index-table tr {
+transition:all .3s ease;
+border-radius:8px
+}
+
+.vendor-applications-index-table tr:hover {
+transform:translateY(-2px);
+box-shadow:0 4px 10px #bb86fc1a
+}
+
+.vendor-applications-index-status {
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-weight:700;
+font-size:12px;
+text-transform:uppercase
+}
+
+.vendor-applications-index-status-waiting {
+background-color:#ffd700;
+color:#121212
+}
+
+.vendor-applications-index-status-accepted {
+background-color:#4caf50;
+color:#fff
+}
+
+.vendor-applications-index-status-denied {
+background-color:#f44336;
+color:#fff
+}
+
+.vendor-applications-index-empty {
+text-align:center;
+padding:40px;
+color:#a0a0a0;
+font-size:16px;
+background-color:#2c2c2c;
+border-radius:8px
+}
+
+.vendor-applications-index-pagination {
+display:flex;
+justify-content:center;
+margin-top:30px
+}
+
+.vendor-applications-index-btn {
+display:inline-block;
+padding:8px 16px;
+border-radius:4px;
+font-weight:700;
+text-decoration:none;
+transition:all .3s ease;
+background-color:#bb86fc;
+color:#121212
+}
+
+.vendor-applications-index-btn:hover {
+background-color:#96c;
+transform:translateY(-2px)
 }
