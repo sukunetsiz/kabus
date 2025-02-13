@@ -13,13 +13,13 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [X] Write a comprehensive "How to Buy Monero" guide.
 
 ### March 3rd Goals (v0.9)
-- [ ] Implement a feature to allow users and vendors to create and manage disputes.
-- [ ] Create "My Products" and "My Orders" pages, making them fully functional.
+- [ ] Finalize vendor and advertisement application system with Monero payment integration.
+- [ ] Implement 'My Sales' for vendors and 'My Orders' for buyers.
 - [X] Write a comprehensive guide for using Kleopatra.
 - [X] Finish functionality for creating and editing digital, cargo and dead drop products.
 
 ### April 4th Goals (v1.0)
-- [ ] Finish and implement the Moneta Chance game.
+- [ ] Implement a feature to allow users and vendors to create and manage disputes.
 - [ ] Add product review functionality.
 - [ ] Integrate optional Baklava CAPTCHA.
 - [ ] Add walletless escrow mechanism for buying products, making the script fully functional.

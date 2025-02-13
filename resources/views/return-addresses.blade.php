@@ -16,7 +16,7 @@
     @endif
 
     <div class="return-addresses-disclaimer">
-       To shop at {{ config('app.name') }} or play Moneta, you need to add at least one Monero address. Refunds will be made to this address. For your security, use a subaddress instead of your main address and be careful not to share this address elsewhere. Main Monero addresses usually start with "4", while subaddresses start with "8".
+       To shop at {{ config('app.name') }}, you need to add at least one Monero address. Refunds will be made to this address. For your security, use a subaddress instead of your main address and be careful not to share this address elsewhere. Main Monero addresses usually start with "4", while subaddresses start with "8".
     </div>
     
     <div class="return-addresses-card">

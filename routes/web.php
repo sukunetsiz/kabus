@@ -13,7 +13,6 @@ use App\Http\Controllers\BecomeVendorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ReturnAddressController;
-use App\Http\Controllers\MonetaController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\GuidesController;
 use App\Http\Controllers\NotificationController;
@@ -127,9 +126,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/support', [SupportController::class, 'store'])->name('support.store');
     Route::get('/support/{supportRequest:ticket_id}', [SupportController::class, 'show'])->name('support.show');
     Route::post('/support/{supportRequest:ticket_id}/reply', [SupportController::class, 'reply'])->name('support.reply');
-
-    // Moneta Game route
-    Route::get('/moneta', [MonetaController::class, 'index'])->name('moneta.index');
 
     // Rules route
     Route::get('/rules', [RulesController::class, 'index'])->name('rules');

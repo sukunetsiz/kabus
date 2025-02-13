@@ -6,7 +6,6 @@
         <li><a href="{{ route('return-addresses.index') }}" class="{{ request()->routeIs('return-addresses.*') ? 'active' : '' }}">💰 Addresses</a></li>
         <li><a href="{{ route('vendors.index') }}" class="{{ request()->routeIs('vendors.*') ? 'active' : '' }}">📈 Vendors</a></li>
         <li><a href="{{ route('become.vendor') }}" class="{{ request()->routeIs('become.*') ? 'active' : '' }}">🌟 Be a Vendor</a></li>
-        <li><a href="{{ route('moneta.index') }}" class="{{ request()->routeIs('moneta.*') ? 'active' : '' }}">🎲 Moneta ⛔</a></li>
         <li><a href="{{ route('references.index') }}" class="{{ request()->routeIs('references.*') ? 'active' : '' }}">🤝🏻 References</a></li>
         @if(auth()->user()->isAdmin())
         <li><a href="{{ route('admin.index') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">👑 AdminPanel</a></li>
