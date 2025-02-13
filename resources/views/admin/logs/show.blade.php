@@ -3,6 +3,7 @@
 @section('content')
 <div class="admin-logs-container text-center">
     <a href="{{ route('admin.logs') }}" class="admin-logs-back-btn">Return to Logs</a>
+
     <div class="admin-logs-content">
         @forelse ($logs as $log)
             <div class="admin-logs-card">
@@ -16,8 +17,21 @@
             </div>
         @empty
             <div class="admin-logs-empty alert alert-info">
-                <p>No error logs found.</p>
+                <p>
+                    @switch($type)
+                        @case('error')
+                            No error logs found.
+                            @break
+                        @case('warning')
+                            No warning logs found.
+                            @break
+                        @case('info')
+                            No information logs found.
+                            @break
+                    @endswitch
+                </p>
             </div>
         @endforelse
     </div>
+</div>
 @endsection

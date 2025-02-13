@@ -5,7 +5,6 @@
     <div class="messages-rate-limit-wrapper">
         <div class="messages-rate-limit-card">
             <div class="messages-rate-limit-icon">
-                <i class="fas fa-exclamation-circle"></i>
             </div>
             <h2 class="messages-rate-limit-title">Rate Limit Exceeded</h2>
             <div class="messages-rate-limit-alert">
@@ -16,7 +15,6 @@
             </div>
             <div class="messages-rate-limit-action">
                 <a href="{{ route('messages.index') }}" class="messages-rate-limit-button">
-                    <i class="fas fa-arrow-left"></i>
                     Return to Messages
                 </a>
             </div>

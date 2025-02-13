@@ -183,9 +183,9 @@ Route::middleware('auth')->group(function () {
         
         // Admin logs management
         Route::get('/admin/logs', [AdminController::class, 'showLogs'])->name('admin.logs');
-        Route::get('/admin/logs/error', [AdminController::class, 'showErrorLogs'])->name('admin.logs.error');
-        Route::get('/admin/logs/warning', [AdminController::class, 'showWarningLogs'])->name('admin.logs.warning');
-        Route::get('/admin/logs/info', [AdminController::class, 'showInfoLogs'])->name('admin.logs.info');
+        Route::get('/admin/logs/{type}', [AdminController::class, 'showLogsByType'])
+            ->name('admin.logs.show')
+            ->where('type', 'error|warning|info');
         Route::delete('/admin/logs/{type}', [AdminController::class, 'deleteLogs'])->name('admin.logs.delete');
         
         // Admin user management
@@ -213,7 +213,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/vendor-applications/{application}', [AdminController::class, 'showVendorApplication'])->name('admin.vendor-applications.show');
         Route::post('/admin/vendor-applications/{application}/accept', [AdminController::class, 'acceptVendorApplication'])->name('admin.vendor-applications.accept');
         Route::post('/admin/vendor-applications/{application}/deny', [AdminController::class, 'denyVendorApplication'])->name('admin.vendor-applications.deny');
-        Route::get('/admin/vendor-applications/image/{filename}', [AdminController::class, 'showVendorApplicationImage'])->name('admin.vendor-applications.image');
 
         Route::get('/admin/categories', [AdminController::class, 'categories'])->name('admin.categories');
         Route::post('/admin/categories', [AdminController::class, 'storeCategory'])->name('admin.categories.store');

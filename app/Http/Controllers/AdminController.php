@@ -79,22 +79,17 @@ class AdminController extends Controller
         return array_reverse($logs);
     }
 
-    public function showErrorLogs()
+    public function showLogsByType($type)
     {
-        $logs = $this->getFilteredLogs(['error', 'critical', 'alert', 'emergency']);
-        return view('admin.logs.error', compact('logs'));
-    }
+        $logTypes = match($type) {
+            'error' => ['error', 'critical', 'alert', 'emergency'],
+            'warning' => ['warning', 'notice'],
+            'info' => ['info', 'debug'],
+            default => abort(404)
+        };
 
-    public function showWarningLogs()
-    {
-        $logs = $this->getFilteredLogs(['warning', 'notice']);
-        return view('admin.logs.warning', compact('logs'));
-    }
-
-    public function showInfoLogs()
-    {
-        $logs = $this->getFilteredLogs(['info', 'debug']);
-        return view('admin.logs.info', compact('logs'));
+        $logs = $this->getFilteredLogs($logTypes);
+        return view('admin.logs.show', compact('logs', 'type'));
     }
 
     public function deleteLogs($type)
@@ -906,11 +901,35 @@ class AdminController extends Controller
         return view('admin.vendor-applications.list', compact('applications'));
     }
 
-    public function showVendorApplication(VendorPayment $application)
+    public function showVendorApplication(VendorPayment $application, Request $request)
     {
         if (!$application->application_status) {
             return redirect()->route('admin.vendor-applications.list')
                 ->with('error', 'Invalid application.');
+        }
+
+        // Check if this is an image request
+        if ($request->has('image')) {
+            $filename = $request->query('image');
+            $images = json_decode($application->application_images, true) ?? [];
+            
+            // Verify the requested image belongs to this application
+            if (!in_array($filename, $images)) {
+                abort(404);
+            }
+
+            try {
+                $path = 'vendor_application_pictures/' . $filename;
+                
+                if (!Storage::disk('private')->exists($path)) {
+                    abort(404);
+                }
+
+                return response()->file(Storage::disk('private')->path($path));
+            } catch (\Exception $e) {
+                Log::error('Error serving vendor application image: ' . $e->getMessage());
+                abort(404);
+            }
         }
 
         return view('admin.vendor-applications.show', compact('application'));
@@ -973,22 +992,6 @@ class AdminController extends Controller
             Log::error('Error denying vendor application: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'An error occurred while processing the application.');
-        }
-    }
-
-    public function showVendorApplicationImage($filename)
-    {
-        try {
-            $path = 'vendor_application_pictures/' . $filename;
-            
-            if (!Storage::disk('private')->exists($path)) {
-                abort(404);
-            }
-
-            return response()->file(Storage::disk('private')->path($path));
-        } catch (\Exception $e) {
-            Log::error('Error serving vendor application image: ' . $e->getMessage());
-            abort(404);
         }
     }
 

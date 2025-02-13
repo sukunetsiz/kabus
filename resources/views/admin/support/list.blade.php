@@ -9,6 +9,7 @@
         </div>
     @else
         <div class="admin-support-index-card">
+            <h2 class="admin-support-index-title">Support Requests</h2>
             <div class="admin-support-index-table-container">
                 <table class="admin-support-index-table">
                     <thead>
@@ -60,10 +61,9 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        <div class="admin-support-index-pagination-container">
-            {{ $requests->links() }}
+            <div class="admin-support-index-pagination-container">
+                {{ $requests->links() }}
+            </div>
         </div>
     @endif
 </div>
