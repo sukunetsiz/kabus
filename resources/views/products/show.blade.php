@@ -1,7 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-{{-- Error Messages --}}
+
+<div class="products-show-container">
+    @if($vendor_on_vacation)
+        <div class="products-show-vacation-notice">
+            <h2>Product Currently Unavailable</h2>
+            <p>This product is temporarily unavailable as the vendor is currently on vacation. Please check back later.</p>
+        </div>
+    @else
+        <div class="products-show-main">
+    {{-- Error Messages --}}
     @if(session('error'))
         <div class="alert alert-error">
             <p>{{ session('error') }}</p>
@@ -14,15 +23,6 @@
             <p>{{ session('success') }}</p>
         </div>
     @endif
-
-<div class="products-show-container">
-    @if($vendor_on_vacation)
-        <div class="products-show-vacation-notice">
-            <h2>Product Currently Unavailable</h2>
-            <p>This product is temporarily unavailable as the vendor is currently on vacation. Please check back later.</p>
-        </div>
-    @else
-        <div class="products-show-main">
             {{-- Product Name Header --}}
             <div class="products-show-header">
                 <h1 class="products-show-title">{{ $product->name }}</h1>

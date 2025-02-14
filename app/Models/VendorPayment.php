@@ -12,6 +12,7 @@ class VendorPayment extends Model
     protected $table = 'vendor_payment_subaddresses';
 
     protected $fillable = [
+        'identifier',
         'address',
         'address_index',
         'user_id',
@@ -35,6 +36,20 @@ class VendorPayment extends Model
     ];
 
     public $timestamps = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->identifier = \Str::random(30);
+        });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'identifier';
+    }
 
     public function isApplicationSubmitted()
     {

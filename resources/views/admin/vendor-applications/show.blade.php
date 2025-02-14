@@ -24,7 +24,7 @@
                 <div class="vendor-applications-show-image-grid">
                     @foreach(json_decode($application->application_images) as $image)
                         <div class="vendor-applications-show-image-container">
-                            <img src="{{ route('admin.vendor-applications.show', ['application' => $application->id, 'image' => $image]) }}" alt="Product Image">
+                            <img src="{{ route('admin.vendor-applications.show', ['application' => $application, 'image' => $image]) }}" alt="Product Image">
                         </div>
                     @endforeach
                 </div>
@@ -35,12 +35,12 @@
             <div class="vendor-applications-show-section">
                 <h2 class="vendor-applications-show-section-title">Make Decision</h2>
                 <div class="vendor-applications-show-actions">
-                    <form action="{{ route('admin.vendor-applications.accept', $application->id) }}" method="POST" class="inline-form">
+                    <form action="{{ route('admin.vendor-applications.accept', $application) }}" method="POST" class="inline-form">
                         @csrf
                         <button type="submit" class="vendor-applications-show-btn vendor-applications-show-btn-accept">Accept Application</button>
                     </form>
 
-                    <form action="{{ route('admin.vendor-applications.deny', $application->id) }}" method="POST" class="inline-form">
+                    <form action="{{ route('admin.vendor-applications.deny', $application) }}" method="POST" class="inline-form">
                         @csrf
                         <button type="submit" class="vendor-applications-show-btn vendor-applications-show-btn-deny">Deny Application</button>
                     </form>

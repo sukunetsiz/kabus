@@ -10,6 +10,7 @@ class CreateVendorPaymentSubaddressesTable extends Migration
     {
         Schema::create('vendor_payment_subaddresses', function (Blueprint $table) {
             $table->id();
+            $table->string('identifier', 30)->unique();
             $table->string('address');
             $table->unsignedInteger('address_index');
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');

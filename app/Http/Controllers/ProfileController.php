@@ -236,7 +236,7 @@ class ProfileController extends Controller
         Log::info('PGP Key ID: ' . $pgpKey->id);
         Log::info('PGP Key User ID: ' . $pgpKey->user_id);
 
-        $message = 'kabus' . mt_rand(1000000000, 9999999999);
+        $message = 'PGP' . mt_rand(1000000000, 9999999999) . 'KEY';
         $encryptedMessage = '';
 
         // Create a unique temporary directory

@@ -1069,7 +1069,8 @@ padding:10px 20px;
 background-color:#1e1e1e;
 border-radius:8px;
 border:1px solid #3c3c3c;
-box-shadow:0 4px 20px #0000004d
+box-shadow:0 4px 20px #0000004d;
+margin-top:0px
 }
 
 .pgp-confirm-title {
@@ -4783,9 +4784,13 @@ padding:0 20px
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:30px;
-padding-bottom:15px;
-border-bottom:2px solid #bb86fc
+margin-bottom:10px;
+margin-top:-20px;
+padding:20px;
+background:linear-gradient(135deg,#1e1e1e,#2c2c2c);
+border:2px solid #bb86fc;
+border-radius:8px;
+box-shadow:0 4px 10px #00000080
 }
 
 .wishlist-index-title {
@@ -4818,7 +4823,8 @@ border-radius:12px;
 padding:30px;
 text-align:center;
 border:1px solid #3c3c3c;
-box-shadow:0 4px 20px #0000004d
+box-shadow:0 4px 20px #0000004d;
+margin-top: 20px
 }
 
 .wishlist-index-empty-text {
@@ -4872,7 +4878,8 @@ border-radius:12px;
 padding:25px;
 box-shadow:0 6px 25px #0000004d;
 border:1px solid #3c3c3c;
-margin-bottom:30px
+margin-bottom:-10px;
+margin-top:-20px
 }
 
 .products-index-filter-row {
@@ -7424,7 +7431,7 @@ transform: translateY(-2px)
 #pop-up-toggle:checked ~ .pop-up-container { display: grid; }
 
 .products-show-container {
-max-width:1200px;
+max-width:1100px;
 margin:0 auto;
 padding:20px
 }
@@ -7435,7 +7442,7 @@ border-radius:12px;
 padding:10px 30px;
 box-shadow:0 6px 25px #0000004d;
 border:1px solid #3c3c3c;
-margin-top:-36px
+margin-top:-30px
 }
 
 .products-show-header {
@@ -7734,8 +7741,7 @@ font-size:24px;
 margin:6px;
 padding:10px 0;
 text-align:center;
-position:relative;
-top:-5px
+position:relative
 }
 
 .products-show-description-content {

@@ -38,7 +38,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.vendor-applications.show', $application->id) }}" 
+                                    <a href="{{ route('admin.vendor-applications.show', $application) }}"
                                        class="vendor-applications-index-btn">
                                         Review Details
                                     </a>

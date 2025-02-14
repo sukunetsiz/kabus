@@ -5,17 +5,15 @@
 <div class="wishlist-index-container">
     <div class="wishlist-index-header">
         <h1 class="wishlist-index-title">{{ $title }}</h1>
-        
-    @if(!$products->isEmpty())
-        <form action="{{ route('wishlist.clear') }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" 
-                    class="wishlist-index-clear-btn">
-                Clear Wishlist
-            </button>
-        </form>
-    @endif
+        @if(!$products->isEmpty())
+            <form action="{{ route('wishlist.clear') }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="wishlist-index-clear-btn">
+                    Clear Wishlist
+                </button>
+            </form>
+        @endif
     </div>
     
     @if ($errors->any() || session('error'))
@@ -50,8 +48,7 @@
             @foreach($products as $product)
                 <a href="{{ route('products.show', $product->slug) }}" class="product-card">
                     <div class="product-card-image">
-                        <img src="{{ $product->product_picture_url }}" 
-                             alt="{{ $product->name }}">
+                        <img src="{{ $product->product_picture_url }}" alt="{{ $product->name }}">
                     </div>
                     <div class="product-card-content">
                         <div class="product-card-header">
@@ -85,3 +82,4 @@
     @endif
 </div>
 @endsection
+
