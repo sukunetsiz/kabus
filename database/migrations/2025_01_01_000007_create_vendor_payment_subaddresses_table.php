@@ -24,6 +24,8 @@ class CreateVendorPaymentSubaddressesTable extends Migration
             $table->json('application_images')->nullable(); // Store up to 4 image paths
             $table->timestamp('application_submitted_at')->nullable();
             $table->timestamp('admin_response_at')->nullable();
+            $table->decimal('refund_amount', 20, 12)->nullable();
+            $table->string('refund_address')->nullable();
             $table->boolean('payment_completed')->default(false);
         });
     }

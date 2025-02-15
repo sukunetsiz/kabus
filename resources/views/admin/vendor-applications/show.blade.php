@@ -59,6 +59,20 @@
                 </p>
                 </div>
             </div>
+
+            @if($application->application_status === 'denied' && $application->refund_amount)
+            <div class="vendor-applications-show-section">
+                <h2 class="vendor-applications-show-section-title">Refund Details</h2>
+                <div class="vendor-applications-show-status">
+                    <p class="vendor-applications-show-detail-row">
+                        <strong>Refund Amount:</strong> {{ $application->refund_amount }} XMR
+                    </p>
+                    <p class="vendor-applications-show-detail-row">
+                        <strong>Refund Address:</strong> {{ $application->refund_address }}
+                    </p>
+                </div>
+            </div>
+            @endif
         @endif
 
         <div class="vendor-applications-show-back">

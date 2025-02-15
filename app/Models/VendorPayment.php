@@ -23,11 +23,14 @@ class VendorPayment extends Model
         'application_status',
         'application_images',
         'application_submitted_at',
-        'admin_response_at'
+        'admin_response_at',
+        'refund_amount',
+        'refund_address'
     ];
 
     protected $casts = [
         'total_received' => 'decimal:12',
+        'refund_amount' => 'decimal:12',
         'expires_at' => 'datetime',
         'payment_completed' => 'boolean',
         'application_images' => 'json',

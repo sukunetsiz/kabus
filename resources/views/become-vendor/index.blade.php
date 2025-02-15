@@ -57,6 +57,11 @@
                     <p class="become-vendor-index-status-message">Congratulations! Your application has been accepted. You can now access the vendor features.</p>
                 @else
                     <p class="become-vendor-index-status-message">Unfortunately, your application has been denied. You cannot submit a new application at this time.</p>
+                    @if($vendorPayment->refund_amount)
+                        <div class="become-vendor-index-refund-info">
+                            <p class="become-vendor-index-status-message">A refund of {{ $vendorPayment->refund_amount }} XMR has been sent to your return address.</p>
+                        </div>
+                    @endif
                 @endif
             </div>
         @endif

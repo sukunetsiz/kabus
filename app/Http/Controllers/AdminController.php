@@ -978,20 +978,80 @@ class AdminController extends Controller
         }
 
         try {
+            \DB::beginTransaction();
+
+            // Get refund percentage from config
+            $refundPercentage = config('monero.vendor_payment_refund_percentage');
+            if ($refundPercentage <= 0) {
+                throw new \Exception('Refund percentage must be greater than zero');
+            }
+
+            // Calculate refund amount
+            $refundAmount = $application->total_received * ($refundPercentage / 100);
+
+            // Get random verified return address
+            $returnAddress = $application->user->returnAddresses()
+                ->where('is_verified', true)
+                ->inRandomOrder()
+                ->first();
+
+            if (!$returnAddress) {
+                throw new \Exception('No verified return address found for user');
+            }
+
+            // First update application status
             $application->update([
                 'application_status' => 'denied',
                 'admin_response_at' => now()
             ]);
 
-            Log::info("Vendor application denied for user {$application->user_id}");
+            try {
+                // Initialize WalletRPC with increased timeout
+                $config = config('monero');
+                $walletRPC = new \MoneroIntegrations\MoneroPhp\walletRPC(
+                    $config['host'],
+                    $config['port'],
+                    $config['ssl'],
+                    30000  // 30 second timeout
+                );
+
+                // Process refund
+                $result = $walletRPC->transfer([
+                    'address' => $returnAddress->monero_address,
+                    'amount' => $refundAmount,
+                    'priority' => 1
+                ]);
+
+                // Update refund details only if transfer successful
+                $application->update([
+                    'refund_amount' => $refundAmount,
+                    'refund_address' => $returnAddress->monero_address
+                ]);
+
+                $refundMessage = "Refund of {$refundAmount} XMR has been processed.";
+            } catch (\Exception $e) {
+                Log::error('Error processing refund: ' . $e->getMessage());
+                $refundMessage = "Application denied but refund failed. Please process refund manually.";
+                
+                // Still update refund details for manual processing
+                $application->update([
+                    'refund_amount' => $refundAmount,
+                    'refund_address' => $returnAddress->monero_address
+                ]);
+            }
+
+            \DB::commit();
+
+            Log::info("Vendor application denied for user {$application->user_id}. Refund processed: {$refundAmount} XMR to address {$returnAddress->monero_address}");
 
             return redirect()->route('admin.vendor-applications.show', $application)
-                ->with('success', 'Application denied successfully.');
+                ->with('success', "Application denied successfully. " . $refundMessage);
 
         } catch (\Exception $e) {
+            \DB::rollBack();
             Log::error('Error denying vendor application: ' . $e->getMessage());
             return redirect()->back()
-                ->with('error', 'An error occurred while processing the application.');
+                ->with('error', 'An error occurred while processing the application and refund.');
         }
     }
 
