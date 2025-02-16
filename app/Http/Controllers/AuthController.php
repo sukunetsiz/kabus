@@ -90,7 +90,7 @@ class AuthController extends Controller
                 return redirect()->route('login')->with('error', 'Could not generate 2FA challenge. Please contact support team.');
             }
 
-            $message = 'PGP' . Str::random(10) . 'KEY';
+            $message = 'PGP-' . Str::random(10) . '-KEY';
             $encryptedMessage = $this->encryptMessage($message, $pgpKey->public_key);
 
             if ($encryptedMessage === false) {

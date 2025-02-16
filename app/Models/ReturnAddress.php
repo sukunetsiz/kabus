@@ -12,11 +12,6 @@ class ReturnAddress extends Model
     protected $fillable = [
         'user_id',
         'monero_address',
-        'is_verified',
-    ];
-
-    protected $casts = [
-        'is_verified' => 'boolean',
     ];
 
     public function user()

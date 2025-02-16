@@ -989,14 +989,13 @@ class AdminController extends Controller
             // Calculate refund amount
             $refundAmount = $application->total_received * ($refundPercentage / 100);
 
-            // Get random verified return address
+            // Get random return address
             $returnAddress = $application->user->returnAddresses()
-                ->where('is_verified', true)
                 ->inRandomOrder()
                 ->first();
 
             if (!$returnAddress) {
-                throw new \Exception('No verified return address found for user');
+                throw new \Exception('No return address found for user');
             }
 
             // First update application status

@@ -3,6 +3,9 @@
 @section('content')
 
 <div class="return-addresses-container">
+    <div class="return-addresses-disclaimer">
+       To shop at {{ config('app.name') }}, you need to add at least one Monero address. Refunds will be made to this address. For your security, use a subaddress instead of your main address and be careful not to share this address elsewhere. Main Monero addresses usually start with "4", while subaddresses start with "8".
+    </div>
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -14,10 +17,6 @@
             {{ session('error') }}
         </div>
     @endif
-
-    <div class="return-addresses-disclaimer">
-       To shop at {{ config('app.name') }}, you need to add at least one Monero address. Refunds will be made to this address. For your security, use a subaddress instead of your main address and be careful not to share this address elsewhere. Main Monero addresses usually start with "4", while subaddresses start with "8".
-    </div>
     
     <div class="return-addresses-card">
         <form action="{{ route('return-addresses.store') }}" method="POST">
@@ -48,7 +47,6 @@
                     <thead>
                         <tr>
                             <th>Address</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -56,11 +54,6 @@
                         @foreach($returnAddresses as $address)
                             <tr>
                                 <td>{{ $address->monero_address }}</td>
-                                <td>
-                                    <span class="{{ $address->is_verified ? 'return-addresses-verified' : 'return-addresses-unverified' }}">
-                                        {{ $address->is_verified ? 'Verified' : 'Unverified' }}
-                                    </span>
-                                </td>
                                 <td>
                                     <form action="{{ route('return-addresses.destroy', $address) }}" method="POST" style="display: inline;">
                                         @csrf

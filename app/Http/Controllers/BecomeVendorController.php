@@ -51,10 +51,8 @@ class BecomeVendorController extends Controller
             $hasPgpVerified = $user->pgpKey->verified;
         }
 
-        // Check if the user has at least one verified Monero return address.
-        $hasMoneroAddress = $user->returnAddresses()
-            ->where('is_verified', true)
-            ->exists();
+        // Check if the user has at least one Monero return address.
+        $hasMoneroAddress = $user->returnAddresses()->exists();
 
         // Get the latest vendor payment
         $vendorPayment = VendorPayment::where('user_id', $user->id)
@@ -76,9 +74,7 @@ class BecomeVendorController extends Controller
             $hasPgpVerified = $user->pgpKey->verified;
         }
 
-        $hasMoneroAddress = $user->returnAddresses()
-            ->where('is_verified', true)
-            ->exists();
+        $hasMoneroAddress = $user->returnAddresses()->exists();
 
         // Check if user has a processed application
         $existingPayment = VendorPayment::where('user_id', $user->id)

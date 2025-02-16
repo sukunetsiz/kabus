@@ -788,15 +788,31 @@ margin:0 auto;
 padding:0 20px 40px
 }
 
-.rules-section h2,.rules-section h3,.rules-title {
+.rules-section h2,.rules-section h3 {
 color:#bb86fc;
 margin-bottom:20px;
 text-align:center
 }
 
 .rules-title {
-font-size:32px;
-margin-top:-20px
+background-color:#2c2c2c;
+border:2px solid #bb86fc;
+color:#bb86fc;
+padding:16px 32px;
+border-radius:36px;
+font-size:28px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+transition:all .3s ease;
+display:inline-block;
+margin:30px 0 20px;
+margin-top:0
+}
+
+.rules-title:hover {
+transform:translateY(-2px);
+box-shadow:0 4px 15px #bb86fc33
 }
 
 .rules-section {
@@ -835,11 +851,11 @@ margin-top:30px;
 color:#e0e0e0
 }
 
-.rule-item {
+.rules-item {
 margin-bottom:30px
 }
 
-.rule-item:last-child {
+.rules-item:last-child {
 margin-bottom:0
 }
 
@@ -1135,7 +1151,7 @@ font-weight:700
 }
 
 .pgp-confirm-textarea {
-width:22%;
+width:24%;
 height:70%;
 padding:12px 15px;
 background-color:#1e1e1e;
@@ -1325,7 +1341,8 @@ background-color:#1e1e1e;
 border-radius:8px;
 padding:30px;
 box-shadow:0 4px 20px #0000004d;
-border:1px solid #3c3c3c
+border:1px solid #3c3c3c;
+margin-top:-40px
 }
 
 .become-vendor-index-title {
@@ -2459,7 +2476,8 @@ margin-bottom:20px;
 color:#e0e0e0;
 font-size:.9em;
 line-height:1.4;
-border-radius:4px
+border-radius:4px;
+margin-top:-20px
 }
 
 .return-addresses-card {
@@ -2550,16 +2568,6 @@ box-shadow:0 4px 10px #bb86fc33
 padding:12px;
 color:#e0e0e0;
 text-align:center
-}
-
-.return-addresses-verified {
-color:#4caf50;
-font-weight:700
-}
-
-.return-addresses-unverified {
-color:#ffc107;
-font-weight:700
 }
 
 .return-addresses-delete-btn {

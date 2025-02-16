@@ -43,7 +43,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $profile = $user->profile ?? $user->profile()->create();
 
-        return view('profile', compact('user', 'profile'));
+        return view('profile.index', compact('user', 'profile'));
     }
 
     public function update(Request $request)
@@ -236,7 +236,7 @@ class ProfileController extends Controller
         Log::info('PGP Key ID: ' . $pgpKey->id);
         Log::info('PGP Key User ID: ' . $pgpKey->user_id);
 
-        $message = 'PGP' . mt_rand(1000000000, 9999999999) . 'KEY';
+        $message = 'PGP-' . mt_rand(1000000000, 9999999999) . '-KEY';
         $encryptedMessage = '';
 
         // Create a unique temporary directory
@@ -283,7 +283,7 @@ class ProfileController extends Controller
             'pgp_confirmation_expiry' => $expirationTime
         ]);
 
-        return view('confirm-pgp-key', compact('encryptedMessage', 'expirationTime'));
+        return view('profile.confirm-pgp-key', compact('encryptedMessage', 'expirationTime'));
     }
 
     /**

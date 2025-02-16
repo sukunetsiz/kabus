@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->string('monero_address');
-            $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
     }

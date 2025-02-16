@@ -6,122 +6,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>Kabus</title>
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+<style>
+body {
+font-family:"Arial",sans-serif;
+margin:0;
+padding:0;
+background-color:#121212;
+color:#e0e0e0;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh
+}
 
-        .maintenance-container {
-            max-width: 600px;
-            margin: 20px;
-            padding: 40px;
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
-            border: 1px solid #3c3c3c;
-            text-align: center;
-            animation: fadeIn 0.6s ease-out;
-        }
+.maintenance-container {
+max-width:600px;
+margin:20px;
+padding:40px;
+background-color:#1e1e1e;
+border-radius:12px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c;
+text-align:center;
+animation:fadeIn .6s ease-out
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+@keyframes fadeIn {
+from {
+opacity:0;
+transform:translateY(20px)
+}
 
-        .maintenance-icon {
-            font-size: 64px;
-            color: #bb86fc;
-            margin-bottom: 20px;
-        }
+to {
+opacity:1;
+transform:translateY(0)
+}
+}
 
-        .maintenance-title {
-            color: #bb86fc;
-            font-size: 32px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
+.maintenance-icon {
+font-size:64px;
+color:#bb86fc;
+margin-bottom:20px
+}
 
-        .maintenance-message {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            color: #e0e0e0;
-        }
+.maintenance-title {
+color:#bb86fc;
+font-size:32px;
+margin-bottom:20px;
+font-weight:700
+}
 
-        .maintenance-info {
-            background-color: #2c2c2c;
-            border-left: 4px solid #bb86fc;
-            padding: 20px;
-            text-align: left;
-            margin: 20px 0;
-            border-radius: 0 8px 8px 0;
-        }
+.maintenance-message {
+font-size:18px;
+line-height:1.6;
+margin-bottom:30px;
+color:#e0e0e0
+}
 
-        .maintenance-info strong {
-            color: #bb86fc;
-            display: block;
-            margin-bottom: 10px;
-        }
+.maintenance-info {
+background-color:#2c2c2c;
+border-left:4px solid #bb86fc;
+padding:20px;
+text-align:left;
+margin:20px 0;
+border-radius:0 8px 8px 0
+}
 
-        .maintenance-status {
-            display: inline-block;
-            background-color: #2c2c2c;
-            border: 2px solid #bb86fc;
-            color: #bb86fc;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 20px;
-        }
+.maintenance-info strong {
+color:#bb86fc;
+display:block;
+margin-bottom:10px
+}
 
-        .loading-animation {
-            width: 50px;
-            height: 50px;
-            margin: 20px auto;
-            border: 5px solid #bb86fc;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s infinite linear;
-        }
+.maintenance-status {
+display:inline-block;
+background-color:#2c2c2c;
+border:2px solid #bb86fc;
+color:#bb86fc;
+padding:12px 24px;
+border-radius:25px;
+font-size:16px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+margin-top:20px
+}
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+.loading-animation {
+width:50px;
+height:50px;
+margin:20px auto;
+border:5px solid #bb86fc;
+border-radius:50%;
+border-top-color:transparent;
+animation:spin 1s infinite linear
+}
 
-        @media (max-width: 480px) {
-            .maintenance-container {
-                padding: 30px 20px;
-                margin: 15px;
-            }
+@keyframes spin {
+0% {
+transform:rotate(0deg)
+}
 
-            .maintenance-title {
-                font-size: 24px;
-            }
-
-            .maintenance-message {
-                font-size: 16px;
-            }
-
-            .loading-animation {
-                width: 30px;
-                height: 30px;
-                border-width: 3px;
-                margin: 15px auto;
-            }
-        }
-    </style>
+100% {
+transform:rotate(360deg)
+}
+}   
+</style>
 </head>
 <body>
     <div class="maintenance-container">

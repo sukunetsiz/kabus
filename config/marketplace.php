@@ -11,7 +11,7 @@ return [
     | When false, the reference code becomes optional.
     |
     */
-    'require_reference_code' => env('MARKETPLACE_REQUIRE_REFERENCE', true),
+    'require_reference_code' => env('MARKETPLACE_REQUIRE_REFERENCE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ return [
     | When false, the warning will be hidden.
     |
     */
-    'show_javascript_warning' => env('MARKETPLACE_SHOW_JS_WARNING', true),
+    'show_javascript_warning' => env('MARKETPLACE_SHOW_JS_WARNING', false),
 
     /*
     |--------------------------------------------------------------------------
