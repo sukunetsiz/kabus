@@ -83,14 +83,6 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">🚀 Ad Applications ⛔</h3>
-                <p class="admin-panel-item-description">Manage advertising requests and from vendors.</p>
-                <a href="#" class="admin-panel-item-link">Review Ads</a>
-            </div>
-
-            <div class="admin-panel-item">
-                <div class="admin-panel-item-icon">
-                </div>
                 <h3 class="admin-panel-item-title">🌐 Web Pop-Up 🌐</h3>
                 <p class="admin-panel-item-description">Create and manage website-wide pop-up notifications.</p>
                 <a href="{{ route('admin.popup.index') }}" class="admin-panel-item-link">Configure Popups</a>

@@ -28,27 +28,12 @@
                 <p class="admin-panel-item-description">You can add products that can be delivered via dead drop.</p>
                 <a href="{{ route('vendor.products.create', 'deaddrop') }}" class="admin-panel-item-link">Add Dead Drop Product</a>
             </div>
-            
-            <div class="admin-panel-item">
-                <div class="admin-panel-item-icon">
-                </div>
-                <h3 class="admin-panel-item-title">📈 Statistics ⛔</h3>
-                <p class="admin-panel-item-description">You can view sales data and other statistics.</p>
-                <a href="#" class="admin-panel-item-link">View Statistics</a>
-            </div>
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
                 <h3 class="admin-panel-item-title">🎨 Vendor Appearance 🎨</h3>
                 <p class="admin-panel-item-description">You can customize your store appearance and profile.</p>
                 <a href="{{ route('vendor.appearance') }}" class="admin-panel-item-link">Edit Appearance</a>
-            </div>
-            <div class="admin-panel-item">
-                <div class="admin-panel-item-icon">
-                </div>
-                <h3 class="admin-panel-item-title">🎯 Advertisement ⛔</h3>
-                <p class="admin-panel-item-description">You can apply to promote your products with advertisements.</p>
-                <a href="#" class="admin-panel-item-link">Apply for Advertisement</a>
             </div>
             
             <div class="admin-panel-item">
@@ -73,14 +58,6 @@
                 <h3 class="admin-panel-item-title">❗ My Disputes ⛔</h3>
                 <p class="admin-panel-item-description">View and manage customer disputes and resolution cases.</p>
                 <a href="#" class="admin-panel-item-link">View Disputes</a>
-            </div>
-
-            <div class="admin-panel-item">
-                <div class="admin-panel-item-icon">
-                </div>
-                <h3 class="admin-panel-item-title">⭐ My Reviews ⛔</h3>
-                <p class="admin-panel-item-description">Check customer feedback and ratings for your products.</p>
-                <a href="#" class="admin-panel-item-link">View Reviews</a>
             </div>
         </div>
     </div>
