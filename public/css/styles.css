@@ -1797,14 +1797,15 @@ display:inline-block;
 background-color:#2c2c2c;
 border:2px solid #bb86fc;
 color:#bb86fc;
-padding:12px 24px;
-border-radius:25px;
-font-size:20px;
+padding:16px 32px;
+border-radius:36px;
+font-size:28px;
 font-weight:700;
 text-transform:uppercase;
 letter-spacing:1px;
 transition:all .3s ease;
-margin-bottom:30px
+margin-bottom:30px;
+margin-top:-20px
 }
 
 .logs-index-badge:hover {
@@ -8674,4 +8675,92 @@ box-shadow:0 4px 15px #bb86fc4d
 
 .become-vendor-application-form-group:last-child {
 margin-bottom:0
+}
+
+.admin-statistics-title {
+background-color:#2c2c2c;
+border:2px solid #bb86fc;
+color:#bb86fc;
+padding:16px 32px;
+border-radius:36px;
+font-size:28px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+transition:all .3s ease;
+display:inline-block;
+margin:30px 0 20px;
+margin-top:0
+}
+
+.admin-statistics-title:hover {
+transform:translateY(-2px);
+box-shadow:0 4px 15px #bb86fc33
+}
+
+.admin-statistics-container {
+max-width:1200px;
+margin:0 auto;
+padding:20px
+}
+
+.admin-statistics-header {
+text-align:center;
+margin-bottom:30px
+}
+
+.admin-statistics-header .admin-statistics-title {
+background-color:#2c2c2c;
+border:2px solid #bb86fc;
+color:#bb86fc;
+padding:16px 32px;
+border-radius:36px;
+font-size:28px;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+display:inline-block;
+margin:0
+}
+
+.admin-statistics-grid {
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px
+}
+
+.admin-statistics-card {
+background-color:#1e1e1e;
+border:1px solid #3c3c3c;
+border-radius:8px;
+padding:30px;
+box-shadow:0 4px 6px #0000001a
+}
+
+.admin-statistics-card h2 {
+color:#bb86fc;
+font-size:24px;
+border-bottom:2px solid #bb86fc;
+padding-bottom:8px;
+margin-bottom:20px;
+text-align:center
+}
+
+.admin-statistics-card p,.admin-statistics-card li {
+color:#e0e0e0;
+font-size:16px;
+line-height:1.6;
+margin-bottom:10px;
+text-align:center
+}
+
+.admin-statistics-card ul {
+list-style:none;
+padding-left:0;
+margin-bottom:0
+}
+
+.admin-statistics-strong {
+color:#bb86fc;
+font-weight:700
 }

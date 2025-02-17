@@ -3,13 +3,13 @@
 @section('content')
 
 <div class="admin-support-index-container">
-    @if($requests->isEmpty())
-        <div class="admin-support-index-empty">
-            No support requests found.
-        </div>
-    @else
         <div class="admin-support-index-card">
             <h2 class="admin-support-index-title">Support Requests</h2>
+                @if($requests->isEmpty())
+                <div class="admin-support-index-empty">
+                    No support requests found.
+                </div>
+                @else
             <div class="admin-support-index-table-container">
                 <table class="admin-support-index-table">
                     <thead>

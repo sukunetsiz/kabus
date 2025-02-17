@@ -91,9 +91,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">📊 Statistics ⛔</h3>
+                <h3 class="admin-panel-item-title">📊 Statistics 📊</h3>
                 <p class="admin-panel-item-description">Access platform analytics and performance metrics dashboards.</p>
-                <a href="#" class="admin-panel-item-link">View Stats</a>
+                <a href="{{ route('admin.statistics') }}" class="admin-panel-item-link">View Stats</a>
             </div>
         </div>
     </div>

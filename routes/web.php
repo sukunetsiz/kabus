@@ -177,6 +177,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/canary', [AdminController::class, 'showUpdateCanary'])->name('admin.canary');
         Route::post('/admin/canary', [AdminController::class, 'updateCanary'])->name('admin.canary.post');
         
+        // Admin statistics
+        Route::get('/admin/statistics', [AdminController::class, 'statistics'])->name('admin.statistics');
+        
         // Admin logs management
         Route::get('/admin/logs', [AdminController::class, 'showLogs'])->name('admin.logs');
         Route::get('/admin/logs/{type}', [AdminController::class, 'showLogsByType'])

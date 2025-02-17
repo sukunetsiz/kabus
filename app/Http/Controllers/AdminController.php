@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\BannedUser;
+use App\Models\PgpKey;
 use App\Models\SupportRequest;
 use App\Models\Notification;
 use App\Models\Category;
@@ -1052,6 +1053,49 @@ class AdminController extends Controller
             return redirect()->back()
                 ->with('error', 'An error occurred while processing the application and refund.');
         }
+    }
+
+    /**
+     * Display the statistics page.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function statistics()
+    {
+        // User Statistics
+        $totalUsers = User::count();
+        $usersByRole = Role::withCount('users')->get();
+        $bannedUsersCount = BannedUser::where('banned_until', '>', now())->count();
+        
+        // Security Statistics
+        $totalPgpKeys = PgpKey::count();
+        $verifiedPgpKeys = PgpKey::where('verified', true)->count();
+        $twoFaEnabled = PgpKey::where('two_fa_enabled', true)->count();
+        
+        // Product Statistics
+        $totalProducts = Product::count();
+        $productsByType = [
+            'digital' => Product::where('type', Product::TYPE_DIGITAL)->count(),
+            'cargo' => Product::where('type', Product::TYPE_CARGO)->count(),
+            'deaddrop' => Product::where('type', Product::TYPE_DEADDROP)->count()
+        ];
+        
+        // Calculate percentages
+        $pgpVerificationRate = $totalUsers > 0 ? ($verifiedPgpKeys / $totalUsers) * 100 : 0;
+        $twoFaAdoptionRate = $totalUsers > 0 ? ($twoFaEnabled / $totalUsers) * 100 : 0;
+
+        return view('admin.statistics', compact(
+            'totalUsers',
+            'usersByRole',
+            'bannedUsersCount',
+            'totalPgpKeys',
+            'verifiedPgpKeys',
+            'twoFaEnabled',
+            'pgpVerificationRate',
+            'twoFaAdoptionRate',
+            'totalProducts',
+            'productsByType'
+        ));
     }
 
     private function handleProductPictureUpload($file)
