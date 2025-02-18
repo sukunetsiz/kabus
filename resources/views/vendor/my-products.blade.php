@@ -27,7 +27,7 @@
                             <a href="{{ route('vendor.products.edit', $product) }}" class="my-products-index-btn my-products-index-btn-edit">
                                 Edit
                             </a>
-                            <a href="#" class="my-products-index-btn my-products-index-btn-ad">
+                            <a href="{{ route('vendor.advertisement.create', $product) }}" class="my-products-index-btn my-products-index-btn-ad">
                                 Advertisement
                             </a>
                             <form action="{{ route('vendor.products.destroy', $product) }}" method="POST" style="display: inline;">

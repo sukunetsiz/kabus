@@ -19,9 +19,24 @@ class HomeController extends Controller
         if (!session()->has('popup_dismissed')) {
             $popup = \App\Models\Popup::getActive();
         }
+
+        // Get active advertisements
+        $advertisements = \App\Models\Advertisement::getActiveAdvertisements();
+
+        // Organize advertisements by slot
+        $adSlots = [];
+        foreach ($advertisements as $ad) {
+            $adSlots[$ad->slot_number] = [
+                'product' => $ad->product,
+                'vendor' => $ad->product->user,
+                'ends_at' => $ad->ends_at
+            ];
+        }
+
         return view('home', [
             'username' => Auth::user()->username,
-            'popup' => $popup
+            'popup' => $popup,
+            'adSlots' => $adSlots
         ]);
     }
 

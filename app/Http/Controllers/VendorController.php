@@ -7,7 +7,13 @@ use App\Models\VendorProfile;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Advertisement;
 use Illuminate\Support\Facades\Storage;
+use MoneroIntegrations\MoneroPhp\walletRPC;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\ImageManager;
@@ -23,12 +29,30 @@ use Exception;
 
 class VendorController extends Controller
 {
+    protected $walletRPC;
     private $allowedMimeTypes = [
         'image/jpeg',
         'image/png',
         'image/gif',
         'image/webp'
     ];
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $config = config('monero');
+        try {
+            $this->walletRPC = new walletRPC(
+                $config['host'],
+                $config['port'],
+                $config['ssl']
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to initialize Monero RPC connection: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Display the vendor dashboard.
@@ -567,6 +591,178 @@ class VendorController extends Controller
                 return $image->encode(new GifEncoder());
             default:
                 return $image->encode(new JpegEncoder(80));
+        }
+    }
+
+    /**
+     * Show the form for creating a new advertisement.
+     */
+    public function createAdvertisement(Product $product)
+    {
+        // Check if the authenticated user owns this product
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('vendor.advertisement.create', compact('product'));
+    }
+
+    /**
+     * Store a new advertisement and initiate payment.
+     */
+    public function storeAdvertisement(Request $request, Product $product)
+    {
+        // Check if the authenticated user owns this product
+        if ($product->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'slot_number' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:8',
+                function ($attribute, $value, $fail) use ($request) {
+                    $duration = (int) $request->duration_days;
+                    if ($duration < 1) {
+                        return; // Let the other validation rules handle this
+                    }
+                    if (!Advertisement::isSlotAvailable($value, now(), now()->addDays($duration))) {
+                        $fail('This slot is currently occupied.');
+                    }
+                },
+            ],
+            'duration_days' => [
+                'required',
+                'integer',
+                'min:' . config('monero.advertisement_min_duration', 1),
+                'max:' . config('monero.advertisement_max_duration', 30),
+            ],
+        ]);
+
+        try {
+            // Calculate required amount
+            $requiredAmount = Advertisement::calculateRequiredAmount(
+                $validated['slot_number'],
+                $validated['duration_days']
+            );
+
+            // Create Monero subaddress
+            $result = $this->walletRPC->create_address(0, "Advertisement Payment " . Auth::id() . "_" . time());
+
+            // Create advertisement record
+            $advertisement = new Advertisement([
+                'product_id' => $product->id,
+                'user_id' => Auth::id(),
+                'slot_number' => $validated['slot_number'],
+                'duration_days' => $validated['duration_days'],
+                'payment_address' => $result['address'],
+                'payment_address_index' => $result['address_index'],
+                'required_amount' => $requiredAmount,
+                'expires_at' => now()->addMinutes((int) config('monero.address_expiration_time')),
+            ]);
+
+            $advertisement->save();
+
+            return redirect()->route('vendor.advertisement.payment', $advertisement->payment_identifier);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create advertisement: ' . $e->getMessage());
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Failed to create advertisement. Please try again.');
+        }
+    }
+
+    /**
+     * Show the advertisement payment page.
+     */
+    public function showAdvertisementPayment(string $identifier)
+    {
+        $advertisement = Advertisement::where('payment_identifier', $identifier)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        // Check if payment has expired
+        if ($advertisement->isExpired()) {
+            return redirect()
+                ->route('vendor.my-products')
+                ->with('error', 'Payment window has expired.');
+        }
+
+        try {
+            // Check for new payments
+            $transfers = $this->walletRPC->get_transfers([
+                'in' => true,
+                'pool' => true,
+                'subaddr_indices' => [$advertisement->payment_address_index]
+            ]);
+
+            $totalReceived = 0;
+            foreach (['in', 'pool'] as $type) {
+                if (isset($transfers[$type])) {
+                    foreach ($transfers[$type] as $transfer) {
+                        $totalReceived += $transfer['amount'] / 1e12;
+                    }
+                }
+            }
+
+            // Update received amount
+            $advertisement->total_received = $totalReceived;
+
+            // Check if payment is completed
+            if ($totalReceived >= $advertisement->required_amount && !$advertisement->payment_completed) {
+                $advertisement->payment_completed = true;
+                $advertisement->payment_completed_at = now();
+                $advertisement->starts_at = now();
+                $advertisement->ends_at = now()->addDays((int) $advertisement->duration_days);
+            }
+
+            $advertisement->save();
+
+            // Generate QR code
+            $qrCode = null;
+            if (!$advertisement->payment_completed) {
+                $qrCode = $this->generateQrCode($advertisement->payment_address);
+            }
+
+            return view('vendor.advertisement.payment', [
+                'advertisement' => $advertisement,
+                'qrCode' => $qrCode
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error processing advertisement payment: ' . $e->getMessage());
+            return view('vendor.advertisement.payment', [
+                'advertisement' => $advertisement,
+                'qrCode' => null,
+                'error' => 'Error checking payment status. Please try refreshing the page.'
+            ]);
+        }
+    }
+
+    /**
+     * Generate a QR code for the given address.
+     */
+    private function generateQrCode($address)
+    {
+        try {
+            $result = Builder::create()
+                ->writer(new PngWriter())
+                ->writerOptions([])
+                ->data($address)
+                ->encoding(new Encoding('UTF-8'))
+                ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+                ->size(300)
+                ->margin(10)
+                ->build();
+            
+            return $result->getDataUri();
+        } catch (\Exception $e) {
+            Log::error('Error generating QR code: ' . $e->getMessage());
+            return null;
         }
     }
 }

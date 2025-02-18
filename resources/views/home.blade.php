@@ -20,6 +20,31 @@
 @endif
 
 <div class="home-container">
+    @if(count($adSlots) > 0)
+        <div class="advertisement-slots">
+            @for($i = 1; $i <= 8; $i++)
+                @if(isset($adSlots[$i]))
+                    <div class="ad-slot ad-slot-{{ $i }}">
+                        <div class="ad-content">
+                            <div class="ad-image">
+                                <img src="{{ $adSlots[$i]['product']->product_picture_url }}" 
+                                     alt="{{ $adSlots[$i]['product']->name }}"
+                                     class="w-full h-48 object-cover rounded">
+                            </div>
+                            <div class="ad-details">
+                                <h3 class="ad-title">{{ $adSlots[$i]['product']->name }}</h3>
+                                <p class="ad-vendor">by {{ $adSlots[$i]['vendor']->username }}</p>
+                                <p class="ad-price">${{ number_format($adSlots[$i]['product']->price, 2) }}</p>
+                                <a href="{{ route('products.show', $adSlots[$i]['product']) }}" 
+                                   class="ad-link">View Product</a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endfor
+        </div>
+    @endif
+
     <div class="home-welcome-message">
         <h1 class="home-title">Welcome to Kabus v0.8.2</h1>
         

@@ -243,6 +243,14 @@ Route::middleware('auth')->group(function () {
         // My Products routes
         Route::get('/vendor/my-products', [VendorController::class, 'myProducts'])->name('vendor.my-products');
         Route::delete('/vendor/products/{product}', [VendorController::class, 'destroy'])->name('vendor.products.destroy');
+
+        // Advertisement routes
+        Route::get('/vendor/advertisement/create/{product}', [VendorController::class, 'createAdvertisement'])
+            ->name('vendor.advertisement.create');
+        Route::post('/vendor/advertisement/{product}', [VendorController::class, 'storeAdvertisement'])
+            ->name('vendor.advertisement.store');
+        Route::get('/vendor/advertisement/payment/{identifier}', [VendorController::class, 'showAdvertisementPayment'])
+            ->name('vendor.advertisement.payment');
         
         // Product creation and editing routes
         Route::get('/vendor/products/{type}/create', [VendorController::class, 'create'])
