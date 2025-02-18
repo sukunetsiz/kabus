@@ -21,22 +21,20 @@
 
 <div class="home-container">
     @if(count($adSlots) > 0)
-        <div class="advertisement-slots">
+        <div>
             @for($i = 1; $i <= 8; $i++)
                 @if(isset($adSlots[$i]))
-                    <div class="ad-slot ad-slot-{{ $i }}">
-                        <div class="ad-content">
-                            <div class="ad-image">
+                    <div>
+                        <div>
+                            <div>
                                 <img src="{{ $adSlots[$i]['product']->product_picture_url }}" 
-                                     alt="{{ $adSlots[$i]['product']->name }}"
-                                     class="w-full h-48 object-cover rounded">
+                                     alt="{{ $adSlots[$i]['product']->name }}">
                             </div>
-                            <div class="ad-details">
-                                <h3 class="ad-title">{{ $adSlots[$i]['product']->name }}</h3>
-                                <p class="ad-vendor">by {{ $adSlots[$i]['vendor']->username }}</p>
-                                <p class="ad-price">${{ number_format($adSlots[$i]['product']->price, 2) }}</p>
-                                <a href="{{ route('products.show', $adSlots[$i]['product']) }}" 
-                                   class="ad-link">View Product</a>
+                            <div>
+                                <h3>{{ $adSlots[$i]['product']->name }}</h3>
+                                <p>by {{ $adSlots[$i]['vendor']->username }}</p>
+                                <p>${{ number_format($adSlots[$i]['product']->price, 2) }}</p>
+                                <a href="{{ route('products.show', $adSlots[$i]['product']) }}">View Product</a>
                             </div>
                         </div>
                     </div>
@@ -46,7 +44,7 @@
     @endif
 
     <div class="home-welcome-message">
-        <h1 class="home-title">Welcome to Kabus v0.8.2</h1>
+        <h1 class="home-title">Welcome to Kabus v0.8.3</h1>
         
         <p class="home-text">Dear users,</p>
         

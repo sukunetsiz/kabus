@@ -4226,7 +4226,9 @@ color:#bb86fc;
 font-size:28px;
 margin-bottom:25px;
 font-weight:700;
-text-align:center
+text-align:center;
+border-bottom:2px solid #bb86fc;
+padding-bottom:15px
 }
 
 .vendors-index-error {

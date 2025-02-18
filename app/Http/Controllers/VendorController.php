@@ -597,6 +597,37 @@ class VendorController extends Controller
     /**
      * Show the form for creating a new advertisement.
      */
+    /**
+     * Prepare advertisement slot data with pricing and availability.
+     *
+     * @return array
+     */
+    private function prepareAdvertisementSlots()
+    {
+        $basePrice = config('monero.advertisement_base_price');
+        $slots = [];
+
+        foreach (config('monero.advertisement_slot_multipliers') as $slot => $multiplier) {
+            $price = $basePrice * $multiplier;
+            $isAvailable = !\App\Models\Advertisement::where('slot_number', $slot)
+                ->where('payment_completed', true)
+                ->where('starts_at', '<=', now())
+                ->where('ends_at', '>=', now())
+                ->exists();
+
+            $slots[] = [
+                'number' => $slot,
+                'price' => $price,
+                'is_available' => $isAvailable
+            ];
+        }
+
+        return $slots;
+    }
+
+    /**
+     * Show the form for creating a new advertisement.
+     */
     public function createAdvertisement(Product $product)
     {
         // Check if the authenticated user owns this product
@@ -604,7 +635,8 @@ class VendorController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        return view('vendor.advertisement.create', compact('product'));
+        $slots = $this->prepareAdvertisementSlots();
+        return view('vendor.advertisement.create', compact('product', 'slots'));
     }
 
     /**
