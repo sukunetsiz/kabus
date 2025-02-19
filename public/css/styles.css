@@ -6001,6 +6001,20 @@ transform:translateY(-2px);
 box-shadow:0 4px 8px #0003
 }
 
+.my-products-index-btn-ad-disabled {
+background-color:#997300;
+color:#0a0a0a;
+cursor:not-allowed;
+pointer-events:none;
+opacity:.9
+}
+
+.my-products-index-btn-ad-disabled:hover {
+transform:none;
+box-shadow:none;
+background-color:#997300
+}
+
 .my-products-index-btn-delete {
 background-color:transparent;
 color:#ff3838;

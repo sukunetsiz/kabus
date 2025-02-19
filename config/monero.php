@@ -28,8 +28,8 @@ return [
     */
     'vendor_payment_required_amount' => env('MONERO_VENDOR_PAYMENT_REQUIRED_AMOUNT', 0.4),
     'vendor_payment_minimum_amount' => env('MONERO_VENDOR_PAYMENT_MINIMUM_AMOUNT', 0.04),
-    'vendor_payment_refund_percentage' => env('MONERO_VENDOR_PAYMENT_REFUND_PERCENTAGE', 80),
-    'address_expiration_time' => env('MONERO_ADDRESS_EXPIRATION_TIME', 1440), // 24 hours
+    'vendor_payment_refund_percentage' => env('MONERO_VENDOR_PAYMENT_REFUND_PERCENTAGE', 80), /* This value must never be set to zero */
+    'address_expiration_time' => env('MONERO_ADDRESS_EXPIRATION_TIME', 1440), /* 24 hours */
 
     /*
     |--------------------------------------------------------------------------
@@ -49,14 +49,14 @@ return [
     */
     'advertisement_base_price' => env('MONERO_ADVERTISEMENT_BASE_PRICE', 0.10),
     'advertisement_slot_multipliers' => [
-        1 => 1.00,    // 0.10 XMR/day
-        2 => 0.85,    // 0.085 XMR/day
-        3 => 0.70,    // 0.07 XMR/day
-        4 => 0.55,    // 0.055 XMR/day
-        5 => 0.40,    // 0.04 XMR/day
-        6 => 0.30,    // 0.03 XMR/day
-        7 => 0.20,    // 0.02 XMR/day
-        8 => 0.10,    // 0.01 XMR/day
+        1 => 1.00,    /* 0.10 XMR/day */
+        2 => 0.85,    /* 0.085 XMR/day */
+        3 => 0.70,    /* 0.07 XMR/day */
+        4 => 0.55,    /* 0.055 XMR/day */
+        5 => 0.40,    /* 0.04 XMR/day */
+        6 => 0.30,    /* 0.03 XMR/day */
+        7 => 0.20,    /* 0.02 XMR/day */
+        8 => 0.10,    /* 0.01 XMR/day */
     ],
     'advertisement_max_duration' => env('MONERO_ADVERTISEMENT_MAX_DURATION', 30),
     'advertisement_min_duration' => env('MONERO_ADVERTISEMENT_MIN_DURATION', 1),

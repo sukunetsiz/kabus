@@ -121,6 +121,11 @@ class VendorController extends Controller
             ->select('id', 'name', 'type', 'slug')
             ->get();
 
+        // Check advertisement status for each product
+        foreach ($products as $product) {
+            $product->is_advertised = Advertisement::isProductAdvertised($product->id);
+        }
+
         return view('vendor.my-products', compact('products'));
     }
 
@@ -635,6 +640,13 @@ class VendorController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+        // Check if product is already being advertised
+        if (Advertisement::isProductAdvertised($product->id)) {
+            return redirect()
+                ->route('vendor.my-products')
+                ->with('error', 'This product is already being advertised in another slot.');
+        }
+
         $slots = $this->prepareAdvertisementSlots();
         return view('vendor.advertisement.create', compact('product', 'slots'));
     }
@@ -647,6 +659,14 @@ class VendorController extends Controller
         // Check if the authenticated user owns this product
         if ($product->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
+        }
+
+        // Check if product is already being advertised
+        if (Advertisement::isProductAdvertised($product->id)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['product' => 'This product is already being advertised in another slot.']);
         }
 
         $validated = $request->validate([

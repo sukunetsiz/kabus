@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 
 <div class="my-products-index-container">
@@ -27,9 +28,15 @@
                             <a href="{{ route('vendor.products.edit', $product) }}" class="my-products-index-btn my-products-index-btn-edit">
                                 Edit
                             </a>
-                            <a href="{{ route('vendor.advertisement.create', $product) }}" class="my-products-index-btn my-products-index-btn-ad">
-                                Advertisement
-                            </a>
+                            @if($product->is_advertised)
+                                <span class="my-products-index-btn my-products-index-btn-ad my-products-index-btn-ad-disabled">
+                                    Advertised
+                                </span>
+                            @else
+                                <a href="{{ route('vendor.advertisement.create', $product) }}" class="my-products-index-btn my-products-index-btn-ad">
+                                    Advertisement
+                                </a>
+                            @endif
                             <form action="{{ route('vendor.products.destroy', $product) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')

@@ -43,6 +43,7 @@
         </div>
     @endif
 
+    @if(count($adSlots) === 0)
     <div class="home-welcome-message">
         <h1 class="home-title">Welcome to Kabus v0.8.3</h1>
         
@@ -68,5 +69,6 @@
             <p>Best regards,<br>sukunetsiz</p>
         </div>
     </div>
+    @endif
 </div>
 @endsection

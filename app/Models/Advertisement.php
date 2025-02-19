@@ -178,4 +178,20 @@ class Advertisement extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Check if a product is currently being advertised.
+     *
+     * @param mixed $productId
+     * @return bool
+     */
+    public static function isProductAdvertised($productId): bool
+    {
+        return static::query()
+            ->where('product_id', $productId)
+            ->where('payment_completed', true)
+            ->where('starts_at', '<=', now())
+            ->where('ends_at', '>=', now())
+            ->exists();
+    }
 }

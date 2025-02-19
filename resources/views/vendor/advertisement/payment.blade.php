@@ -79,13 +79,18 @@
                 
                 <div>
                     <p>
-                        Payment window expires in:
-                        <span id="countdown" data-expires="{{ $advertisement->expires_at->timestamp }}">
-                            {{ $advertisement->expires_at->diffForHumans() }}
-                        </span>
+                        Payment window expires: {{ $advertisement->expires_at->diffForHumans() }}
                     </p>
                 </div>
             </div>
+
+            @if(!$advertisement->payment_completed)
+                <div>
+                    <a href="{{ route('vendor.advertisement.payment', $advertisement->payment_identifier) }}" class="btn btn-primary">
+                        Refresh to check for new transactions
+                    </a>
+                </div>
+            @endif
         </div>
 
         @if($advertisement->payment_completed)
@@ -99,7 +104,13 @@
             <div>
                 <p>
                     Please send exactly ɱ{{ number_format($advertisement->required_amount, 12) }} XMR to the address above. 
-                    The payment will be automatically detected once confirmed on the blockchain.
+                    The payment will be detected once confirmed on the blockchain.
+                </p>
+                <p>
+                    DO NOT CLOSE THIS PAGE WITHOUT SEEING PAYMENT COMPLETED TEXT; OTHERWISE, YOU WILL LOSE ALL MONERO YOU PAID. ONLY USE THE REFRESH BUTTON BELOW TO CHECK FOR INCOMING TRANSACTIONS.
+                </p>
+                <p>
+                    Click the refresh button above to check for new transactions.
                 </p>
             </div>
         @endif
@@ -111,36 +122,4 @@
         </div>
     </div>
 </div>
-
-@if(!$advertisement->payment_completed)
-    @push('scripts')
-    <script>
-        function updateCountdown() {
-            const expiresAt = document.getElementById('countdown').dataset.expires * 1000;
-            const now = new Date().getTime();
-            const distance = expiresAt - now;
-
-            if (distance < 0) {
-                document.getElementById('countdown').textContent = 'Expired';
-                return;
-            }
-
-            const hours = Math.floor(distance / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('countdown').textContent = 
-                `${hours}h ${minutes}m ${seconds}s`;
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
-        // Refresh page every 30 seconds to check payment status
-        setTimeout(() => {
-            window.location.reload();
-        }, 30000);
-    </script>
-    @endpush
-@endif
 @endsection
