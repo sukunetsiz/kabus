@@ -58,6 +58,12 @@
                             <span class="become-vendor-payment-amount">{{ config('monero.vendor_payment_required_amount') }} XMR</span>
                         </p>
                         <p>
+                            <strong>Minimum Transaction Amount:</strong>
+                            <span class="become-vendor-payment-amount">{{ config('monero.vendor_payment_minimum_amount') }} XMR</span>
+                            <br>
+                            <small class="text-danger">Payments below this amount will be ignored</small>
+                        </p>
+                        <p>
                             <strong>Total Received:</strong>
                             <span class="become-vendor-payment-received">{{ number_format($vendorPayment->total_received, 12) }} XMR</span>
                         </p>
