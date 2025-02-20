@@ -245,6 +245,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/vendor/products/{product}', [VendorController::class, 'destroy'])->name('vendor.products.destroy');
 
         // Advertisement routes
+        Route::get('/vendor/advertisement/rate-limit', [VendorController::class, 'showRateLimit'])
+            ->name('vendor.advertisement.rate-limit');
         Route::get('/vendor/advertisement/create/{product}', [VendorController::class, 'createAdvertisement'])
             ->name('vendor.advertisement.create');
         Route::post('/vendor/advertisement/{product}', [VendorController::class, 'storeAdvertisement'])

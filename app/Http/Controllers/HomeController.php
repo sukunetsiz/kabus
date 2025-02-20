@@ -23,9 +23,14 @@ class HomeController extends Controller
         // Get active advertisements
         $advertisements = \App\Models\Advertisement::getActiveAdvertisements();
 
-        // Organize advertisements by slot
+        // Organize advertisements by slot, skipping ads with deleted products
         $adSlots = [];
         foreach ($advertisements as $ad) {
+            // Skip advertisements where product is soft-deleted
+            if (!$ad->product || $ad->product->trashed()) {
+                continue;
+            }
+            
             $adSlots[$ad->slot_number] = [
                 'product' => $ad->product,
                 'vendor' => $ad->product->user,

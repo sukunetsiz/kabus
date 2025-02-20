@@ -180,6 +180,38 @@ class Advertisement extends Model
     }
 
     /**
+     * Check if a vendor has reached their daily advertisement request limit.
+     *
+     * @param int|string $userId
+     * @return bool
+     */
+    public static function hasReachedDailyLimit($userId): bool
+    {
+        $last24Hours = Carbon::now()->subHours(24);
+        $requestCount = static::where('user_id', (int) $userId)
+            ->where('created_at', '>=', $last24Hours)
+            ->count();
+        
+        return $requestCount >= 8;
+    }
+
+    /**
+     * Get the cooldown end time for a vendor who has reached their limit.
+     *
+     * @param int|string $userId
+     * @return \Carbon\Carbon|null
+     */
+    public static function getCooldownEndTime($userId): ?Carbon
+    {
+        $oldestRequest = static::where('user_id', (int) $userId)
+            ->where('created_at', '>=', Carbon::now()->subHours(24))
+            ->orderBy('created_at', 'asc')
+            ->first();
+
+        return $oldestRequest ? $oldestRequest->created_at->addHours(24) : null;
+    }
+
+    /**
      * Check if a product is currently being advertised.
      *
      * @param mixed $productId

@@ -8991,3 +8991,64 @@ background-color:#96c;
 transform:translateY(-2px);
 box-shadow:0 4px 15px #bb86fc4d
 }
+
+.advertisement-rate-limit-container {
+max-width:600px;
+margin:50px auto;
+padding:30px;
+background-color:#1e1e1e;
+border:1px solid #3c3c3c;
+border-radius:8px;
+box-shadow:0 4px 20px #0000004d;
+text-align:center
+}
+
+.advertisement-rate-limit-header {
+font-size:28px;
+font-weight:700;
+color:#bb86fc;
+margin-bottom:20px
+}
+
+.advertisement-rate-limit-message p {
+font-size:16px;
+color:#e0e0e0;
+margin-bottom:15px;
+line-height:1.6
+}
+
+.advertisement-rate-limit-cooldown {
+font-size:16px;
+color:#e0e0e0;
+background-color:#2c2c2c;
+padding:15px;
+border-radius:8px;
+margin:20px 0;
+border-left:4px solid #cf6679;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:50px
+}
+
+.advertisement-rate-limit-cooldown strong {
+margin-left:4px
+}
+
+.advertisement-rate-limit-button a {
+display:inline-block;
+padding:12px 25px;
+background-color:#bb86fc;
+color:#121212;
+border-radius:4px;
+text-decoration:none;
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:1px;
+transition:all .3s ease
+}
+
+.advertisement-rate-limit-button a:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}

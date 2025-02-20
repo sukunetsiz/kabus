@@ -631,6 +631,15 @@ class VendorController extends Controller
     }
 
     /**
+     * Show the rate limit page for advertisement requests.
+     */
+    public function showRateLimit()
+    {
+        $cooldownEnds = Advertisement::getCooldownEndTime(Auth::id());
+        return view('vendor.advertisement.rate-limit', compact('cooldownEnds'));
+    }
+
+    /**
      * Show the form for creating a new advertisement.
      */
     public function createAdvertisement(Product $product)
@@ -638,6 +647,11 @@ class VendorController extends Controller
         // Check if the authenticated user owns this product
         if ($product->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
+        }
+
+        // Check if vendor has reached daily limit
+        if (Advertisement::hasReachedDailyLimit(Auth::id())) {
+            return redirect()->route('vendor.advertisement.rate-limit');
         }
 
         // Check if product is already being advertised
@@ -659,6 +673,11 @@ class VendorController extends Controller
         // Check if the authenticated user owns this product
         if ($product->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
+        }
+
+        // Check if vendor has reached daily limit
+        if (Advertisement::hasReachedDailyLimit(Auth::id())) {
+            return redirect()->route('vendor.advertisement.rate-limit');
         }
 
         // Check if product is already being advertised
