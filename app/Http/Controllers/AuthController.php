@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use FurqanSiddiqui\BIP39\BIP39;
+use FurqanSiddiqui\BIP39\Language\English;
 
 class AuthController extends Controller
 {
@@ -563,42 +565,23 @@ class AuthController extends Controller
         return view('auth.banned', ['bannedUser' => $bannedUser]);
     }
 
-    protected function generateMnemonic($numWords = 12)
+    /**
+     * Generate a secure mnemonic phrase using BIP39.
+     *
+     * @return string|false
+     */
+    protected function generateMnemonic()
     {
-        if (!Storage::exists('wordlist.json')) {
+        try {
+            $mnemonic = BIP39::fromRandom(
+                English::getInstance(),
+                wordCount: 12
+            );
+            return implode(' ', $mnemonic->words);
+        } catch (\Exception $e) {
+            Log::error('Failed to generate mnemonic: ' . $e->getMessage());
             return false;
         }
-
-        $words = json_decode(Storage::get('wordlist.json'), true);
-        if (!is_array($words) || count($words) < 2048) {
-            return false;
-        }
-
-        $wordCount = count($words);
-        $systemEntropy = $this->getSystemEntropy();
-        $indices = array_rand($words, $numWords);
-        $mnemonic = [];
-
-        foreach ($indices as $i => $index) {
-            $entropyMix = random_bytes(32) . $systemEntropy . microtime(true) . getmypid();
-            $randomIndex = ($index + hexdec(substr(hash('sha256', $entropyMix . $i), 0, 8))) % $wordCount;
-            $mnemonic[] = $words[$randomIndex];
-        }
-
-        return implode(' ', $mnemonic);
-    }
-
-    protected function getSystemEntropy()
-    {
-        static $staticEntropy = null;
-        if ($staticEntropy === null) {
-            $staticEntropy = php_uname() . disk_free_space("/") . disk_total_space("/");
-        }
-        $entropy = $staticEntropy;
-        $entropy .= memory_get_usage(true);
-        $entropy .= microtime(true);
-        $entropy .= getmypid();
-        return hash('sha256', $entropy, true);
     }
 
     protected function generateReferenceId()

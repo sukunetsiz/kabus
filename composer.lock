@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39f4701fa0b1aa14dfc4fdf2e0b32257",
+    "content-hash": "056522dbb9bd2a0395281cfd6de17032",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -188,6 +188,99 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "charcoal-dev/buffers",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charcoal-dev/buffers.git",
+                "reference": "3ff43a0bf1df3297d0d0dc2df68a2429306d006a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charcoal-dev/buffers/zipball/3ff43a0bf1df3297d0d0dc2df68a2429306d006a",
+                "reference": "3ff43a0bf1df3297d0d0dc2df68a2429306d006a",
+                "shasum": ""
+            },
+            "require": {
+                "charcoal-dev/gmp-adapter": "^0.0.1",
+                "ext-gmp": "*",
+                "php": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Charcoal\\Buffers\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Furqan A. Siddiqui",
+                    "email": "hello@furqansiddiqui.com",
+                    "homepage": "https://www.furqansiddiqui.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Byte Array Buffers for Charcoal PHP Apps",
+            "homepage": "https://github.com/charcoal-dev/buffers",
+            "support": {
+                "issues": "https://github.com/charcoal-dev/buffers/issues",
+                "source": "https://github.com/charcoal-dev/buffers/tree/0.1.0"
+            },
+            "time": "2024-08-04T12:41:41+00:00"
+        },
+        {
+            "name": "charcoal-dev/gmp-adapter",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charcoal-dev/gmp-adapter.git",
+                "reference": "35f72a52eb3c9f9cc1eace85431a1c4467f5dfd8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charcoal-dev/gmp-adapter/zipball/35f72a52eb3c9f9cc1eace85431a1c4467f5dfd8",
+                "reference": "35f72a52eb3c9f9cc1eace85431a1c4467f5dfd8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gmp": "*",
+                "php": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Charcoal\\Adapters\\GMP\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Furqan A. Siddiqui",
+                    "email": "hello@furqansiddiqui.com",
+                    "homepage": "https://www.furqansiddiqui.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Provides BigInteger class to Charcoal Apps",
+            "homepage": "https://github.com/charcoal-dev/gmp-adapter",
+            "support": {
+                "issues": "https://github.com/charcoal-dev/gmp-adapter/issues",
+                "source": "https://github.com/charcoal-dev/gmp-adapter/tree/0.0.1"
+            },
+            "time": "2023-08-11T11:54:13+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -813,6 +906,49 @@
                 }
             ],
             "time": "2023-10-12T05:21:21+00:00"
+        },
+        {
+            "name": "furqansiddiqui/bip39-mnemonic-php",
+            "version": "0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/furqansiddiqui/bip39-mnemonic-php.git",
+                "reference": "959737534d36acc63aa4f2c2dc7fdab3e0246b91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/furqansiddiqui/bip39-mnemonic-php/zipball/959737534d36acc63aa4f2c2dc7fdab3e0246b91",
+                "reference": "959737534d36acc63aa4f2c2dc7fdab3e0246b91",
+                "shasum": ""
+            },
+            "require": {
+                "charcoal-dev/buffers": "^0.1.0",
+                "ext-mbstring": "*",
+                "php-64bit": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FurqanSiddiqui\\BIP39\\": [
+                        "src"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "BIP39 Mnemonics implementation in PHP",
+            "keywords": [
+                "BIP-0039",
+                "bip39",
+                "mnemonics"
+            ],
+            "support": {
+                "issues": "https://github.com/furqansiddiqui/bip39-mnemonic-php/issues",
+                "source": "https://github.com/furqansiddiqui/bip39-mnemonic-php/tree/0.2.1"
+            },
+            "time": "2024-08-04T14:24:32+00:00"
         },
         {
             "name": "graham-campbell/result-type",
