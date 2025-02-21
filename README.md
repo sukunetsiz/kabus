@@ -1,5 +1,5 @@
 # [Installation Guide](docs/INSTALLATION.md)
-
+---
 # Kabus - Monero Marketplace Script
 
 ## Introduction
@@ -11,16 +11,17 @@ Built with PHP 8.3 and Laravel 11.
 ## Core Features
 
 ### Security & Privacy
-- **PGP Integration**: Optional PGP key functionality for vendors and users to verify key ownership
+- **PGP Integration**: Mandatory PGP key confirmation for vendors to verify key ownership
 - **Two-Factor Authentication**: Enhanced security through PGP-based 2FA
 - **Mnemonic Recovery**: Built-in mnemonic phrase generation for key recovery
 - **No JavaScript**: Built entirely with pure PHP and does not utilize JavaScript in any capacity.
 
 ### Monero Integration
 - **Vendor Registration Payment**: Monero Wallet RPC integration that generates a wallet address for vendor fee payments, with support for separate transactions and a 24-hour payment window
+- **Product Advertising Payment**: Integrated payment system for vendors to advertise their products on the homepage through Monero transactions
 - **Return Address System**: Simple validation for user's Monero return addresses
 
-*Note: Product purchasing with Monero is planned for future updates. Currently, Monero integration is only used for vendor registration fees.*
+*Note: Product purchasing with Monero is planned for future updates. Currently, Monero integration is only used for vendor registration fees and product advertisement payments*
 
 ![Vendor Registration Payment](docs/1.png)
 
@@ -34,23 +35,39 @@ Built with PHP 8.3 and Laravel 11.
 
 ### Additional Features
 - **Reference System**: Optional referral code requirement for registration
-- **Educational Resources**: Comprehensive guides on Monero usage, KeePassXC for new users
+- **Educational Resources**: Comprehensive guides on Monero, Tor, KeePassXC and Kleopatra usage for new users
 - **Support System**: Integrated help desk functionality
 
 ### Other Screenshots
 
 ![Products Page](docs/2.png)
+---
 ![AdminPanel's User Page](docs/3.png)
+---
 ![Account Page](docs/4.png)
+---
 ![Support Page](docs/5.png)
+---
 ![Products Page](docs/6.png)
+---
 ![Cart Page](docs/7.png)
+---
 ![Return Addresses Page](docs/8.png)
-
-
+---
 # [View the Roadmap](docs/ROADMAP.md)
+---
 # [Monero Wallet RPC Guide](docs/CONNECTING-MONERO-RPC.md)
+---
+### Supporting Development
+The Kabus marketplace script is maintained as an open source project dedicated to improving privacy-focused commerce. If you'd like to support ongoing development and maintenance:
 
+- **Monero Donations**: Direct support through Monero payments
+  - Donation Address: `8AfRSCLzLR7PuFjdztbxDaWyXkYXtbLfUQK8iP27bcyu6yDQYQHncfGMZjX7cee9tTU9Qu1hsax93KFQcnhApKEr5pgP1N5`
+- **Code Contributions**: Pull requests and improvements are welcome
+- **Bug Reports**: Help improve platform stability by reporting issues
+- **Feature Suggestions**: Share ideas for enhancing marketplace functionality
+
+*All donations are used exclusively for maintaining and improving the open source codebase.*
 ---
 
 ```

@@ -60,4 +60,16 @@ return [
     ],
     'advertisement_max_duration' => env('MONERO_ADVERTISEMENT_MAX_DURATION', 30),
     'advertisement_min_duration' => env('MONERO_ADVERTISEMENT_MIN_DURATION', 1),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Advertisement Payment Thresholds
+    |--------------------------------------------------------------------------
+    |
+    | Minimum payment percentage threshold for advertisements.
+    | Payments below this percentage of the total required amount will be ignored.
+    | Default is 10% (0.10)
+    |
+    */
+    'advertisement_minimum_payment_percentage' => env('MONERO_ADVERTISEMENT_MINIMUM_PAYMENT_PERCENTAGE', 0.10),
 ];

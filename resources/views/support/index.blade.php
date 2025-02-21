@@ -44,11 +44,11 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="support-index-time">{{ $request->created_at->diffForHumans() }}</span>
+                                <span class="support-index-time">{{ $request->created_at->format('Y-m-d / H:i') }}</span>
                             </td>
                             <td>
                                 <span class="support-index-time">
-                                    {{ $request->latestMessage ? $request->latestMessage->created_at->diffForHumans() : 'N/A' }}
+                                    {{ $request->latestMessage ? $request->latestMessage->created_at->format('Y-m-d / H:i') : 'N/A' }}
                                 </span>
                             </td>
                             <td>

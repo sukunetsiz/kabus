@@ -8,7 +8,7 @@
             <div class="support-show-title-group">
                 <h1 class="support-show-title">{{ $supportRequest->title }}</h1>
                 <div class="support-show-meta">
-                    <span>created {{ $supportRequest->created_at->diffForHumans() }}</span>
+                    <span>Created at {{ $supportRequest->created_at->format('Y-m-d / H:i') }}</span>
                     <span class="support-show-status 
                         @if($supportRequest->status === 'open') support-show-status-open
                         @elseif($supportRequest->status === 'in_progress') support-show-status-in_progress
@@ -47,7 +47,7 @@
                             @endif
                         </div>
                         <div class="support-show-message-time">
-                            {{ $message->created_at->diffForHumans() }}
+                            {{ $message->created_at->format('Y-m-d / H:i') }}
                         </div>
                     </div>
                     <div class="support-show-message-content">{{ $message->formatted_message }}</div>

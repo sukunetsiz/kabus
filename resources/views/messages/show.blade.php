@@ -13,7 +13,7 @@
                         <a href="{{ route('dashboard', $message->sender->username) }}" class="messages-show-username">
                             {{ $message->sender->username }}
                         </a>
-                        <span class="messages-show-time">{{ $message->created_at->diffForHumans() }}</span>
+                        <span class="messages-show-time">{{ $message->created_at->format('Y-m-d / H:i') }}</span>
                     </div>
                 </div>
             @endforeach

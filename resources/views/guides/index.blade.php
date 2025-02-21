@@ -13,7 +13,7 @@
             <div class="guides-index-item">
                 <h3 class="guides-index-item-title">🪙 Monero Guide 🪙</h3>
                 <p class="guides-index-item-description">
-                    Comprehensive information about creating and safely using a Monero wallet.
+                    Information about creating and safely using a Monero wallet.
                 </p>
                 <a href="{{ route('guides.monero') }}" class="guides-index-item-link">View Guide</a>
             </div>
@@ -21,7 +21,7 @@
             <div class="guides-index-item">
                 <h3 class="guides-index-item-title">🧅 Tor Guide 🧅</h3>
                 <p class="guides-index-item-description">
-                    Detailed information about Tor Browser usage and operational security.
+                    Information about Tor Browser usage and operational security.
                 </p>
                 <a href="{{ route('guides.tor') }}" class="guides-index-item-link">View Guide</a>
             </div>

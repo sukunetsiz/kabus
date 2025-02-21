@@ -771,11 +771,19 @@ class VendorController extends Controller
                 'subaddr_indices' => [$advertisement->payment_address_index]
             ]);
 
+            // Calculate minimum accepted payment amount
+            $minPaymentPercentage = config('monero.advertisement_minimum_payment_percentage');
+            $minAcceptedAmount = $advertisement->required_amount * $minPaymentPercentage;
+
             $totalReceived = 0;
             foreach (['in', 'pool'] as $type) {
                 if (isset($transfers[$type])) {
                     foreach ($transfers[$type] as $transfer) {
-                        $totalReceived += $transfer['amount'] / 1e12;
+                        // Only count payments that meet the minimum threshold
+                        $amount = $transfer['amount'] / 1e12;
+                        if ($amount >= $minAcceptedAmount) {
+                            $totalReceived += $amount;
+                        }
                     }
                 }
             }

@@ -2,7 +2,6 @@
 
 @section('content')
 @if($popup)
-
 <input type="checkbox" id="pop-up-toggle" checked>
 <div class="pop-up-container">
     <div class="pop-up-card">
@@ -26,15 +25,77 @@
                 @if(isset($adSlots[$i]))
                     <div>
                         <div>
+                            {{-- Product Image --}}
                             <div>
                                 <img src="{{ $adSlots[$i]['product']->product_picture_url }}" 
                                      alt="{{ $adSlots[$i]['product']->name }}">
                             </div>
+                        <span>Advertised Product</span>
+
+                            {{-- Product Details --}}
                             <div>
+                                {{-- Product Name and Type --}}
                                 <h3>{{ $adSlots[$i]['product']->name }}</h3>
-                                <p>by {{ $adSlots[$i]['vendor']->username }}</p>
-                                <p>${{ number_format($adSlots[$i]['product']->price, 2) }}</p>
-                                <a href="{{ route('products.show', $adSlots[$i]['product']) }}">View Product</a>
+                                <div>
+                                    <span>{{ ucfirst($adSlots[$i]['product']->type) }}</span>
+                                    <span>{{ $adSlots[$i]['product']->category->name }}</span>
+                                </div>
+
+                                {{-- Pricing --}}
+                                <div>
+                                    <p>${{ number_format($adSlots[$i]['product']->price, 2) }}</p>
+                                    @if($adSlots[$i]['xmr_price'] !== null)
+                                        <p>≈ ɱ{{ number_format($adSlots[$i]['xmr_price'], 4) }}</p>
+                                    @endif
+                                </div>
+
+                                {{-- Stock Information --}}
+                                <div>
+                                    <p>Stock: {{ number_format($adSlots[$i]['product']->stock_amount) }} 
+                                       {{ $adSlots[$i]['measurement_unit'] }}</p>
+                                </div>
+
+                                {{-- Shipping Information --}}
+                                <div>
+                                    <p>Delivery From: {{ $adSlots[$i]['product']->ships_from }} To: {{ $adSlots[$i]['product']->ships_to }}</p>
+                                </div>
+
+                                {{-- Vendor Information --}}
+                                <div>
+                                    <p>Vendor: {{ $adSlots[$i]['vendor']->username }}</p>
+                                </div>
+
+                                {{-- Bulk Options --}}
+                                @if(!empty($adSlots[$i]['bulk_options']))
+                                    <div>
+                                        <p>Bulk Purchase Options:</p>
+                                        <ul>
+                                            @foreach($adSlots[$i]['bulk_options'] as $option)
+                                                <li>{{ $option['display_text'] }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                {{-- Delivery Options --}}
+                                <div>
+                                    <p>Delivery Options:</p>
+                                    <ul>
+                                        @foreach($adSlots[$i]['delivery_options'] as $option)
+                                            <li>
+                                                {{ $option['description'] }} - 
+                                                {{ $option['price'] }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+
+                                {{-- View Product Link --}}
+                                <div class="ad-action">
+                                    <a href="{{ route('products.show', $adSlots[$i]['product']) }}">
+                                        View Product
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -59,7 +120,7 @@
         </ul>
         
         <div class="home-important">
-            <strong>Important Note:</strong>
+            <strong>Important Note</strong>
             <p class="home-text" style="margin-bottom: 0;">Memberships created during this test version should be deleted before the platform launch.</p>
         </div>
         

@@ -45,7 +45,7 @@
                             @endif
 
                             <span class="notifications-index-item-time">
-                                {{ $notification->created_at->format('d.m.Y H:i') }}
+                                {{ $notification->created_at->format('d-m-Y / H:i') }}
                             </span>
 
                             <form method="POST" action="{{ route('notifications.destroy', ['notification' => $notification->id]) }}" style="display: inline;">

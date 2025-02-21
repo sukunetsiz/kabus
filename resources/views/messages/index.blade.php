@@ -25,7 +25,7 @@
                                 </h5>
                                 <span class="messages-index-time">
                                     @if($conversation->last_message_at)
-                                        {{ $conversation->last_message_at->diffForHumans() }}
+                                        {{ $conversation->last_message_at->format('Y-m-d / H:i') }}
                                     @else
                                         No messages yet
                                     @endif

@@ -9,7 +9,7 @@
                 <h1 class="admin-support-show-username">Support Request from {{ $supportRequest->user->username }}</h1>
                 <div class="admin-support-show-subject">{{ $supportRequest->title }}</div>
                 <div class="admin-support-show-meta">
-                    <span>Created {{ $supportRequest->created_at->diffForHumans() }}</span>
+                    <span>Created at {{ $supportRequest->created_at->format('Y-m-d / H:i') }}</span>
                     <form action="{{ route('admin.support.status', $supportRequest->ticket_id) }}" method="POST" class="admin-support-show-status-form">
                         @csrf
                         @method('PUT')
@@ -50,7 +50,7 @@
                             @endif
                         </div>
                         <div class="admin-support-show-message-time">
-                            {{ $message->created_at->diffForHumans() }}
+                            {{ $message->created_at->format('Y-m-d / H:i') }}
                         </div>
                     </div>
                     <div class="admin-support-show-message-content">{{ $message->formatted_message }}</div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\XmrPriceController;
 
 class HomeController extends Controller
 {
@@ -12,7 +13,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(XmrPriceController $xmrPriceController)
     {
         $popup = null;
         // Only show popup if user hasn't dismissed it in this session
@@ -23,6 +24,9 @@ class HomeController extends Controller
         // Get active advertisements
         $advertisements = \App\Models\Advertisement::getActiveAdvertisements();
 
+        // Get current XMR price for conversion
+        $xmrPrice = $xmrPriceController->getXmrPrice();
+
         // Organize advertisements by slot, skipping ads with deleted products
         $adSlots = [];
         foreach ($advertisements as $ad) {
@@ -31,10 +35,27 @@ class HomeController extends Controller
                 continue;
             }
             
+            // Get the formatted measurement unit
+            $measurementUnits = \App\Models\Product::getMeasurementUnits();
+            $formattedMeasurementUnit = $measurementUnits[$ad->product->measurement_unit] ?? $ad->product->measurement_unit;
+            
+            // Format product price in XMR
+            $productXmrPrice = (is_numeric($xmrPrice) && $xmrPrice > 0) 
+                ? $ad->product->price / $xmrPrice 
+                : null;
+            
+            // Get formatted options with XMR price
+            $formattedBulkOptions = $ad->product->getFormattedBulkOptions($xmrPrice);
+            $formattedDeliveryOptions = $ad->product->getFormattedDeliveryOptions($xmrPrice);
+            
             $adSlots[$ad->slot_number] = [
                 'product' => $ad->product,
                 'vendor' => $ad->product->user,
-                'ends_at' => $ad->ends_at
+                'ends_at' => $ad->ends_at,
+                'measurement_unit' => $formattedMeasurementUnit,
+                'xmr_price' => $productXmrPrice,
+                'bulk_options' => $formattedBulkOptions,
+                'delivery_options' => $formattedDeliveryOptions
             ];
         }
 
