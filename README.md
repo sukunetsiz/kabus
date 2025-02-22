@@ -1,5 +1,5 @@
 # [Installation Guide](docs/INSTALLATION.md)
----
+
 # Kabus - Monero Marketplace Script
 
 ## Introduction
@@ -55,14 +55,14 @@ Built with PHP 8.3 and Laravel 11.
 ![Return Addresses Page](docs/8.png)
 ---
 # [View the Roadmap](docs/ROADMAP.md)
----
+
 # [Monero Wallet RPC Guide](docs/CONNECTING-MONERO-RPC.md)
----
+
 ### Supporting Development
 The Kabus marketplace script is maintained as an open source project dedicated to improving privacy-focused commerce. If you'd like to support ongoing development and maintenance:
 
 - **Monero Donations**: Direct support through Monero payments
-  - Donation Address: `8AfRSCLzLR7PuFjdztbxDaWyXkYXtbLfUQK8iP27bcyu6yDQYQHncfGMZjX7cee9tTU9Qu1hsax93KFQcnhApKEr5pgP1N5`
+- **Donation Address:** `8AfRSCLzLR7PuFjdztbxDaWyXkYXtbLfUQK8iP27bcyu6yDQYQHncfGMZjX7cee9tTU9Qu1hsax93KFQcnhApKEr5pgP1N5`
 - **Code Contributions**: Pull requests and improvements are welcome
 - **Bug Reports**: Help improve platform stability by reporting issues
 - **Feature Suggestions**: Share ideas for enhancing marketplace functionality
