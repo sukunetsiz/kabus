@@ -20,79 +20,73 @@
 
 <div class="home-container">
     @if(count($adSlots) > 0)
-        <div>
+        <div class="home-advertisement-container">
             @for($i = 1; $i <= 8; $i++)
                 @if(isset($adSlots[$i]))
-                    <div>
-                        <div>
-                            {{-- Product Image --}}
-                            <div>
-                                <img src="{{ $adSlots[$i]['product']->product_picture_url }}" 
-                                     alt="{{ $adSlots[$i]['product']->name }}">
-                            </div>
-                        <span>Advertised Product</span>
+                    <div class="home-advertisement-card">
+                        {{-- Product Image --}}
+                        <div class="home-advertisement-image">
+                            <img src="{{ $adSlots[$i]['product']->product_picture_url }}" 
+                                 alt="{{ $adSlots[$i]['product']->name }}">
+                        </div>
 
-                            {{-- Product Details --}}
-                            <div>
-                                {{-- Product Name and Type --}}
-                                <h3>{{ $adSlots[$i]['product']->name }}</h3>
-                                <div>
-                                    <span>{{ ucfirst($adSlots[$i]['product']->type) }}</span>
-                                    <span>{{ $adSlots[$i]['product']->category->name }}</span>
+                        {{-- Product Details --}}
+                        <div class="home-advertisement-content">
+                            <div class="home-advertisement-header">
+                                <div class="home-advertisement-title-section">
+                                    <h3 class="home-advertisement-title">{{ $adSlots[$i]['product']->name }}</h3>
+                                    <div class="home-advertisement-badges">
+                                    <span class="home-advertisement-type home-advertisement-type-{{ $adSlots[$i]['product']->type }}">
+                                        {{ ucfirst($adSlots[$i]['product']->type) }}
+                                    </span>
+                                        <span class="home-advertisement-vendor">
+                                            <a href="{{ route('vendors.show', ['username' => $adSlots[$i]['vendor']->username]) }}" class="home-advertisement-vendor-link">
+                                                {{ $adSlots[$i]['vendor']->username }}
+                                            </a>
+                                        </span>
+                                        <span class="home-advertisement-badge home-advertisement-category">
+                                            {{ $adSlots[$i]['product']->category->name }}
+                                        </span>
+                                    </div>
                                 </div>
-
-                                {{-- Pricing --}}
-                                <div>
-                                    <p>${{ number_format($adSlots[$i]['product']->price, 2) }}</p>
+                                
+                                <div class="home-advertisement-price-section">
+                                    <div class="home-advertisement-price">
+                                        ${{ number_format($adSlots[$i]['product']->price, 2) }}
+                                    </div>
                                     @if($adSlots[$i]['xmr_price'] !== null)
-                                        <p>≈ ɱ{{ number_format($adSlots[$i]['xmr_price'], 4) }}</p>
+                                        <div class="home-advertisement-xmr">
+                                            ≈ ɱ{{ number_format($adSlots[$i]['xmr_price'], 4) }}
+                                        </div>
                                     @endif
                                 </div>
+                            </div>
 
-                                {{-- Stock Information --}}
-                                <div>
-                                    <p>Stock: {{ number_format($adSlots[$i]['product']->stock_amount) }} 
-                                       {{ $adSlots[$i]['measurement_unit'] }}</p>
-                                </div>
-
-                                {{-- Shipping Information --}}
-                                <div>
-                                    <p>Delivery From: {{ $adSlots[$i]['product']->ships_from }} To: {{ $adSlots[$i]['product']->ships_to }}</p>
-                                </div>
-
-                                {{-- Vendor Information --}}
-                                <div>
-                                    <p>Vendor: {{ $adSlots[$i]['vendor']->username }}</p>
-                                </div>
-
-                                {{-- Bulk Options --}}
-                                @if(!empty($adSlots[$i]['bulk_options']))
-                                    <div>
-                                        <p>Bulk Purchase Options:</p>
-                                        <ul>
-                                            @foreach($adSlots[$i]['bulk_options'] as $option)
-                                                <li>{{ $option['display_text'] }}</li>
-                                            @endforeach
-                                        </ul>
+                            <div class="home-advertisement-details">
+                                <div class="home-advertisement-info">
+                                    <div class="home-advertisement-stock">
+                                        {{ number_format($adSlots[$i]['product']->stock_amount) }} 
+                                        {{ $adSlots[$i]['measurement_unit'] }}
                                     </div>
-                                @endif
 
-                                {{-- Delivery Options --}}
-                                <div>
-                                    <p>Delivery Options:</p>
-                                    <ul>
-                                        @foreach($adSlots[$i]['delivery_options'] as $option)
-                                            <li>
-                                                {{ $option['description'] }} - 
-                                                {{ $option['price'] }}
-                                            </li>
-                                        @endforeach
-                                    </ul>
+                                    <div class="home-advertisement-shipping">
+                                        {{ $adSlots[$i]['product']->ships_from }} ➜ {{ $adSlots[$i]['product']->ships_to }}
+                                    </div>
+
+                                    @if(!empty($adSlots[$i]['bulk_options']))
+                                        <div class="home-advertisement-bulk-preview">
+                                            {{ count($adSlots[$i]['bulk_options']) }} Bulk Offers
+                                        </div>
+                                    @endif
+
+                                        <div class="home-advertisement-delivery-preview">
+                                            {{ count($adSlots[$i]['delivery_options']) }} Delivery Options
+                                        </div>
                                 </div>
 
-                                {{-- View Product Link --}}
-                                <div class="ad-action">
-                                    <a href="{{ route('products.show', $adSlots[$i]['product']) }}">
+                                <div class="home-advertisement-action">
+                                    <a href="{{ route('products.show', $adSlots[$i]['product']) }}" 
+                                       class="home-advertisement-button">
                                         View Product
                                     </a>
                                 </div>
