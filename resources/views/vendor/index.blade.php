@@ -47,9 +47,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">💸 My Sales ⛔</h3>
+                <h3 class="admin-panel-item-title">💸 My Sales 💸</h3>
                 <p class="admin-panel-item-description">You can view all your completed sales.</p>
-                <a href="#" class="admin-panel-item-link">View My Sales</a>
+                <a href="{{ route('vendor.sales') }}" class="admin-panel-item-link">View My Sales</a>
             </div>
 
             <div class="admin-panel-item">

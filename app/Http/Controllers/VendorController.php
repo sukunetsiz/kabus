@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Advertisement;
+use App\Models\Orders;
 use Illuminate\Support\Facades\Storage;
 use MoneroIntegrations\MoneroPhp\walletRPC;
 use Endroid\QrCode\Builder\Builder;
@@ -62,6 +63,44 @@ class VendorController extends Controller
     public function index()
     {
         return view('vendor.index');
+    }
+
+    /**
+     * Display a listing of the vendor's sales (orders).
+     * 
+     * @return \Illuminate\View\View
+     */
+    public function sales()
+    {
+        $sales = Orders::getVendorOrders(Auth::id());
+        
+        return view('vendor.sales.index', [
+            'sales' => $sales
+        ]);
+    }
+
+    /**
+     * Display the specified sale (order) details.
+     * 
+     * @param string $uniqueUrl
+     * @return \Illuminate\View\View
+     */
+    public function showSale($uniqueUrl)
+    {
+        $sale = Orders::findByUrl($uniqueUrl);
+        
+        if (!$sale) {
+            abort(404);
+        }
+        
+        // Verify ownership - only the vendor of this order can view it
+        if ($sale->vendor_id !== Auth::id()) {
+            abort(403, 'Unauthorized access.');
+        }
+        
+        return view('vendor.sales.show', [
+            'sale' => $sale
+        ]);
     }
 
     /**

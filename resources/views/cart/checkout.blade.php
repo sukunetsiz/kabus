@@ -102,9 +102,12 @@
                     <a href="{{ route('cart.index') }}" class="cart-checkout-back-btn">
                         Back to Cart
                     </a>
-                    <button type="submit" class="cart-checkout-proceed-btn">
-                        Proceed
-                    </button>
+                    <form action="{{ route('orders.store') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="cart-checkout-proceed-btn">
+                            Proceed
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

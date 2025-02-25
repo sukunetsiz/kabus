@@ -20,6 +20,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrdersController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -168,6 +169,14 @@ Route::middleware('auth')->group(function () {
     // Vendor listing routes
     Route::get('/vendors', [VendorsController::class, 'index'])->name('vendors.index');
     Route::get('/vendors/{username}', [VendorsController::class, 'show'])->name('vendors.show');
+    
+    // Order routes
+    Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{uniqueUrl}', [OrdersController::class, 'show'])->name('orders.show');
+    Route::post('/orders', [OrdersController::class, 'store'])->name('orders.store');
+    Route::post('/orders/{uniqueUrl}/mark-paid', [OrdersController::class, 'markAsPaid'])->name('orders.mark-paid');
+    Route::post('/orders/{uniqueUrl}/mark-delivered', [OrdersController::class, 'markAsDelivered'])->name('orders.mark-delivered');
+    Route::post('/orders/{uniqueUrl}/mark-completed', [OrdersController::class, 'markAsCompleted'])->name('orders.mark-completed');
 
     // -------------------------------------------------------------------------
     // Admin Routes
@@ -243,6 +252,10 @@ Route::middleware('auth')->group(function () {
         // My Products routes
         Route::get('/vendor/my-products', [VendorController::class, 'myProducts'])->name('vendor.my-products');
         Route::delete('/vendor/products/{product}', [VendorController::class, 'destroy'])->name('vendor.products.destroy');
+        
+        // Sales routes
+        Route::get('/vendor/sales', [VendorController::class, 'sales'])->name('vendor.sales');
+        Route::get('/vendor/sales/{uniqueUrl}', [VendorController::class, 'showSale'])->name('vendor.sales.show');
 
         // Advertisement routes
         Route::get('/vendor/advertisement/rate-limit', [VendorController::class, 'showRateLimit'])
