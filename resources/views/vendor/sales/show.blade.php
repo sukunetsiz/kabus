@@ -17,21 +17,21 @@
                     <div>1</div>
                     <div>Waiting for Payment</div>
                     @if($sale->paid_at)
-                        <div>{{ $sale->paid_at->format('M d, Y') }}</div>
+                        <div>{{ $sale->paid_at->format('Y-m-d / H:i') }}</div>
                     @endif
                 </div>
                 <div>
                     <div>2</div>
                     <div>Payment Received</div>
                     @if($sale->delivered_at)
-                        <div>{{ $sale->delivered_at->format('M d, Y') }}</div>
+                        <div>{{ $sale->delivered_at->format('Y-m-d / H:i') }}</div>
                     @endif
                 </div>
                 <div>
                     <div>3</div>
                     <div>Product Delivered</div>
                     @if($sale->completed_at)
-                        <div>{{ $sale->completed_at->format('M d, Y') }}</div>
+                        <div>{{ $sale->completed_at->format('Y-m-d / H:i') }}</div>
                     @endif
                 </div>
                 <div>
@@ -64,7 +64,7 @@
                 </div>
                 <div>
                     <div>Order Date</div>
-                    <div>{{ $sale->created_at->format('M d, Y h:i A') }}</div>
+                    <div>{{ $sale->created_at->format('Y-m-d / H:i') }}</div>
                 </div>
             </div>
         </div>

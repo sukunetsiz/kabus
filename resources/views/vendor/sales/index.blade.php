@@ -27,7 +27,7 @@
                             @foreach($sales as $sale)
                                 <tr>
                                     <td>{{ substr($sale->id, 0, 8) }}</td>
-                                    <td>{{ $sale->created_at->format('M d, Y') }}</td>
+                                    <td>{{ $sale->created_at->format('Y-m-d / H:i') }}</td>
                                     <td>{{ $sale->user->username }}</td>
                                     <td>${{ number_format($sale->total, 2) }}</td>
                                     <td>

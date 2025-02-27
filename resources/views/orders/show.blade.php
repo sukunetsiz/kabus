@@ -17,21 +17,21 @@
                     <div class="orders-show-status-step-number">1</div>
                     <div class="orders-show-status-step-label">Waiting for Payment</div>
                     @if($order->paid_at)
-                        <div class="orders-show-status-step-date">{{ $order->paid_at->format('M d, Y') }}</div>
+                        <div class="orders-show-status-step-date">{{ $order->paid_at->format('Y-m-d / H:i') }}</div>
                     @endif
                 </div>
                 <div class="orders-show-status-step {{ $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }}">
                     <div class="orders-show-status-step-number">2</div>
                     <div class="orders-show-status-step-label">Payment Received</div>
                     @if($order->delivered_at)
-                        <div class="orders-show-status-step-date">{{ $order->delivered_at->format('M d, Y') }}</div>
+                        <div class="orders-show-status-step-date">{{ $order->delivered_at->format('Y-m-d / H:i') }}</div>
                     @endif
                 </div>
                 <div class="orders-show-status-step {{ $order->is_delivered || $order->is_completed ? 'active' : '' }}">
                     <div class="orders-show-status-step-number">3</div>
                     <div class="orders-show-status-step-label">Product Delivered</div>
                     @if($order->completed_at)
-                        <div class="orders-show-status-step-date">{{ $order->completed_at->format('M d, Y') }}</div>
+                        <div class="orders-show-status-step-date">{{ $order->completed_at->format('Y-m-d / H:i') }}</div>
                     @endif
                 </div>
                 <div class="orders-show-status-step {{ $order->is_completed ? 'active' : '' }}">
@@ -69,7 +69,7 @@
             <div class="orders-show-info-grid">
                 <div class="orders-show-info-item">
                     <div class="orders-show-info-label">Order Date</div>
-                    <div class="orders-show-info-value">{{ $order->created_at->format('M d, Y h:i A') }}</div>
+                    <div class="orders-show-info-value">{{ $order->created_at->format('Y-m-d / H:i') }}</div>
                 </div>
                 <div class="orders-show-info-item">
                     <div class="orders-show-info-label">Vendor</div>

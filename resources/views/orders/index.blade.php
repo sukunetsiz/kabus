@@ -30,7 +30,7 @@
                             @foreach($orders as $order)
                                 <tr>
                                     <td>{{ substr($order->id, 0, 8) }}</td>
-                                    <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                    <td>{{ $order->created_at->format('Y-m-d / H:i') }}</td>
                                     <td>{{ $order->vendor->username }}</td>
                                     <td>${{ number_format($order->total, 2) }}</td>
                                     <td>
