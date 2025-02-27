@@ -49,6 +49,16 @@
                     </form>
                 </div>
             @endif
+            
+            {{-- Cancel Button (only show for non-completed orders) --}}
+            @if($sale->status !== 'completed')
+                <div>
+                    <form action="{{ route('orders.mark-cancelled', $sale->unique_url) }}" method="POST">
+                        @csrf
+                        <button type="submit">Cancel Sale</button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 

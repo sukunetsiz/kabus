@@ -155,4 +155,37 @@ class OrdersController extends Controller
         return redirect()->route('orders.show', $order->unique_url)
             ->with('error', 'Unable to mark as completed at this time.');
     }
+
+    /**
+     * Mark the order as cancelled.
+     */
+    public function markAsCancelled($uniqueUrl)
+    {
+        $order = Orders::findByUrl($uniqueUrl);
+        
+        if (!$order) {
+            abort(404);
+        }
+
+        // Verify ownership - both buyer and vendor can cancel
+        if ($order->user_id !== Auth::id() && $order->vendor_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if order is in a status that can be cancelled
+        if ($order->status === Orders::STATUS_COMPLETED) {
+            return redirect()->back()->with('error', 'Completed orders cannot be cancelled.');
+        }
+
+        if ($order->markAsCancelled()) {
+            // Determine the redirect route based on whether the user is buyer or vendor
+            $isBuyer = $order->user_id === Auth::id();
+            $route = $isBuyer ? 'orders.show' : 'vendor.sales.show';
+            
+            return redirect()->route($route, $order->unique_url)
+                ->with('success', 'Order has been cancelled successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Unable to cancel the order at this time.');
+    }
 }

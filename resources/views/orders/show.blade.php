@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            {{-- Status-based Actions --}}
+            {{-- Status-based Actions (without cancel button) --}}
             @if($isBuyer)
                 @if($order->status === 'waiting_payment')
                     <div class="orders-show-actions">
@@ -90,6 +90,16 @@
             </div>
         </div>
     </div>
+
+    {{-- Cancel Button Section (new location) --}}
+    @if($isBuyer && ($order->status === 'waiting_payment' || $order->status === 'payment_received' || $order->status === 'product_delivered'))
+    <div class="orders-show-cancel-container">
+        <form action="{{ route('orders.mark-cancelled', $order->unique_url) }}" method="POST">
+            @csrf
+            <button type="submit" class="orders-show-action-btn orders-show-cancel-btn orders-show-cancel-btn-standalone">Cancel Order</button>
+        </form>
+    </div>
+    @endif
 
     {{-- Order Items --}}
     <div class="orders-show-items-container">
@@ -185,8 +195,24 @@ color:#121212;
 background-color:#bb86fc
 }
 
-.orders-show-status-container,.orders-show-details-container,.orders-show-items-container,.orders-show-message-container {
+.orders-show-status-container,.orders-show-items-container,.orders-show-message-container {
 margin-bottom:30px
+}
+
+.orders-show-details-container {
+margin-bottom:30px
+}
+
+.orders-show-cancel-container {
+display:flex;
+justify-content:center;
+margin-bottom:30px;
+min-height:20px
+}
+
+.orders-show-cancel-btn-standalone {
+width:250px;
+margin-top:0
 }
 
 .orders-show-status-card,.orders-show-details-card,.orders-show-items-card {
@@ -229,6 +255,11 @@ border-left:4px solid #bb86fc;
 border-right:4px solid #bb86fc
 }
 
+.orders-show-status-cancelled {
+border-left:4px solid #9e9e9e;
+border-right:4px solid #9e9e9e
+}
+
 .orders-show-status-title,.orders-show-details-title,.orders-show-items-title,.orders-show-message-title {
 font-size:24px;
 font-weight:700;
@@ -266,8 +297,8 @@ background-color:#3c3c3c;
 z-index:0
 }
 
-.orders-show-status-step.active:not(:last-child) + .orders-show-status-step.active::after,.orders-show-status-step.active:not(:last-child)::after {
-background-color:#bb86fc
+.orders-show-status-step.active:not(:last-child):has(+ .orders-show-status-step.active)::after {
+background-color:#bb86fc!important
 }
 
 .orders-show-status-step.active {
@@ -294,6 +325,14 @@ box-shadow:0 0 0 5px #1e1e1e
 }
 
 .orders-show-status-step.active .orders-show-status-step-number {
+background-color:#bb86fc;
+color:#121212;
+border-color:#bb86fc;
+transform:scale(1.1);
+box-shadow:0 0 15px #bb86fc66
+}
+
+.orders-show-status-cancelled .orders-show-status-step:first-child .orders-show-status-step-number {
 background-color:#bb86fc;
 color:#121212;
 border-color:#bb86fc;
@@ -351,6 +390,29 @@ color:#121212
 
 .orders-show-confirm-delivery-btn:hover {
 background-color:#96c
+}
+
+.orders-show-cancel-btn {
+background-color:#ff3838;
+color:#121212;
+margin-top:-10px;
+margin-bottom:-10px
+}
+
+.orders-show-cancel-btn:hover {
+background-color:#f02424
+}
+
+.orders-show-cancel-form {
+display:inline-block;
+margin-top:10px
+}
+
+.orders-show-actions {
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px
 }
 
 .orders-show-info-grid {
@@ -456,7 +518,6 @@ background-color:#ffd166;
 padding:6px 12px;
 border-radius:20px;
 display:inline-block;
-font-size:14px;
 font-weight:700
 }
 
@@ -467,7 +528,6 @@ background-color:#ef476f;
 padding:6px 12px;
 border-radius:20px;
 display:inline-block;
-font-size:14px;
 font-weight:700
 }
 

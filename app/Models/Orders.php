@@ -18,6 +18,7 @@ class Orders extends Model
     public const STATUS_PAYMENT_RECEIVED = 'payment_received';
     public const STATUS_PRODUCT_DELIVERED = 'product_delivered';
     public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELLED = 'cancelled';
 
     /**
      * The attributes that are mass assignable.
@@ -169,6 +170,22 @@ class Orders extends Model
     }
 
     /**
+     * Mark the order as cancelled.
+     */
+    public function markAsCancelled()
+    {
+        // Only allow cancellation for orders that aren't completed
+        if ($this->status === self::STATUS_COMPLETED) {
+            return false;
+        }
+
+        $this->status = self::STATUS_CANCELLED;
+        $this->save();
+
+        return true;
+    }
+
+    /**
      * Get the formatted status.
      */
     public function getFormattedStatus()
@@ -178,6 +195,7 @@ class Orders extends Model
             self::STATUS_PAYMENT_RECEIVED => 'Payment Received',
             self::STATUS_PRODUCT_DELIVERED => 'Product Delivered',
             self::STATUS_COMPLETED => 'Order Completed',
+            self::STATUS_CANCELLED => 'Order Cancelled',
             default => 'Unknown Status'
         };
     }

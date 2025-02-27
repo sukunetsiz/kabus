@@ -9668,7 +9668,7 @@ text-transform:uppercase
 
 .orders-index-status-waiting_payment {
 background-color:#ff3838;
-color:#000
+color:#fff
 }
 
 .orders-index-status-payment_received {
@@ -9683,6 +9683,11 @@ color:#000
 
 .orders-index-status-completed {
 background-color:#bb86fc;
+color:#000
+}
+
+.orders-index-status-cancelled {
+background-color:#9e9e9e;
 color:#000
 }
 
@@ -9791,7 +9796,7 @@ text-transform:uppercase
 
 .sales-index-status-waiting_payment {
 background-color:#ff3838;
-color:#000
+color:#fff
 }
 
 .sales-index-status-payment_received {
@@ -9806,6 +9811,11 @@ color:#000
 
 .sales-index-status-completed {
 background-color:#bb86fc;
+color:#000
+}
+
+.sales-index-status-cancelled {
+background-color:#9e9e9e;
 color:#000
 }
 
