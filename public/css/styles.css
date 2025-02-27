@@ -9565,3 +9565,269 @@ color:#212121;
 background-color:#FF9800;
 text-align:center
 }
+
+.orders-index-container {
+max-width:1200px;
+margin:20px auto;
+padding:0 20px
+}
+
+.orders-index-card {
+background-color:#1e1e1e;
+border-radius:12px;
+padding:30px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c;
+margin-top:-20px
+}
+
+.orders-index-title {
+color:#bb86fc;
+font-size:28px;
+margin-bottom:25px;
+text-align:center;
+font-weight:700;
+border-bottom:2px solid #bb86fc;
+padding-bottom:15px
+}
+
+.orders-index-empty {
+text-align:center;
+padding:40px;
+color:#a0a0a0;
+font-size:18px;
+background-color:#2c2c2c;
+border-radius:8px
+}
+
+.orders-index-browse-btn {
+display:inline-block;
+margin-top:15px;
+background-color:#bb86fc;
+color:#121212;
+padding:12px 24px;
+border-radius:8px;
+text-decoration:none;
+font-weight:700;
+transition:all .3s ease;
+text-transform:uppercase;
+letter-spacing:1px
+}
+
+.orders-index-browse-btn:hover {
+background-color:#96c;
+transform:translateY(-2px);
+box-shadow:0 4px 15px #bb86fc4d
+}
+
+.orders-index-table-container {
+overflow-x:auto;
+margin-bottom:-30px
+}
+
+.orders-index-table {
+width:100%;
+border-collapse:separate;
+border-spacing:0 10px
+}
+
+.orders-index-table th {
+background-color:#2c2c2c;
+color:#bb86fc;
+font-weight:700;
+padding:15px;
+text-align:center;
+text-transform:uppercase;
+font-size:.9em
+}
+
+.orders-index-table tr {
+background-color:#2c2c2c;
+transition:all .3s ease
+}
+
+.orders-index-table tr:hover {
+transform:translateY(-2px);
+box-shadow:0 4px 10px #bb86fc33
+}
+
+.orders-index-table td {
+padding:15px;
+color:#e0e0e0;
+text-align:center
+}
+
+.orders-index-status {
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-weight:700;
+font-size:.85em;
+text-transform:uppercase
+}
+
+.orders-index-status-waiting_payment {
+background-color:#ff3838;
+color:#000
+}
+
+.orders-index-status-payment_received {
+background-color:#ffc107;
+color:#000
+}
+
+.orders-index-status-product_delivered {
+background-color:#4caf50;
+color:#000
+}
+
+.orders-index-status-completed {
+background-color:#bb86fc;
+color:#000
+}
+
+.orders-index-action-btn {
+display:inline-block;
+padding:8px 16px;
+background-color:#bb86fc;
+color:#121212;
+border-radius:4px;
+font-weight:700;
+text-decoration:none;
+transition:all .3s ease;
+text-align:center
+}
+
+.orders-index-action-btn:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
+.orders-index-pagination-container {
+margin-top:20px;
+display:flex;
+justify-content:center
+}
+
+.sales-index-container {
+max-width:1200px;
+margin:20px auto;
+padding:0 20px
+}
+
+.sales-index-card {
+background-color:#1e1e1e;
+border-radius:12px;
+padding:30px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c;
+margin-top:-20px
+}
+
+.sales-index-title {
+color:#bb86fc;
+font-size:28px;
+margin-bottom:25px;
+text-align:center;
+font-weight:700;
+border-bottom:2px solid #bb86fc;
+padding-bottom:15px
+}
+
+.sales-index-empty {
+text-align:center;
+padding:40px;
+color:#a0a0a0;
+font-size:18px;
+background-color:#2c2c2c;
+border-radius:8px
+}
+
+.sales-index-table-container {
+overflow-x:auto;
+margin-bottom:-30px
+}
+
+.sales-index-table {
+width:100%;
+border-collapse:separate;
+border-spacing:0 10px
+}
+
+.sales-index-table th {
+background-color:#2c2c2c;
+color:#bb86fc;
+font-weight:700;
+padding:15px;
+text-align:center;
+text-transform:uppercase;
+font-size:.9em
+}
+
+.sales-index-table tr {
+background-color:#2c2c2c;
+transition:all .3s ease
+}
+
+.sales-index-table tr:hover {
+transform:translateY(-2px);
+box-shadow:0 4px 10px #bb86fc33
+}
+
+.sales-index-table td {
+padding:15px;
+color:#e0e0e0;
+text-align:center
+}
+
+.sales-index-status {
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-weight:700;
+font-size:.85em;
+text-transform:uppercase
+}
+
+.sales-index-status-waiting_payment {
+background-color:#ff3838;
+color:#000
+}
+
+.sales-index-status-payment_received {
+background-color:#ffc107;
+color:#000
+}
+
+.sales-index-status-product_delivered {
+background-color:#4caf50;
+color:#000
+}
+
+.sales-index-status-completed {
+background-color:#bb86fc;
+color:#000
+}
+
+.sales-index-action-btn {
+display:inline-block;
+padding:8px 16px;
+background-color:#bb86fc;
+color:#121212;
+border-radius:4px;
+font-weight:700;
+text-decoration:none;
+transition:all .3s ease;
+text-align:center
+}
+
+.sales-index-action-btn:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
+.sales-index-pagination-container {
+margin-top:20px;
+display:flex;
+justify-content:center
+}
