@@ -12,26 +12,41 @@
         <div class="orders-show-status-card orders-show-status-{{ $order->status }}">
             <h2 class="orders-show-status-title">Status: {{ $order->getFormattedStatus() }}</h2>
             
-            <div class="orders-show-status-steps">
-                <div class="orders-show-status-step {{ $order->status === 'waiting_payment' || $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }}">
+            <div class="orders-show-status-steps {{ $order->status === 'cancelled' ? 'with-cancelled' : '' }}">
+                <div class="orders-show-status-step {{ $order->status === 'waiting_payment' || $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && !$order->paid_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">1</div>
                     <div class="orders-show-status-step-label">Waiting for Payment</div>
                     @if($order->paid_at)
                         <div class="orders-show-status-step-date">{{ $order->paid_at->format('Y-m-d / H:i') }}</div>
                     @endif
+                    @if($order->status === 'cancelled' && !$order->paid_at)
+                        <div class="orders-show-status-cancelled-marker">
+                            <div class="orders-show-status-cancelled-x">X</div>
+                        </div>
+                    @endif
                 </div>
-                <div class="orders-show-status-step {{ $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }}">
+                <div class="orders-show-status-step {{ $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->paid_at && !$order->delivered_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">2</div>
                     <div class="orders-show-status-step-label">Payment Received</div>
                     @if($order->delivered_at)
                         <div class="orders-show-status-step-date">{{ $order->delivered_at->format('Y-m-d / H:i') }}</div>
                     @endif
+                    @if($order->status === 'cancelled' && $order->paid_at && !$order->delivered_at)
+                        <div class="orders-show-status-cancelled-marker">
+                            <div class="orders-show-status-cancelled-x">X</div>
+                        </div>
+                    @endif
                 </div>
-                <div class="orders-show-status-step {{ $order->is_delivered || $order->is_completed ? 'active' : '' }}">
+                <div class="orders-show-status-step {{ $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->delivered_at && !$order->completed_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">3</div>
                     <div class="orders-show-status-step-label">Product Delivered</div>
                     @if($order->completed_at)
                         <div class="orders-show-status-step-date">{{ $order->completed_at->format('Y-m-d / H:i') }}</div>
+                    @endif
+                    @if($order->status === 'cancelled' && $order->delivered_at && !$order->completed_at)
+                        <div class="orders-show-status-cancelled-marker">
+                            <div class="orders-show-status-cancelled-x">X</div>
+                        </div>
                     @endif
                 </div>
                 <div class="orders-show-status-step {{ $order->is_completed ? 'active' : '' }}">
@@ -276,6 +291,10 @@ margin-bottom:30px;
 position:relative
 }
 
+.orders-show-status-steps.with-cancelled {
+margin-top: 120px;
+}
+
 .orders-show-status-step {
 display:flex;
 flex-direction:column;
@@ -284,6 +303,40 @@ text-align:center;
 flex:1;
 position:relative;
 z-index:2
+}
+
+.orders-show-status-cancelled-marker {
+position: absolute;
+top: -95px;
+width: 50px;
+height: 50px;
+}
+
+.orders-show-status-cancelled-x {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+background-color: #bb86fc;
+color: #121212;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 22px;
+border: 2px solid #bb86fc;
+box-shadow: 0 0 15px #bb86fc66;
+transform: scale(1.1);
+}
+
+.orders-show-status-cancelled-marker::after {
+content: '';
+position: absolute;
+top: 49px;
+left: 50%;
+width: 3px;
+height: 45px;
+background-color: #bb86fc;
+z-index: 1;
 }
 
 .orders-show-status-step:not(:last-child)::after {
@@ -301,15 +354,35 @@ z-index:0
 background-color:#bb86fc!important
 }
 
+/* For cancelled orders, only show colored line between active steps */
+.orders-show-status-step.active:not(:last-child).cancelled-step::after,
+.orders-show-status-step.active:not(:last-child):has(+ .cancelled-step)::after {
+background-color:#bb86fc!important
+}
+
+/* Make sure that steps after cancelled are not connected with active color */
+.orders-show-status-step.cancelled-step:not(:last-child)::after,
+.orders-show-status-step.cancelled-step:not(:last-child):has(+ .orders-show-status-step)::after {
+background-color:#3c3c3c!important
+}
+
 .orders-show-status-step.active {
 opacity:1
+}
+
+.orders-show-status-step.cancelled-step .orders-show-status-step-number {
+background-color:#bb86fc;
+color:#121212;
+border-color:#bb86fc;
+transform:scale(1.1);
+box-shadow:0 0 15px #bb86fc66
 }
 
 .orders-show-status-step-number {
 width:50px;
 height:50px;
 border-radius:50%;
-background-color:#2c2c2c;
+background-color:#292929;
 color:#e0e0e0;
 display:flex;
 align-items:center;
@@ -424,7 +497,7 @@ gap:20px
 .orders-show-info-item {
 padding:15px;
 border-radius:8px;
-background-color:#2c2c2c;
+background-color:#292929;
 transition:all .3s ease
 }
 
@@ -478,7 +551,7 @@ justify-content:space-between;
 align-items:flex-start;
 padding:20px;
 border-radius:8px;
-background-color:#2c2c2c;
+background-color:#292929;
 transition:all .3s ease
 }
 
@@ -566,7 +639,7 @@ border-radius:8px;
 font-family:monospace;
 font-size:14px;
 resize:vertical;
-background-color:#2c2c2c;
+background-color:#292929;
 color:#e0e0e0;
 transition:all .3s ease
 }

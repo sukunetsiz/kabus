@@ -166,6 +166,26 @@ class Orders extends Model
         $this->completed_at = now();
         $this->save();
 
+        // Reduce stock for all products in this order
+        foreach ($this->items as $item) {
+            $product = $item->product;
+            if (!$product) {
+                continue;
+            }
+            
+            // Calculate actual quantity based on bulk options
+            $actualQuantity = $item->quantity;
+            if ($item->bulk_option && isset($item->bulk_option['amount'])) {
+                $actualQuantity = $item->quantity * $item->bulk_option['amount'];
+            }
+            
+            // Only reduce stock if there's enough available
+            if ($product->stock_amount >= $actualQuantity) {
+                $product->stock_amount -= $actualQuantity;
+                $product->save();
+            }
+        }
+
         return true;
     }
 

@@ -16,7 +16,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [X] Finalize advertisement payments and vendor application system with Monero payment integration.
 - [ ] Implement 'My Sales' for vendors and 'My Orders' for buyers.
 - [X] Write a comprehensive guide for using Kleopatra.
-- [X] Finish functionality for creating and editing digital, cargo and dead drop products.
+- [X] Finish functionality for creating and editing digital, cargo, and dead drop products.
 
 #### April 4th Goals (v1.0)
 - [ ] Implement a feature to allow users and vendors to create and manage disputes.
@@ -24,28 +24,23 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [ ] Integrate optional Baklava CAPTCHA.
 - [ ] Add walletless escrow mechanism for buying products, making the script fully functional.
 
-After the final release of Kabus Marketplace Script, I will stop adding new features and will focus solely on long-term support—updating PHP and Laravel versions, and performing bug fixes and security enhancements.
+Following the v1.0 release, development will continue with additional milestones to further enhance the functionality, security, and user experience of Kabus Marketplace Script:
 
-Following the first release, I will begin developing a paid Monero marketplace script called **"Karabasan"**. This new script will offer improved marketplace functions, enhanced security measures, and a better user experience.
-
----
-
-## Karabasan Private Marketplace Script Milestones
-
-### May 5th Goals (v1.1)
+#### May 5th Goals (v1.1)
 - [ ] Implement a **moderator role** to grant restricted admin privileges.
 - [ ] Build a **self-developed unique submission CAPTCHA** to replace the mobicms/captcha library.
 - [ ] Execute **CSS improvements** to enhance the overall website appearance.
 - [ ] Replace all default emojis with a **custom sprite sheet** for a consistent visual identity.
 
-### June 6th Goals (v1.2)
-- [ ] Integrate a **custodial Monero wallet** that allows full access to funds so you can manually accept withdrawals, minimizing the risk of the market’s wallet being drained.
-- [ ] Enable **activation/deactivation for products** for vendors.
-- [ ] Enhance account security by introducing a **secret phrase during sign-up** to prevent phishing and a spending PIN for withdrawals.
-- [ ] Set up a **private Jabber server** to receive notifications in real time.
+#### June 6th Goals (v1.2)
 
-### July 7th Goals (v1.3)
+- [ ] Enable **activation/deactivation for products** for vendors.
+- [ ] Enhance account security by introducing a **secret phrase during sign-up** to prevent phishing.
+- [ ] Set up a **private Jabber server** to receive notifications in real time.
 - [ ] Introduce **private vendor shops** that are accessible only to referenced users for a more exclusive marketplace experience.
+
+#### July 7th Goals (v1.3)
 - [ ] Expand **PGP encryption integration** throughout the website for improved data protection.
 - [ ] Develop a **customized EndGame CAPTCHA** to help prevent DDoS attacks.
-- [ ] Implement **enhanced log tracking** for improved incident monitoring.
+- [ ] Implement **enhanced and optimized log tracking** for improved incident monitoring.
+- [ ] Conduct a comprehensive **code review** to improve the repository's organization, ensuring a more modular structure and improved readability.

@@ -64,7 +64,7 @@ color:#e0e0e0
 }
 
 .maintenance-info {
-background-color:#2c2c2c;
+background-color:#292929;
 border-left:4px solid #bb86fc;
 padding:20px;
 text-align:left;
@@ -80,7 +80,7 @@ margin-bottom:10px
 
 .maintenance-status {
 display:inline-block;
-background-color:#2c2c2c;
+background-color:#292929;
 border:2px solid #bb86fc;
 color:#bb86fc;
 padding:12px 24px;
