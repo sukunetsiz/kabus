@@ -100,7 +100,7 @@
 
     @if(count($adSlots) === 0)
     <div class="home-welcome-message">
-        <h1 class="home-title">Welcome to Kabus v0.8.3</h1>
+        <h1 class="home-title">Welcome to Kabus v0.8.4</h1>
         
         <p class="home-text">Dear users,</p>
         

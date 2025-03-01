@@ -391,4 +391,45 @@ class Product extends Model
     {
         return static::create(array_merge($attributes, ['type' => self::TYPE_DEADDROP]));
     }
+    
+    /**
+     * Get products of a specific type.
+     * 
+     * @param string $type The product type to filter by
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function getByType(string $type)
+    {
+        return static::where('type', $type);
+    }
+    
+    /**
+     * Get all digital products.
+     * 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function getDigitalProducts()
+    {
+        return static::getByType(self::TYPE_DIGITAL);
+    }
+    
+    /**
+     * Get all cargo products.
+     * 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function getCargoProducts()
+    {
+        return static::getByType(self::TYPE_CARGO);
+    }
+    
+    /**
+     * Get all deaddrop products.
+     * 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function getDeadDropProducts()
+    {
+        return static::getByType(self::TYPE_DEADDROP);
+    }
 }

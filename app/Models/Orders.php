@@ -321,7 +321,8 @@ class OrderItem extends Model
         'quantity',
         'measurement_unit',
         'delivery_option',
-        'bulk_option'
+        'bulk_option',
+        'delivery_text'
     ];
 
     /**

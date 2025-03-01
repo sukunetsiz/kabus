@@ -104,6 +104,55 @@ class VendorController extends Controller
     }
 
     /**
+     * Update the delivery text for products in an order.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $uniqueUrl
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateDeliveryText(Request $request, $uniqueUrl)
+    {
+        $sale = Orders::findByUrl($uniqueUrl);
+        
+        if (!$sale) {
+            abort(404);
+        }
+        
+        // Verify ownership - only the vendor of this order can update delivery text
+        if ($sale->vendor_id !== Auth::id()) {
+            abort(403, 'Unauthorized access.');
+        }
+        
+        // Verify the order is in the correct status
+        if ($sale->status !== Orders::STATUS_PAYMENT_RECEIVED) {
+            return redirect()->route('vendor.sales.show', $sale->unique_url)
+                ->with('error', 'Delivery information can only be updated for orders with "Payment Received" status.');
+        }
+        
+        // Validate the request data
+        $request->validate([
+            'delivery_text.*' => 'required|string|max:1000',
+        ], [
+            'delivery_text.*.required' => 'Delivery information is required for each product.',
+            'delivery_text.*.max' => 'Delivery information cannot exceed 1000 characters.',
+        ]);
+        
+        // Update the delivery text for each order item
+        foreach ($sale->items as $item) {
+            $productId = $item->product_id;
+            if (isset($request->delivery_text[$productId])) {
+                // Update the delivery_text field directly in the order_items table
+                $item->update([
+                    'delivery_text' => $request->delivery_text[$productId]
+                ]);
+            }
+        }
+        
+        return redirect()->route('vendor.sales.show', $sale->unique_url)
+            ->with('success', 'Delivery information has been updated successfully.');
+    }
+
+    /**
      * Show the form for editing vendor appearance.
      *
      * @return \Illuminate\View\View

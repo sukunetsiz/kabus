@@ -257,6 +257,7 @@ Route::middleware('auth')->group(function () {
         // Sales routes
         Route::get('/vendor/sales', [VendorController::class, 'sales'])->name('vendor.sales');
         Route::get('/vendor/sales/{uniqueUrl}', [VendorController::class, 'showSale'])->name('vendor.sales.show');
+        Route::post('/vendor/sales/{uniqueUrl}/update-delivery-text', [VendorController::class, 'updateDeliveryText'])->name('vendor.sales.update-delivery-text');
 
         // Advertisement routes
         Route::get('/vendor/advertisement/rate-limit', [VendorController::class, 'showRateLimit'])

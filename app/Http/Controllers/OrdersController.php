@@ -41,6 +41,8 @@ class OrdersController extends Controller
         // Determine if the current user is the buyer or vendor
         $isBuyer = $order->user_id === Auth::id();
         
+        // No need to retrieve delivery text separately since it's already in the order_items
+        
         return view('orders.show', [
             'order' => $order,
             'isBuyer' => $isBuyer

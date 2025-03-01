@@ -43,6 +43,7 @@ return new class extends Migration
             $table->string('measurement_unit')->nullable();
             $table->json('delivery_option')->nullable();
             $table->json('bulk_option')->nullable();
+            $table->text('delivery_text')->nullable();
             $table->timestamps();
         });
     }

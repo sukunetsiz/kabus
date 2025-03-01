@@ -14,7 +14,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 
 #### March 3rd Goals (v0.9)
 - [X] Finalize advertisement payments and vendor application system with Monero payment integration.
-- [ ] Implement 'My Sales' for vendors and 'My Orders' for buyers.
+- [X] Implement 'My Sales' for vendors and 'My Orders' for buyers.
 - [X] Write a comprehensive guide for using Kleopatra.
 - [X] Finish functionality for creating and editing digital, cargo, and dead drop products.
 
