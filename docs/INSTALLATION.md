@@ -43,13 +43,6 @@ Install Git for version control:
 sudo apt install -y git
 ```
 
-Install Node.js and npm for frontend asset compilation:
-```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
-sudo apt install -y npm
-```
-
 ### Database Server
 Install and configure MySQL server:
 ```bash
@@ -72,8 +65,6 @@ Verify all installations by checking their versions:
 php -v
 composer -V
 git --version
-node -v
-npm -v
 mysql --version
 nginx -v
 ```
@@ -83,8 +74,6 @@ Expected output (versions may vary):
 Composer version 2.8.4 2024-12-11 11:57:47
 PHP version 8.3.15 (/usr/bin/php8.3)
 git version 2.34.1
-v12.22.9
-8.5.1
 mysql  Ver 8.0.40-0ubuntu0.22.04.1 for Linux on x86_64 ((Ubuntu))
 nginx version: nginx/1.18.0 (Ubuntu)
 ```

@@ -522,9 +522,9 @@ color:#bb86fc;
 text-align:center
 }
 
-.pagination .active {
+.pagination li.active span {
 background-color:#bb86fc;
-color:#121212
+color:#121212!important
 }
 
 .pagination .disabled {

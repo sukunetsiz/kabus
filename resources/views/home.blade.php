@@ -100,11 +100,11 @@
 
     @if(count($adSlots) === 0)
     <div class="home-welcome-message">
-        <h1 class="home-title">Welcome to Kabus v0.8.4</h1>
+        <h1 class="home-title">Welcome to Kabus v0.9</h1>
         
         <p class="home-text">Dear users,</p>
         
-        <p class="home-text">We are currently in the alpha testing phase. Our marketplace script is not yet fully functional and is not suitable for trading at this time.</p>
+        <p class="home-text">We are currently in the beta testing phase. Our marketplace script is not yet fully functional and is not suitable for trading at this time.</p>
         
         <p class="home-text">Project timeline:</p>
         

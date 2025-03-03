@@ -46,13 +46,21 @@ Built with PHP 8.3 and Laravel 11.
 ---
 ![Account Page](docs/4.png)
 ---
-![Support Page](docs/5.png)
+![Support Page 1](docs/5.png)
 ---
-![Products Page](docs/6.png)
+![Support Page 2](docs/6.png)
 ---
-![Cart Page](docs/7.png)
+![Products Page](docs/7.png)
 ---
-![Return Addresses Page](docs/8.png)
+![Cart Page](docs/8.png)
+---
+![Return Addresses Page](docs/9.png)
+---
+![Sales Page](docs/10.png)
+---
+![Advertisements Page](docs/11.png)
+---
+![Vendors Page](docs/12.png)
 ---
 # [View the Roadmap](docs/ROADMAP.md)
 
