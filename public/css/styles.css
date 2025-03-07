@@ -334,6 +334,7 @@ cursor:pointer;
 font-size:16px;
 text-transform:uppercase;
 letter-spacing:1px;
+font-weight:700;
 transition:all .3s ease
 }
 
@@ -616,11 +617,6 @@ word-spacing:8px;
 text-align:center;
 color:#bb86fc;
 margin:0
-}
-
-.message-form textarea:focus,.settings-index-card input:focus {
-outline:0;
-border-color:#bb86fc
 }
 
 .invalid-feedback {
@@ -1208,81 +1204,6 @@ background-color:#96c;
 transform:translateY(-2px)
 }
 
-.settings-index-wrapper {
-max-width:1000px;
-margin:0 auto;
-padding:10px 20px
-}
-
-.settings-index-layout {
-display:flex;
-flex-wrap:wrap;
-justify-content:space-between;
-gap:20px;
-margin-bottom:30px
-}
-
-.settings-index-change-password-container,.settings-index-manage-pgp-key-container {
-width:calc(50% - 15px)
-}
-
-.settings-index-manage-2fa-container {
-width:calc(33.33% - 20px);
-margin:0 auto
-}
-
-.settings-index-card- {
-background-color:#1e1e1e;
-border-radius:8px;
-border:1px solid #3c3c3c;
-padding:30px;
-margin-bottom:10px;
-box-shadow:0 4px 20px #0000004d
-}
-
-.settings-index-card-header {
-color:#bb86fc;
-font-size:24px;
-margin-bottom:20px;
-text-align:center
-}
-
-.settings-index-card-body {
-color:#e0e0e0
-}
-
-.settings-index-page-form-group {
-margin-bottom:20px
-}
-
-.settings-index-page-form-group label {
-display:block;
-margin-bottom:8px;
-color:#e0e0e0;
-font-weight:700
-}
-
-.settings-index-page-form-control {
-width:100%;
-padding:12px 15px;
-background-color:#292929;
-border:1px solid #3c3c3c;
-border-radius:4px;
-color:#e0e0e0;
-box-sizing:border-box;
-transition:all .3s ease
-}
-
-textarea.settings-index-page-form-control {
-resize:vertical;
-min-height:150px
-}
-
-.settings-index-page-form-control:focus {
-outline:none;
-border-color:#bb86fc
-}
-
 .text-warning {
 color:#ffc107
 }
@@ -1290,46 +1211,6 @@ color:#ffc107
 .alert-danger {
 background-color:#b71c1c;
 color:#ffebee
-}
-
-.two-fa-buttons {
-display:flex;
-justify-content:center;
-gap:10px
-}
-
-.btn-2fa {
-padding:10px 20px;
-font-size:16px;
-font-weight:700;
-border:none;
-border-radius:4px;
-cursor:pointer;
-transition:all .3s ease
-}
-
-.btn-2fa-on {
-background-color:#4CAF50;
-color:#fff
-}
-
-.btn-2fa-off {
-background-color:#f44336;
-color:#fff
-}
-
-.btn-2fa.active {
-opacity:1;
-transform:scale(1.05)
-}
-
-.btn-2fa:not(.active) {
-opacity:.7
-}
-
-.btn-2fa:hover {
-opacity:1;
-transform:translateY(-2px)
 }
 
 .become-vendor-index-container {
@@ -10950,4 +10831,203 @@ box-shadow:0 0 10px #bb86fc33
 
 .sales-show-deliver-form {
 margin-top:10px
+}
+
+.settings-index-wrapper {
+max-width:1000px;
+margin:0 auto;
+padding:10px 20px
+}
+
+.settings-index-layout {
+display:flex;
+flex-wrap:wrap;
+justify-content:space-between;
+gap:20px;
+margin-bottom:30px
+}
+
+.settings-index-change-password-container,.settings-index-manage-pgp-key-container {
+width:calc(50% - 15px)
+}
+
+.settings-index-secret-phrase-row {
+width:100%;
+display:flex;
+justify-content:center;
+margin-bottom:30px
+}
+
+.settings-index-manage-2fa-row {
+width:100%;
+display:flex;
+justify-content:center;
+margin-bottom:30px
+}
+
+.settings-index-secret-phrase-container {
+width:100%;
+max-width:500px
+}
+
+.settings-index-manage-2fa-container {
+width:100%;
+max-width:400px
+}
+
+.settings-index-card {
+background-color:#1e1e1e;
+border-radius:8px;
+border:1px solid #3c3c3c;
+padding:30px;
+margin-bottom:10px;
+box-shadow:0 4px 20px #0000004d;
+text-align:center
+}
+
+.settings-index-card-header {
+color:#bb86fc;
+font-size:24px;
+margin-bottom:20px;
+text-align:center
+}
+
+.settings-index-card-body {
+color:#e0e0e0
+}
+
+.settings-index-page-form-group {
+margin-bottom:20px
+}
+
+.settings-index-page-form-group label {
+display:block;
+margin-bottom:8px;
+color:#e0e0e0;
+font-weight:700
+}
+
+.settings-index-page-form-control {
+width:100%;
+padding:12px 15px;
+background-color:#292929;
+border:1px solid #3c3c3c;
+border-radius:4px;
+color:#e0e0e0;
+box-sizing:border-box;
+transition:all .3s ease
+}
+
+textarea.settings-index-page-form-control {
+resize:vertical;
+min-height:150px
+}
+
+.settings-index-page-form-control:focus {
+outline:none;
+border-color:#bb86fc
+}
+
+.settings-two-fa-buttons {
+display:flex;
+justify-content:center;
+gap:10px
+}
+
+.settings-btn-2fa {
+padding:10px 20px;
+font-size:16px;
+font-weight:700;
+border:none;
+border-radius:4px;
+cursor:pointer;
+transition:all .3s ease
+}
+
+.settings-btn-2fa-on {
+background-color:#4CAF50;
+color:#fff
+}
+
+.settings-btn-2fa-off {
+background-color:#f44336;
+color:#fff
+}
+
+.settings-btn-2fa.active {
+opacity:1;
+transform:scale(1.05)
+}
+
+.settings-btn-2fa:not(.active) {
+opacity:.7
+}
+
+.settings-btn-2fa:hover {
+opacity:1;
+transform:translateY(-2px)
+}
+
+.settings-secret-form label {
+display:block;
+margin-bottom:8px;
+font-weight:700;
+color:#e0e0e0;
+text-align:center
+}
+
+.settings-secret-form input[type="text"] {
+width:100%;
+padding:10px;
+background-color:#292929;
+border:1px solid #3c3c3c;
+border-radius:4px;
+color:#e0e0e0;
+box-sizing:border-box;
+margin-bottom:10px;
+transition:border-color .3s ease
+}
+
+.settings-secret-form input[type="text"]:focus {
+outline:none;
+border-color:#bb86fc
+}
+
+.settings-secret-form button {
+width:100%;
+max-width:300px;
+padding:12px;
+background-color:#bb86fc;
+color:#121212;
+border:0;
+border-radius:4px;
+cursor:pointer;
+font-size:16px;
+text-transform:uppercase;
+letter-spacing:1px;
+transition:all .3s ease;
+font-weight:700;
+margin:0 auto;
+display:block
+}
+
+.settings-secret-form button:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
+.settings-secret-error {
+color:#ff3838;
+font-size:14px;
+margin-top:5px
+}
+
+.settings-secret-display p {
+margin:10px 0
+}
+
+.settings-secret-text {
+font-weight:700;
+font-size:24px;
+color:#bb86fc
 }

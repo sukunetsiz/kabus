@@ -112,6 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings/change-password', [SettingsController::class, 'changePassword'])->name('settings.changePassword');
     Route::post('/settings/update-pgp-key', [SettingsController::class, 'updatePgpKey'])->name('settings.updatePgpKey');
+    Route::post('/settings/update-secret-phrase', [SettingsController::class, 'updateSecretPhrase'])->name('settings.updateSecretPhrase');
 
     // Messaging routes
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');

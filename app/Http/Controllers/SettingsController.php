@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PgpKey;
+use App\Models\SecretPhrase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -141,6 +142,64 @@ class SettingsController extends Controller
         }
 
         RateLimiter::hit($key, 60);
+    }
+
+    /**
+     * Update the user's secret phrase.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateSecretPhrase(Request $request)
+    {
+        if (!Auth::check()) {
+            return back()->with('error', 'Unauthorized access.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'secret_phrase' => [
+                'required',
+                'string',
+                'min:4',
+                'max:16',
+                'regex:/^[a-zA-Z]+$/',
+            ],
+        ], [
+            'secret_phrase.required' => 'Secret phrase is required.',
+            'secret_phrase.min' => 'Secret phrase must be at least 4 characters.',
+            'secret_phrase.max' => 'Secret phrase cannot exceed 16 characters.',
+            'secret_phrase.regex' => 'Secret phrase must contain only letters (no numbers or special characters).',
+        ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $user = Auth::user();
+
+        try {
+            // Check if user already has a secret phrase
+            if ($user->secretPhrase) {
+                return back()->with('error', 'You already have a secret phrase. This is a one-time setting for security purposes.');
+            }
+
+            // Create new secret phrase
+            $secretPhrase = new SecretPhrase();
+            $secretPhrase->user_id = $user->id;
+            $secretPhrase->phrase = $request->secret_phrase;
+            $secretPhrase->save();
+
+            // Log secret phrase creation
+            Log::info("User {$user->id} added a secret phrase");
+
+            return back()->with('status', 'Secret phrase successfully added. This phrase will be displayed on your settings page to help you identify genuine site access.');
+        } catch (QueryException $e) {
+            Log::error("Error adding secret phrase for user {$user->id}: " . $e->getMessage());
+            return back()->with('error', 'An error occurred while adding your secret phrase. Please try again or contact support if the problem persists.');
+        } catch (Exception $e) {
+            Log::error("Unexpected error adding secret phrase for user {$user->id}: " . $e->getMessage());
+            return back()->with('error', 'An unexpected error occurred. Please try again or contact support if the problem persists.');
+        }
     }
 
     private function throttleKey(Request $request)

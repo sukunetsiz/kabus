@@ -35,7 +35,7 @@ Following the v1.0 release, development will continue with additional milestones
 #### June 6th Goals (v1.2)
 
 - [ ] Enable **activation/deactivation for products** for vendors.
-- [ ] Enhance account security by introducing a **secret phrase during sign-up** to prevent phishing.
+- [X] Enhance account security by introducing a **secret phrase** to prevent phishing.
 - [ ] Set up a **private Jabber server** to receive notifications in real time.
 - [ ] Introduce **private vendor shops** that are accessible only to referenced users for a more exclusive marketplace experience.
 

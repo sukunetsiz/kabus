@@ -309,4 +309,12 @@ class User extends Authenticatable
             ->wherePivot('read', false)
             ->count();
     }
+
+    /**
+     * Get the secret phrase associated with the user.
+     */
+    public function secretPhrase()
+    {
+        return $this->hasOne(SecretPhrase::class);
+    }
 }
