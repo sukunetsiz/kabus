@@ -197,6 +197,69 @@
             </div>
         </div>
     @endif
+
+    {{-- Reviews Section (Only for completed orders and buyers) --}}
+    @if($isBuyer && $order->status === 'completed')
+        <div>
+            <div>
+                <h2>Product Reviews</h2>
+                <div>
+                    @foreach($order->items as $item)
+                        <div>
+                            <h3>{{ $item->product_name }}</h3>
+                            
+                            {{-- Check if already reviewed --}}
+                            @php
+                                $existingReview = \App\Models\ProductReviews::where('user_id', Auth::id())
+                                    ->where('order_item_id', $item->id)
+                                    ->first();
+                            @endphp
+                            
+                            @if($existingReview)
+                                <div>
+                                    <p>You've already reviewed this product on {{ $existingReview->getFormattedDate() }}.</p>
+                                    <div>
+                                        {{ ucfirst($existingReview->sentiment) }}
+                                    </div>
+                                    <div>
+                                        {{ $existingReview->review_text }}
+                                    </div>
+                                </div>
+                            @else
+                                <form action="{{ route('orders.submit-review', ['uniqueUrl' => $order->unique_url, 'orderItemId' => $item->id]) }}" method="POST">
+                                    @csrf
+                                    <div>
+                                        <label for="review_text_{{ $item->id }}">Your Review:</label>
+                                        <textarea id="review_text_{{ $item->id }}" name="review_text" required minlength="3" maxlength="1000" placeholder="Write your review here..."></textarea>
+                                    </div>
+                                    
+                                    <div>
+                                        <label>Review Sentiment:</label>
+                                        <div>
+                                            <div>
+                                                <input type="radio" id="sentiment_positive_{{ $item->id }}" name="sentiment" value="positive" required>
+                                                <label for="sentiment_positive_{{ $item->id }}">Positive</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="sentiment_mixed_{{ $item->id }}" name="sentiment" value="mixed">
+                                                <label for="sentiment_mixed_{{ $item->id }}">Mixed</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" id="sentiment_negative_{{ $item->id }}" name="sentiment" value="negative">
+                                                <label for="sentiment_negative_{{ $item->id }}">Negative</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit">Submit Review</button>
+                                </form>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 
 @endsection

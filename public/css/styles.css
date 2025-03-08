@@ -111,7 +111,8 @@ border-radius:8px
 .btn-logout {
 background-color:#d32f2f;
 margin-right:-10px;
-border-radius:8px
+border-radius:8px;
+cursor:pointer
 }
 
 .btn-home:hover,.btn-login:hover,.btn-logout:hover,.btn-register:hover {

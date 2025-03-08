@@ -31,47 +31,81 @@
 
             {{-- Three Column Layout --}}
             <div class="products-show-columns">
-                {{-- Left Column (Empty for future use) --}}
-                <div class="products-show-column products-show-column-left"></div>
+                {{-- Left Column (Review Statistics) --}}
+                <div class="products-show-column products-show-column-left">
+                    <h2>Review Statistics</h2>
+                    
+                    {{-- Review Statistics --}}
+                    <div>
+                        @if($totalReviews > 0)
+                            <div>
+                                <span>Positive Review Percentage</span>
+                                <span>{{ number_format($positivePercentage, 1) }}%</span>
+                            </div>
+                            <div>
+                                <div>
+                                    <span>Positive:</span>
+                                    <span>{{ $positiveCount }}</span>
+                                </div>
+                                <div>
+                                    <span>Mixed:</span>
+                                    <span>{{ $mixedCount }}</span>
+                                </div>
+                                <div>
+                                    <span>Negative:</span>
+                                    <span>{{ $negativeCount }}</span>
+                                </div>
+                                <div>
+                                    <span>Total Reviews:</span>
+                                    <span>{{ $totalReviews }}</span>
+                                </div>
+                            </div>
+                        @else
+                            <div>
+                                <p>No reviews yet. Be the first to review this product!</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
 
                 {{-- Center Column (Product Images) --}}
-<div class="products-show-column-center">
-<div class="products-show-gallery">
-    <div class="products-show-slider">
-        <div class="products-show-slides">
-            {{-- Main product image --}}
-            <div id="slide-1">
-                <img src="{{ $product->product_picture_url }}" 
-                     alt="{{ $product->name }}"
-                     class="products-show-gallery-image">
-            </div>
+                <div class="products-show-column-center">
+                    <div class="products-show-gallery">
+                        <div class="products-show-slider">
+                            <div class="products-show-slides">
+                                {{-- Main product image --}}
+                                <div id="slide-1">
+                                    <img src="{{ $product->product_picture_url }}" 
+                                         alt="{{ $product->name }}"
+                                         class="products-show-gallery-image">
+                                </div>
 
-            {{-- Additional images --}}
-            @if(!empty($product->additional_photos))
-                @foreach($product->additional_photos_urls as $index => $photoUrl)
-                    <div id="slide-{{ $index + 2 }}">
-                        <img src="{{ $photoUrl }}" 
-                             alt="{{ $product->name }} - Image {{ $index + 1 }}"
-                             class="products-show-gallery-image">
+                                {{-- Additional images --}}
+                                @if(!empty($product->additional_photos))
+                                    @foreach($product->additional_photos_urls as $index => $photoUrl)
+                                        <div id="slide-{{ $index + 2 }}">
+                                            <img src="{{ $photoUrl }}" 
+                                                 alt="{{ $product->name }} - Image {{ $index + 1 }}"
+                                                 class="products-show-gallery-image">
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- Navigation buttons --}}
+                        <div class="products-show-slider-navigation">
+                            <a href="#slide-1" class="products-show-image-button">M</a>
+                            @if(!empty($product->additional_photos))
+                                @foreach($product->additional_photos_urls as $index => $photoUrl)
+                                    <a href="#slide-{{ $index + 2 }}" class="products-show-image-button">
+                                        {{ $index + 1 }}
+                                    </a>
+                                @endforeach
+                            @endif
+                        </div>
                     </div>
-                @endforeach
-            @endif
-        </div>
-</div>
-</div>
-
-        {{-- Navigation buttons --}}
-        <div class="products-show-slider-navigation">
-            <a href="#slide-1" class="products-show-image-button">M</a>
-            @if(!empty($product->additional_photos))
-                @foreach($product->additional_photos_urls as $index => $photoUrl)
-                    <a href="#slide-{{ $index + 2 }}" class="products-show-image-button">
-                        {{ $index + 1 }}
-                    </a>
-                @endforeach
-            @endif
-        </div>
-</div>
+                </div>
 
                 {{-- Right Column (Product Details) --}}
                 <div class="products-show-column products-show-column-right">
@@ -84,48 +118,48 @@
                         </div>
 
                         <div class="products-show-info">
-    <div class="products-show-type">
-        <span class="products-show-badge products-show-badge-{{ $product->type }}">
-            {{ ucfirst($product->type) }}
-        </span>
-        <span class="products-show-badge products-show-badge-category">
-            {{ $product->category->name }}
-        </span>
-    </div>
+                            <div class="products-show-type">
+                                <span class="products-show-badge products-show-badge-{{ $product->type }}">
+                                    {{ ucfirst($product->type) }}
+                                </span>
+                                <span class="products-show-badge products-show-badge-category">
+                                    {{ $product->category->name }}
+                                </span>
+                            </div>
 
-    <div class="products-show-shipping">
-    <div class="products-show-shipping-badge">
-        <div class="products-show-shipping-from">From {{ $product->ships_from }}</div>
-        <div class="products-show-shipping-arrow">⬇</div>
-        <div class="products-show-shipping-to">To {{ $product->ships_to }}</div>
-    </div>
-    </div>
+                            <div class="products-show-shipping">
+                                <div class="products-show-shipping-badge">
+                                    <div class="products-show-shipping-from">From {{ $product->ships_from }}</div>
+                                    <div class="products-show-shipping-arrow">⬇</div>
+                                    <div class="products-show-shipping-to">To {{ $product->ships_to }}</div>
+                                </div>
+                            </div>
 
-    <div class="products-show-stock">
-    <span class="products-show-badge products-show-badge-stock">
-        Stock ➜ {{ number_format($product->stock_amount) }} {{ $formattedMeasurementUnit }}
-    </span>
-</div>
+                            <div class="products-show-stock">
+                                <span class="products-show-badge products-show-badge-stock">
+                                    Stock ➜ {{ number_format($product->stock_amount) }} {{ $formattedMeasurementUnit }}
+                                </span>
+                            </div>
 
-     <div class="products-show-vendor">
-    <div class="products-show-avatar-username">
-        <div class="products-show-avatar">
-            <img src="{{ $product->user->profile ? $product->user->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
-                 alt="{{ $product->user->username }}'s Profile Picture">
-        </div>
-        <div class="products-show-username">
-            <a href="{{ route('dashboard', $product->user->username) }}" class="products-show-username-link">
-                {{ $product->user->username }}
-            </a>
-        </div>
-    </div>
-</div>
-<div class="products-show-vendor-button-container">
-        <a href="{{ route('vendors.show', $product->user->username) }}" class="products-show-vendor-button">
-            Visit Vendor
-        </a>
-    </div>
-</div>
+                            <div class="products-show-vendor">
+                                <div class="products-show-avatar-username">
+                                    <div class="products-show-avatar">
+                                        <img src="{{ $product->user->profile ? $product->user->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
+                                             alt="{{ $product->user->username }}'s Profile Picture">
+                                    </div>
+                                    <div class="products-show-username">
+                                        <a href="{{ route('dashboard', $product->user->username) }}" class="products-show-username-link">
+                                            {{ $product->user->username }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="products-show-vendor-button-container">
+                                <a href="{{ route('vendors.show', $product->user->username) }}" class="products-show-vendor-button">
+                                    Visit Vendor
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -215,6 +249,31 @@
                 <div class="products-show-description-content">
                     {!! nl2br(e($product->description)) !!}
                 </div>
+            </div>
+
+            {{-- Product Reviews List Section --}}
+            <div>
+                <h2>Product Reviews</h2>
+                
+                {{-- Reviews List --}}
+                @if(count($reviews) > 0)
+                    <div>
+                        @foreach($reviews as $review)
+                            <div>
+                                <div>
+                                    <div>{{ $review->user->username }}</div>
+                                    <div>{{ $review->getFormattedDate() }}</div>
+                                    <div>
+                                        {{ ucfirst($review->sentiment) }}
+                                    </div>
+                                </div>
+                                <div>
+                                    {{ $review->review_text }}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     @endif

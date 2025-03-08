@@ -190,4 +190,64 @@ class OrdersController extends Controller
 
         return redirect()->back()->with('error', 'Unable to cancel the order at this time.');
     }
+
+    /**
+     * Submit a review for a product in a completed order.
+     */
+    public function submitReview(Request $request, $uniqueUrl, $orderItemId)
+    {
+        // Find the order
+        $order = Orders::findByUrl($uniqueUrl);
+        
+        if (!$order) {
+            abort(404);
+        }
+
+        // Verify ownership - only the buyer can submit reviews
+        if ($order->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Verify order is completed
+        if ($order->status !== Orders::STATUS_COMPLETED) {
+            return redirect()->route('orders.show', $order->unique_url)
+                ->with('error', 'You can only review products from completed orders.');
+        }
+
+        // Find the order item
+        $orderItem = $order->items()->where('id', $orderItemId)->first();
+        
+        if (!$orderItem) {
+            abort(404);
+        }
+
+        // Check if a review already exists for this item
+        $existingReview = \App\Models\ProductReviews::where('user_id', Auth::id())
+            ->where('order_item_id', $orderItem->id)
+            ->first();
+            
+        if ($existingReview) {
+            return redirect()->route('orders.show', $order->unique_url)
+                ->with('error', 'You have already reviewed this product.');
+        }
+
+        // Validate the request
+        $validated = $request->validate([
+            'review_text' => 'required|string|min:3|max:1000',
+            'sentiment' => 'required|in:positive,mixed,negative',
+        ]);
+
+        // Create the review
+        \App\Models\ProductReviews::create([
+            'product_id' => $orderItem->product_id,
+            'user_id' => Auth::id(),
+            'order_id' => $order->id,
+            'order_item_id' => $orderItem->id,
+            'review_text' => $validated['review_text'],
+            'sentiment' => $validated['sentiment'],
+        ]);
+
+        return redirect()->route('orders.show', $order->unique_url)
+            ->with('success', 'Your review has been submitted successfully.');
+    }
 }

@@ -179,6 +179,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/{uniqueUrl}/mark-delivered', [OrdersController::class, 'markAsDelivered'])->name('orders.mark-delivered');
     Route::post('/orders/{uniqueUrl}/mark-completed', [OrdersController::class, 'markAsCompleted'])->name('orders.mark-completed');
     Route::post('/orders/{uniqueUrl}/mark-cancelled', [OrdersController::class, 'markAsCancelled'])->name('orders.mark-cancelled');
+    Route::post('/orders/{uniqueUrl}/review/{orderItemId}', [OrdersController::class, 'submitReview'])->name('orders.submit-review');
 
     // -------------------------------------------------------------------------
     // Admin Routes

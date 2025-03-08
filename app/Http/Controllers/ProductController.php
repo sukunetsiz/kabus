@@ -159,6 +159,16 @@ class ProductController extends Controller
             $formattedBulkOptions = $product->getFormattedBulkOptions($xmrPrice);
             $formattedDeliveryOptions = $product->getFormattedDeliveryOptions($xmrPrice);
 
+            // Load product reviews with user information
+            $reviews = \App\Models\ProductReviews::getProductReviews($product->id);
+            
+            // Get review statistics
+            $positivePercentage = $product->getPositiveReviewPercentage();
+            $positiveCount = $product->getPositiveReviewsCount();
+            $mixedCount = $product->getMixedReviewsCount();
+            $negativeCount = $product->getNegativeReviewsCount();
+            $totalReviews = $positiveCount + $mixedCount + $negativeCount;
+
             return view('products.show', [
                 'product' => $product,
                 'title' => $product->name,
@@ -166,7 +176,13 @@ class ProductController extends Controller
                 'xmrPrice' => $xmrPrice,
                 'formattedMeasurementUnit' => $formattedMeasurementUnit,
                 'formattedBulkOptions' => $formattedBulkOptions,
-                'formattedDeliveryOptions' => $formattedDeliveryOptions
+                'formattedDeliveryOptions' => $formattedDeliveryOptions,
+                'reviews' => $reviews,
+                'positivePercentage' => $positivePercentage,
+                'positiveCount' => $positiveCount,
+                'mixedCount' => $mixedCount,
+                'negativeCount' => $negativeCount,
+                'totalReviews' => $totalReviews
             ]);
 
         } catch (\Exception $e) {

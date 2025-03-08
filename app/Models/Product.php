@@ -432,4 +432,68 @@ class Product extends Model
     {
         return static::getByType(self::TYPE_DEADDROP);
     }
+    
+    /**
+     * Get the reviews for this product.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(ProductReviews::class);
+    }
+    
+    /**
+     * Get the percentage of positive reviews for this product.
+     * 
+     * @return float|null
+     */
+    public function getPositiveReviewPercentage()
+    {
+        $totalReviews = $this->reviews()->count();
+        
+        if ($totalReviews === 0) {
+            return null;
+        }
+        
+        $positiveReviews = $this->reviews()
+            ->where('sentiment', ProductReviews::SENTIMENT_POSITIVE)
+            ->count();
+            
+        return ($positiveReviews / $totalReviews) * 100;
+    }
+    
+    /**
+     * Get the count of positive reviews for this product.
+     * 
+     * @return int
+     */
+    public function getPositiveReviewsCount()
+    {
+        return $this->reviews()
+            ->where('sentiment', ProductReviews::SENTIMENT_POSITIVE)
+            ->count();
+    }
+    
+    /**
+     * Get the count of mixed reviews for this product.
+     * 
+     * @return int
+     */
+    public function getMixedReviewsCount()
+    {
+        return $this->reviews()
+            ->where('sentiment', ProductReviews::SENTIMENT_MIXED)
+            ->count();
+    }
+    
+    /**
+     * Get the count of negative reviews for this product.
+     * 
+     * @return int
+     */
+    public function getNegativeReviewsCount()
+    {
+        return $this->reviews()
+            ->where('sentiment', ProductReviews::SENTIMENT_NEGATIVE)
+            ->count();
+    }
 }
