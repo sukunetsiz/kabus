@@ -40,8 +40,15 @@ class OrdersController extends Controller
 
         // Determine if the current user is the buyer or vendor
         $isBuyer = $order->user_id === Auth::id();
-        
-        // No need to retrieve delivery text separately since it's already in the order_items
+
+        // If the user is the buyer and the order is completed, prepare existing reviews for each order item.
+        if ($isBuyer && $order->status === 'completed') {
+            foreach ($order->items as $item) {
+                $item->existingReview = \App\Models\ProductReviews::where('user_id', Auth::id())
+                    ->where('order_item_id', $item->id)
+                    ->first();
+            }
+        }
         
         return view('orders.show', [
             'order' => $order,
@@ -251,3 +258,4 @@ class OrdersController extends Controller
             ->with('success', 'Your review has been submitted successfully.');
     }
 }
+

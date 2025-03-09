@@ -10,19 +10,20 @@
         </div>
     @else
         <div class="products-show-main">
-    {{-- Error Messages --}}
-    @if(session('error'))
-        <div class="alert alert-error">
-            <p>{{ session('error') }}</p>
-        </div>
-    @endif
+            {{-- Error Messages --}}
+            @if(session('error'))
+                <div class="alert alert-error">
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
 
-    {{-- Success Messages --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            <p>{{ session('success') }}</p>
-        </div>
-    @endif
+            {{-- Success Messages --}}
+            @if(session('success'))
+                <div class="alert alert-success">
+                    <p>{{ session('success') }}</p>
+                </div>
+            @endif
+            
             {{-- Product Name Header --}}
             <div class="products-show-header">
                 <h1 class="products-show-title">{{ $product->name }}</h1>
@@ -33,35 +34,35 @@
             <div class="products-show-columns">
                 {{-- Left Column (Review Statistics) --}}
                 <div class="products-show-column products-show-column-left">
-                    <h2>Review Statistics</h2>
-                    
-                    {{-- Review Statistics --}}
-                    <div>
+                    <div class="products-show-review-stats">
+                        <h2 class="products-show-review-stats-header">Review Statistics</h2>
+                        
+                        {{-- Review Statistics --}}
                         @if($totalReviews > 0)
-                            <div>
-                                <span>Positive Review Percentage</span>
-                                <span>{{ number_format($positivePercentage, 1) }}%</span>
+                            <div class="products-show-review-percentage">
+                                <span class="products-show-review-percentage-value">{{ number_format($positivePercentage, 1) }}%</span>
+                                <span class="products-show-review-percentage-label">Positive Reviews</span>
                             </div>
-                            <div>
-                                <div>
-                                    <span>Positive:</span>
-                                    <span>{{ $positiveCount }}</span>
+                            <div class="products-show-review-counts">
+                                <div class="products-show-review-count-item">
+                                    <span class="products-show-review-count-label">Positive:</span>
+                                    <span class="products-show-review-count-value">{{ $positiveCount }}</span>
                                 </div>
-                                <div>
-                                    <span>Mixed:</span>
-                                    <span>{{ $mixedCount }}</span>
+                                <div class="products-show-review-count-item">
+                                    <span class="products-show-review-count-label">Mixed:</span>
+                                    <span class="products-show-review-count-value">{{ $mixedCount }}</span>
                                 </div>
-                                <div>
-                                    <span>Negative:</span>
-                                    <span>{{ $negativeCount }}</span>
+                                <div class="products-show-review-count-item">
+                                    <span class="products-show-review-count-label">Negative:</span>
+                                    <span class="products-show-review-count-value">{{ $negativeCount }}</span>
                                 </div>
-                                <div>
-                                    <span>Total Reviews:</span>
-                                    <span>{{ $totalReviews }}</span>
+                                <div class="products-show-review-count-item">
+                                    <span class="products-show-review-count-label">Total:</span>
+                                    <span class="products-show-review-count-value">{{ $totalReviews }}</span>
                                 </div>
                             </div>
                         @else
-                            <div>
+                            <div class="products-show-review-empty">
                                 <p>No reviews yet. Be the first to review this product!</p>
                             </div>
                         @endif
@@ -252,29 +253,37 @@
             </div>
 
             {{-- Product Reviews List Section --}}
-            <div>
-                <h2>Product Reviews</h2>
+            @if(count($reviews) > 0)
+            <div class="products-show-reviews">
+                <h2 class="products-show-reviews-title">Product Reviews</h2>
                 
                 {{-- Reviews List --}}
-                @if(count($reviews) > 0)
-                    <div>
-                        @foreach($reviews as $review)
-                            <div>
-                                <div>
-                                    <div>{{ $review->user->username }}</div>
-                                    <div>{{ $review->getFormattedDate() }}</div>
-                                    <div>
+                <div class="products-show-reviews-list">
+                    @foreach($reviews as $review)
+                        <div class="products-show-review-item">
+                            <div class="products-show-review-header">
+                                <div class="products-show-review-user">
+                                    <div class="products-show-review-avatar">
+                                        <img src="{{ $review->user->profile ? $review->user->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
+                                             alt="{{ $review->user->username }}'s Profile Picture">
+                                    </div>
+                                    <div class="products-show-review-username">{{ $review->user->username }}</div>
+                                </div>
+                                <div class="products-show-review-meta">
+                                    <div class="products-show-review-date">{{ $review->getFormattedDate() }}</div>
+                                    <div class="products-show-review-sentiment products-show-review-sentiment-{{ strtolower($review->sentiment) }}">
                                         {{ ucfirst($review->sentiment) }}
                                     </div>
                                 </div>
-                                <div>
-                                    {{ $review->review_text }}
-                                </div>
                             </div>
-                        @endforeach
-                    </div>
-                @endif
+                            <div class="products-show-review-content">
+                                {{ $review->review_text }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
+            @endif
         </div>
     @endif
 </div>

@@ -158,21 +158,21 @@
                                 @endif
                                 
                                 {{-- Display product type pill --}}
-                                    <div class="orders-show-item-type {{ $item->product->type === 'digital' ? 'type-digital' : ($item->product->type === 'cargo' ? 'type-cargo' : 'type-deaddrop') }}">
-                                        @if($item->product->type === 'digital')
-                                            Digital
-                                        @elseif($item->product->type === 'cargo')
-                                            Cargo
-                                        @elseif($item->product->type === 'deaddrop')
-                                            Dead Drop
-                                        @else
-                                            {{ ucfirst($item->product->type) }}
-                                        @endif
-                                    </div>                                
+                                <div class="orders-show-item-type {{ $item->product->type === 'digital' ? 'type-digital' : ($item->product->type === 'cargo' ? 'type-cargo' : 'type-deaddrop') }}">
+                                    @if($item->product->type === 'digital')
+                                        Digital
+                                    @elseif($item->product->type === 'cargo')
+                                        Cargo
+                                    @elseif($item->product->type === 'deaddrop')
+                                        Dead Drop
+                                    @else
+                                        {{ ucfirst($item->product->type) }}
+                                    @endif
+                                </div>
                                 {{-- Display category pill --}}
-                                    <div class="orders-show-item-category">
-                                        {{ $item->product->category->name }}
-                                    </div>
+                                <div class="orders-show-item-category">
+                                    {{ $item->product->category->name }}
+                                </div>
                             </div>
                         </div>
                         
@@ -200,58 +200,54 @@
 
     {{-- Reviews Section (Only for completed orders and buyers) --}}
     @if($isBuyer && $order->status === 'completed')
-        <div>
-            <div>
-                <h2>Product Reviews</h2>
-                <div>
+        <div class="orders-show-reviews-container">
+            <div class="orders-show-reviews-card">
+                <h2 class="orders-show-reviews-title">Product Reviews</h2>
+                <div class="orders-show-reviews-list">
                     @foreach($order->items as $item)
-                        <div>
-                            <h3>{{ $item->product_name }}</h3>
+                        <div class="orders-show-review-item">
+                            <h3 class="orders-show-review-product-name">{{ $item->product_name }}</h3>
                             
                             {{-- Check if already reviewed --}}
-                            @php
-                                $existingReview = \App\Models\ProductReviews::where('user_id', Auth::id())
-                                    ->where('order_item_id', $item->id)
-                                    ->first();
-                            @endphp
-                            
-                            @if($existingReview)
-                                <div>
-                                    <p>You've already reviewed this product on {{ $existingReview->getFormattedDate() }}.</p>
-                                    <div>
-                                        {{ ucfirst($existingReview->sentiment) }}
+                            @if(isset($item->existingReview) && $item->existingReview)
+                                <div class="orders-show-review-existing">
+                                    <p class="orders-show-review-date">You've already reviewed this product on {{ $item->existingReview->getFormattedDate() }}.</p>
+                                    <div class="orders-show-review-sentiment orders-show-review-sentiment-{{ $item->existingReview->sentiment }}">
+                                        {{ ucfirst($item->existingReview->sentiment) }}
                                     </div>
-                                    <div>
-                                        {{ $existingReview->review_text }}
+                                    <div class="orders-show-review-text">
+                                        {{ $item->existingReview->review_text }}
                                     </div>
                                 </div>
                             @else
-                                <form action="{{ route('orders.submit-review', ['uniqueUrl' => $order->unique_url, 'orderItemId' => $item->id]) }}" method="POST">
+                                <form action="{{ route('orders.submit-review', ['uniqueUrl' => $order->unique_url, 'orderItemId' => $item->id]) }}" method="POST" class="orders-show-review-form">
                                     @csrf
-                                    <div>
-                                        <label for="review_text_{{ $item->id }}">Your Review:</label>
-                                        <textarea id="review_text_{{ $item->id }}" name="review_text" required minlength="3" maxlength="1000" placeholder="Write your review here..."></textarea>
+                                    <div class="orders-show-review-field">
+                                        <label for="review_text_{{ $item->id }}" class="orders-show-review-label">Your Review</label>
+                                        <textarea id="review_text_{{ $item->id }}" name="review_text" required minlength="3" maxlength="1000" placeholder="Write your review here..." class="orders-show-review-textarea"></textarea>
                                     </div>
                                     
-                                    <div>
-                                        <label>Review Sentiment:</label>
-                                        <div>
-                                            <div>
-                                                <input type="radio" id="sentiment_positive_{{ $item->id }}" name="sentiment" value="positive" required>
-                                                <label for="sentiment_positive_{{ $item->id }}">Positive</label>
+                                    <div class="orders-show-review-field">
+                                        <label class="orders-show-review-label">Review Sentiment</label>
+                                        <div class="orders-show-review-sentiment-options">
+                                            <div class="orders-show-review-sentiment-option">
+                                                <input type="radio" id="sentiment_positive_{{ $item->id }}" name="sentiment" value="positive" required class="orders-show-review-radio">
+                                                <label for="sentiment_positive_{{ $item->id }}" class="orders-show-review-radio-label orders-show-review-sentiment-positive">Positive</label>
                                             </div>
-                                            <div>
-                                                <input type="radio" id="sentiment_mixed_{{ $item->id }}" name="sentiment" value="mixed">
-                                                <label for="sentiment_mixed_{{ $item->id }}">Mixed</label>
+                                            <div class="orders-show-review-sentiment-option">
+                                                <input type="radio" id="sentiment_mixed_{{ $item->id }}" name="sentiment" value="mixed" class="orders-show-review-radio">
+                                                <label for="sentiment_mixed_{{ $item->id }}" class="orders-show-review-radio-label orders-show-review-sentiment-mixed">Mixed</label>
                                             </div>
-                                            <div>
-                                                <input type="radio" id="sentiment_negative_{{ $item->id }}" name="sentiment" value="negative">
-                                                <label for="sentiment_negative_{{ $item->id }}">Negative</label>
+                                            <div class="orders-show-review-sentiment-option">
+                                                <input type="radio" id="sentiment_negative_{{ $item->id }}" name="sentiment" value="negative" class="orders-show-review-radio">
+                                                <label for="sentiment_negative_{{ $item->id }}" class="orders-show-review-radio-label orders-show-review-sentiment-negative">Negative</label>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <button type="submit">Submit Review</button>
+                                    <div class="orders-show-review-submit-container">
+                                        <button type="submit" class="orders-show-review-submit-btn">Submit Review</button>
+                                    </div>
                                 </form>
                             @endif
                         </div>
@@ -263,3 +259,4 @@
 </div>
 
 @endsection
+
