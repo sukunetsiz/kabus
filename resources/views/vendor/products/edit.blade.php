@@ -11,6 +11,27 @@
             <form action="{{ route('vendor.products.update', $product) }}" method="POST" class="products-common-create-form">
                 @csrf
                 @method('PATCH')
+                
+                <!-- Product Activation Toggle -->
+                <div class="products-common-edit-visibility">
+                    <h3 class="products-common-edit-visibility-title">
+                        Product Visibility
+                    </h3>
+                    
+                    <div class="products-common-edit-visibility-toggle">
+                        <input type="checkbox" name="active" id="active" value="1" 
+                            class="products-common-edit-visibility-checkbox"
+                            {{ $product->active ? 'checked' : '' }}>
+                    </div>
+                    
+                    <span class="products-common-edit-visibility-status {{ $product->active ? 'active' : '' }}">
+                        {{ $product->active ? 'This product is currently visible to customers' : 'This product is currently hidden from customers' }}
+                    </span>
+                    
+                    <p class="products-common-edit-visibility-hint">
+                        When inactive, the product will be hidden from all marketplace listings.
+                    </p>
+                </div>
 
                 <!-- Product Pictures Section (Read-only) -->
                 <div class="products-common-create-section">
@@ -312,4 +333,5 @@
         </div>
     </div>
 </div>
+
 @endsection

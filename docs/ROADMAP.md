@@ -30,7 +30,7 @@ Following the v1.0 release, development will continue with additional milestones
 - [ ] Implement a **moderator role** to grant restricted admin privileges.
 - [ ] Build a **self-developed unique submission CAPTCHA** to replace the mobicms/captcha library.
 - [ ] Replace all default emojis with a **custom sprite sheet** for a consistent visual identity.
-- [ ] Enable **activation/deactivation for products** for vendors.
+- [X] Enable **activation/deactivation for products** for vendors and admins.
 
 #### June 6th Goals (v1.2)
 

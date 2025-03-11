@@ -8324,6 +8324,79 @@ color:#bb86fc!important;
 font-size:20px!important
 }
 
+.products-common-edit-visibility {
+background-color:#292929;
+border-radius:8px;
+padding:15px;
+margin-bottom:20px;
+border:1px solid #3c3c3c;
+text-align:center
+}
+
+.products-common-edit-visibility-title {
+color:#bb86fc;
+font-size:18px;
+font-weight:600;
+margin-bottom:10px;
+margin-top:0;
+text-align:center
+}
+
+.products-common-edit-visibility-toggle {
+display:flex;
+align-items:center;
+justify-content:center;
+margin:10px 0
+}
+
+.products-common-edit-visibility-checkbox {
+appearance:none;
+width:24px;
+height:24px;
+background-color:#1e1e1e;
+border:2px solid #3c3c3c;
+border-radius:4px;
+position:relative;
+cursor:pointer;
+transition:all .2s ease
+}
+
+.products-common-edit-visibility-checkbox:checked {
+background-color:#bb86fc;
+border-color:#bb86fc
+}
+
+.products-common-edit-visibility-checkbox:checked::after {
+content:"✓";
+color:#121212;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:16px;
+font-weight:700
+}
+
+.products-common-edit-visibility-status {
+display:block;
+margin:10px auto;
+color:#a0a0a0;
+font-size:14px;
+text-align:center
+}
+
+.products-common-edit-visibility-status.active {
+color:#bb86fc
+}
+
+.products-common-edit-visibility-hint {
+color:#a0a0a0;
+font-size:14px;
+margin:0 auto;
+text-align:center;
+max-width:80%
+}
+
 .products-common-admin-edit-delete-btn {
 background:none;
 border:none;

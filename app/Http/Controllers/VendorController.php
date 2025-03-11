@@ -585,6 +585,7 @@ class VendorController extends Controller
                 'bulk_options' => $bulkOptions,
                 'ships_from' => $validated['ships_from'],
                 'ships_to' => $validated['ships_to'],
+                'active' => $request->has('active'),
             ]);
 
             // Get appropriate success message
