@@ -5,14 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\ReturnAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use MoneroIntegrations\MoneroPhp\Cryptonote;
 
 class ReturnAddressController extends Controller
 {
     /**
-     * The regex pattern for validating Monero addresses.
+     * The cryptonote instance.
      */
-    private const MONERO_ADDRESS_REGEX = "/^(4[1-9AB][1-9A-HJ-NP-Za-km-z]{93}|8[2-9ABC][1-9A-HJ-NP-Za-km-z]{93})$/";
+    private $cryptonote;
+
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        try {
+            $this->cryptonote = new cryptonote();
+        } catch (\Exception $e) {
+            Log::error('Failed to initialize Monero cryptonote: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Display a listing of the resource and the form to add a new address.
@@ -39,8 +53,23 @@ class ReturnAddressController extends Controller
             ],
         ]);
 
-        // Validate the address using regex.
-        $isValid = preg_match(self::MONERO_ADDRESS_REGEX, $request->monero_address) === 1;
+        // Validate the address using monerophp cryptonote.
+        $isValid = false;
+        try {
+            // First check if the address has a valid format and checksum
+            $isValid = $this->cryptonote->verify_checksum($request->monero_address);
+            
+            if ($isValid) {
+                // Further validation by attempting to decode the address
+                // This will throw an exception if the address is invalid
+                $decoded = $this->cryptonote->decode_address($request->monero_address);
+                // If we get here, the address is valid
+                $isValid = true;
+            }
+        } catch (\Exception $e) {
+            Log::error('Monero address validation error: ' . $e->getMessage());
+            $isValid = false;
+        }
 
         if ($isValid) {
             $user = Auth::user();
