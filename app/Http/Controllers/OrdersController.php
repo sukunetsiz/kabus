@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orders;
 use App\Models\Cart;
+use App\Models\Dispute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\XmrPriceController;
@@ -50,9 +51,13 @@ class OrdersController extends Controller
             }
         }
         
+        // Get dispute if it exists
+        $dispute = $order->dispute;
+        
         return view('orders.show', [
             'order' => $order,
-            'isBuyer' => $isBuyer
+            'isBuyer' => $isBuyer,
+            'dispute' => $dispute
         ]);
     }
 

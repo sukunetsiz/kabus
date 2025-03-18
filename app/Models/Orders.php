@@ -19,6 +19,7 @@ class Orders extends Model
     public const STATUS_PRODUCT_DELIVERED = 'product_delivered';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_DISPUTED = 'disputed';
 
     /**
      * The attributes that are mass assignable.
@@ -39,9 +40,11 @@ class Orders extends Model
         'is_paid',
         'is_delivered',
         'is_completed',
+        'is_disputed',
         'paid_at',
         'delivered_at',
-        'completed_at'
+        'completed_at',
+        'disputed_at'
     ];
 
     /**
@@ -56,9 +59,11 @@ class Orders extends Model
         'is_paid' => 'boolean',
         'is_delivered' => 'boolean',
         'is_completed' => 'boolean',
+        'is_disputed' => 'boolean',
         'paid_at' => 'datetime',
         'delivered_at' => 'datetime',
         'completed_at' => 'datetime',
+        'disputed_at' => 'datetime',
     ];
 
     /**
@@ -117,6 +122,14 @@ class Orders extends Model
     {
         return $this->hasMany(OrderItem::class, 'order_id');
     }
+    
+    /**
+     * Get the dispute for this order.
+     */
+    public function dispute()
+    {
+        return $this->hasOne(Dispute::class, 'order_id');
+    }
 
     /**
      * Mark the order as paid.
@@ -157,13 +170,22 @@ class Orders extends Model
      */
     public function markAsCompleted()
     {
-        if ($this->status !== self::STATUS_PRODUCT_DELIVERED) {
+        if ($this->status !== self::STATUS_PRODUCT_DELIVERED && $this->status !== self::STATUS_DISPUTED) {
             return false;
         }
 
+        // Store current status before changing it
+        $currentStatus = $this->status;
+        
         $this->status = self::STATUS_COMPLETED;
         $this->is_completed = true;
         $this->completed_at = now();
+        
+        // If this was a disputed order, reset the disputed flag
+        if ($currentStatus === self::STATUS_DISPUTED) {
+            $this->is_disputed = false;
+        }
+        
         $this->save();
 
         // Reduce stock for all products in this order
@@ -199,7 +221,16 @@ class Orders extends Model
             return false;
         }
 
+        // Store current status before changing it
+        $currentStatus = $this->status;
+        
         $this->status = self::STATUS_CANCELLED;
+        
+        // If this was a disputed order, reset the disputed flag
+        if ($currentStatus === self::STATUS_DISPUTED) {
+            $this->is_disputed = false;
+        }
+        
         $this->save();
 
         return true;
@@ -216,8 +247,44 @@ class Orders extends Model
             self::STATUS_PRODUCT_DELIVERED => 'Product Delivered',
             self::STATUS_COMPLETED => 'Order Completed',
             self::STATUS_CANCELLED => 'Order Cancelled',
+            self::STATUS_DISPUTED => 'Order Disputed',
             default => 'Unknown Status'
         };
+    }
+    
+    /**
+     * Open a dispute for the order.
+     */
+    public function openDispute($reason)
+    {
+        // Only allow disputes for orders in "product delivered" status
+        if ($this->status !== self::STATUS_PRODUCT_DELIVERED) {
+            return false;
+        }
+
+        // Update order status
+        $this->status = self::STATUS_DISPUTED;
+        $this->is_disputed = true;
+        $this->disputed_at = now();
+        $this->save();
+
+        // Create dispute record
+        $dispute = new Dispute([
+            'order_id' => $this->id,
+            'status' => Dispute::STATUS_ACTIVE,
+            'reason' => $reason
+        ]);
+        $dispute->save();
+
+        return $dispute;
+    }
+
+    /**
+     * Check if the order has an active dispute.
+     */
+    public function hasActiveDispute()
+    {
+        return $this->dispute && $this->dispute->status === Dispute::STATUS_ACTIVE;
     }
 
     /**

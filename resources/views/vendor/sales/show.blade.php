@@ -119,6 +119,35 @@
             </div>
         </div>
     </div>
+    
+    {{-- Dispute Section --}}
+    @if($sale->dispute)
+        <div class="sales-show-dispute-container">
+            <div class="sales-show-dispute-card sales-show-dispute-status-{{ $sale->dispute->status }}">
+                <h2 class="sales-show-dispute-title">Dispute Information</h2>
+                <div class="sales-show-dispute-status">Status: {{ $sale->dispute->getFormattedStatus() }}</div>
+                
+                <div class="sales-show-dispute-reason">
+                    <h3 class="sales-show-dispute-reason-title">Reason:</h3>
+                    <div class="sales-show-dispute-reason-content">{{ $sale->dispute->reason }}</div>
+                </div>
+                
+                @if($sale->dispute->resolved_at)
+                    <div class="sales-show-dispute-resolution">
+                        <div class="sales-show-dispute-resolved-at">
+                            Resolved on: {{ $sale->dispute->resolved_at->format('Y-m-d / H:i') }}
+                        </div>
+                    </div>
+                @endif
+                
+                <div class="sales-show-dispute-actions">
+                    <a href="{{ route('vendor.disputes.show', $sale->dispute->id) }}" class="sales-show-dispute-chat-btn">
+                        View Dispute Chat
+                    </a>
+                </div>
+            </div>
+        </div>
+    @endif
 
     {{-- Sale Details --}}
     <div class="sales-show-details-container">

@@ -66,11 +66,38 @@
                     </div>
                 @elseif($order->status === 'product_delivered')
                     <div class="orders-show-actions">
-                        <form action="{{ route('orders.mark-completed', $order->unique_url) }}" method="POST">
+                        <form action="{{ route('orders.mark-completed', $order->unique_url) }}" method="POST" class="orders-show-action-form">
                             @csrf
                             <button type="submit" class="orders-show-action-btn orders-show-confirm-delivery-btn">Confirm Product as Delivered</button>
                         </form>
+                        
+                        <!-- Open Dispute Button -->
+                        <button type="button" onclick="toggleDisputeForm()" class="orders-show-action-btn orders-show-dispute-btn">Open Dispute</button>
+                        
+                        <!-- Dispute Form (hidden by default) -->
+                        <div id="disputeFormContainer" class="orders-show-dispute-form-container" style="display: none;">
+                            <form action="{{ route('disputes.store', $order->unique_url) }}" method="POST" class="orders-show-dispute-form">
+                                @csrf
+                                <div class="orders-show-dispute-form-heading">Open a Dispute</div>
+                                <div class="orders-show-dispute-form-desc">
+                                    Please explain why you are opening this dispute. Be specific and provide any relevant details.
+                                </div>
+                                <textarea name="reason" class="orders-show-dispute-textarea" placeholder="Reason for dispute..." required minlength="10" maxlength="500"></textarea>
+                                <div class="orders-show-dispute-form-actions">
+                                    <button type="button" onclick="toggleDisputeForm()" class="orders-show-dispute-cancel-btn">Cancel</button>
+                                    <button type="submit" class="orders-show-dispute-submit-btn">Submit Dispute</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+                    
+                    <!-- JavaScript for toggling dispute form -->
+                    <script>
+                        function toggleDisputeForm() {
+                            var form = document.getElementById('disputeFormContainer');
+                            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                        }
+                    </script>
                 @endif
             @endif
         </div>
@@ -193,6 +220,35 @@
                 <h2 class="orders-show-message-title">Encrypted Message</h2>
                 <div class="orders-show-message-content">
                     <textarea readonly class="orders-show-message-textarea">{{ $order->encrypted_message }}</textarea>
+                </div>
+            </div>
+        </div>
+    @endif
+    
+    {{-- Dispute Section --}}
+    @if($dispute)
+        <div class="orders-show-dispute-container">
+            <div class="orders-show-dispute-card orders-show-dispute-status-{{ $dispute->status }}">
+                <h2 class="orders-show-dispute-title">Dispute Information</h2>
+                <div class="orders-show-dispute-status">Status: {{ $dispute->getFormattedStatus() }}</div>
+                
+                <div class="orders-show-dispute-reason">
+                    <h3 class="orders-show-dispute-reason-title">Reason:</h3>
+                    <div class="orders-show-dispute-reason-content">{{ $dispute->reason }}</div>
+                </div>
+                
+                @if($dispute->resolved_at)
+                    <div class="orders-show-dispute-resolution">
+                        <div class="orders-show-dispute-resolved-at">
+                            Resolved on: {{ $dispute->resolved_at->format('Y-m-d / H:i') }}
+                        </div>
+                    </div>
+                @endif
+                
+                <div class="orders-show-dispute-actions">
+                    <a href="{{ route('disputes.show', $dispute->id) }}" class="orders-show-dispute-chat-btn">
+                        View Dispute Chat
+                    </a>
                 </div>
             </div>
         </div>

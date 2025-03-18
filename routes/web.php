@@ -21,6 +21,7 @@ use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\DisputesController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -180,6 +181,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/{uniqueUrl}/mark-completed', [OrdersController::class, 'markAsCompleted'])->name('orders.mark-completed');
     Route::post('/orders/{uniqueUrl}/mark-cancelled', [OrdersController::class, 'markAsCancelled'])->name('orders.mark-cancelled');
     Route::post('/orders/{uniqueUrl}/review/{orderItemId}', [OrdersController::class, 'submitReview'])->name('orders.submit-review');
+    
+    // Dispute routes
+    Route::get('/disputes', [DisputesController::class, 'index'])->name('disputes.index');
+    Route::get('/disputes/{id}', [DisputesController::class, 'show'])->name('disputes.show');
+    Route::post('/disputes/{uniqueUrl}', [DisputesController::class, 'store'])->name('disputes.store');
+    Route::post('/disputes/{id}/message', [DisputesController::class, 'addMessage'])->name('disputes.add-message');
 
     // -------------------------------------------------------------------------
     // Admin Routes
@@ -205,6 +212,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/admin/users/{user}/roles', [AdminController::class, 'updateUserRoles'])->name('admin.users.update-roles');
         Route::post('/admin/users/{user}/ban', [AdminController::class, 'banUser'])->name('admin.users.ban');
         Route::post('/admin/users/{user}/unban', [AdminController::class, 'unbanUser'])->name('admin.users.unban');
+        
+        // Admin dispute management
+        Route::get('/admin/disputes', [DisputesController::class, 'adminIndex'])->name('admin.disputes.index');
+        Route::get('/admin/disputes/{id}', [DisputesController::class, 'adminShow'])->name('admin.disputes.show');
+        Route::post('/admin/disputes/{id}/vendor-prevails', [DisputesController::class, 'resolveVendorPrevails'])->name('admin.disputes.vendor-prevails');
+        Route::post('/admin/disputes/{id}/buyer-prevails', [DisputesController::class, 'resolveBuyerPrevails'])->name('admin.disputes.buyer-prevails');
 
         // Admin support request management
         Route::get('/admin/support', [AdminController::class, 'supportRequests'])->name('admin.support.requests');
@@ -260,6 +273,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/vendor/sales', [VendorController::class, 'sales'])->name('vendor.sales');
         Route::get('/vendor/sales/{uniqueUrl}', [VendorController::class, 'showSale'])->name('vendor.sales.show');
         Route::post('/vendor/sales/{uniqueUrl}/update-delivery-text', [VendorController::class, 'updateDeliveryText'])->name('vendor.sales.update-delivery-text');
+        
+        // Vendor dispute routes
+        Route::get('/vendor/disputes', [DisputesController::class, 'vendorDisputes'])->name('vendor.disputes.index');
+        Route::get('/vendor/disputes/{id}', [DisputesController::class, 'vendorShow'])->name('vendor.disputes.show');
 
         // Advertisement routes
         Route::get('/vendor/advertisement/rate-limit', [VendorController::class, 'showRateLimit'])

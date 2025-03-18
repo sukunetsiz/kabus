@@ -43,9 +43,9 @@
             <div class="admin-panel-item">
                 <div class="admin-panel-item-icon">
                 </div>
-                <h3 class="admin-panel-item-title">🥊 Disputes ⛔</h3>
+                <h3 class="admin-panel-item-title">🥊 Disputes 🥊</h3>
                 <p class="admin-panel-item-description">View and respond to user disputes for both sides.</p>
-                <a href="#" class="admin-panel-item-link">View Disputes</a>
+                <a href="{{ route('admin.disputes.index') }}" class="admin-panel-item-link">View Disputes</a>
             </div>
 
             <div class="admin-panel-item">
