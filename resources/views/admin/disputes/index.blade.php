@@ -1,135 +1,65 @@
 @extends('layouts.app')
-
 @section('content')
-<div class="admin-disputes-index-container">
-    <div class="admin-disputes-index-header">
-        <h1 class="admin-disputes-index-title">Dispute Management</h1>
-    </div>
 
-    <div class="admin-disputes-tabs">
-        <div class="admin-disputes-tab active" data-tab="active">Active Disputes</div>
-        <div class="admin-disputes-tab" data-tab="resolved">Resolved Disputes</div>
+<div class="disputes-index-container">
+    <div class="disputes-index-card">
+        <h1 class="disputes-index-title">Dispute Management</h1>
+        {{-- Disputes List --}}
+        <div>
+            @if($disputes->isEmpty())
+                <div class="disputes-index-empty">
+                    <p>There are no disputes at the moment.</p>
+                </div>
+            @else
+                <div class="disputes-index-table-container">
+                    <table class="disputes-index-table">
+                        <thead>
+                            <tr>
+                                <th>Dispute ID</th>
+                                <th>Date Opened</th>
+                                <th>Order ID</th>
+                                <th>Buyer</th>
+                                <th>Vendor</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($disputes as $dispute)
+                                <tr>
+                                    <td>{{ substr($dispute->id, 0, 8) }}</td>
+                                    <td>{{ $dispute->created_at->format('Y-m-d / H:i') }}</td>
+                                    <td>{{ substr($dispute->order->id, 0, 8) }}</td>
+                                    <td>{{ $dispute->order->user->username }}</td>
+                                    <td>{{ $dispute->order->vendor->username }}</td>
+                                    <td>
+                                        <span class="disputes-index-status disputes-index-status-{{ $dispute->status }}">
+                                            {{ $dispute->getFormattedStatus() }}
+                                        </span>
+                                        @if($dispute->status !== \App\Models\Dispute::STATUS_ACTIVE)
+                                            <div class="admin-dispute-index-resolver">
+                                                by {{ $dispute->resolver->username }}
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($dispute->status === \App\Models\Dispute::STATUS_ACTIVE)
+                                            <a href="{{ route('admin.disputes.show', $dispute->id) }}" class="disputes-index-action-btn">
+                                                Manage Dispute
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.disputes.show', $dispute->id) }}" class="disputes-index-action-btn">
+                                                View Details
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
     </div>
-
-    {{-- Active Disputes --}}
-    <div class="admin-disputes-tab-content" id="active-tab-content">
-        @if($activeDisputes->isEmpty())
-            <div class="admin-disputes-empty">
-                <p>There are no active disputes at the moment.</p>
-            </div>
-        @else
-            <div class="admin-disputes-list">
-                @foreach($activeDisputes as $dispute)
-                    <div class="admin-disputes-item">
-                        <div class="admin-disputes-item-header">
-                            <div class="admin-disputes-item-id">
-                                Dispute ID: {{ substr($dispute->id, 0, 8) }}
-                            </div>
-                            <div class="admin-disputes-item-date">
-                                Opened: {{ $dispute->created_at->format('Y-m-d / H:i') }}
-                            </div>
-                        </div>
-                        
-                        <div class="admin-disputes-item-users">
-                            <div class="admin-disputes-item-buyer">
-                                Buyer: {{ $dispute->order->user->username }}
-                            </div>
-                            <div class="admin-disputes-item-vendor">
-                                Vendor: {{ $dispute->order->vendor->username }}
-                            </div>
-                        </div>
-                        
-                        <div class="admin-disputes-item-order">
-                            Order ID: {{ substr($dispute->order->id, 0, 8) }}
-                        </div>
-                        
-                        <div class="admin-disputes-item-reason">
-                            <strong>Reason:</strong> {{ Str::limit($dispute->reason, 100) }}
-                        </div>
-                        
-                        <div class="admin-disputes-item-actions">
-                            <a href="{{ route('admin.disputes.show', $dispute->id) }}" class="admin-disputes-item-view-btn">
-                                Manage Dispute
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-    </div>
-
-    {{-- Resolved Disputes --}}
-    <div class="admin-disputes-tab-content hidden" id="resolved-tab-content">
-        @if($resolvedDisputes->isEmpty())
-            <div class="admin-disputes-empty">
-                <p>There are no resolved disputes at the moment.</p>
-            </div>
-        @else
-            <div class="admin-disputes-list">
-                @foreach($resolvedDisputes as $dispute)
-                    <div class="admin-disputes-item admin-disputes-item-status-{{ $dispute->status }}">
-                        <div class="admin-disputes-item-header">
-                            <div class="admin-disputes-item-id">
-                                Dispute ID: {{ substr($dispute->id, 0, 8) }}
-                            </div>
-                            <div class="admin-disputes-item-dates">
-                                <div>Opened: {{ $dispute->created_at->format('Y-m-d / H:i') }}</div>
-                                <div>Resolved: {{ $dispute->resolved_at->format('Y-m-d / H:i') }}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-disputes-item-users">
-                            <div class="admin-disputes-item-buyer">
-                                Buyer: {{ $dispute->order->user->username }}
-                            </div>
-                            <div class="admin-disputes-item-vendor">
-                                Vendor: {{ $dispute->order->vendor->username }}
-                            </div>
-                        </div>
-                        
-                        <div class="admin-disputes-item-order">
-                            Order ID: {{ substr($dispute->order->id, 0, 8) }}
-                        </div>
-                        
-                        <div class="admin-disputes-item-status">
-                            Resolution: <span class="admin-disputes-status-badge">{{ $dispute->getFormattedStatus() }}</span>
-                            <span class="admin-disputes-resolver">by {{ $dispute->resolver->username }}</span>
-                        </div>
-                        
-                        <div class="admin-disputes-item-actions">
-                            <a href="{{ route('admin.disputes.show', $dispute->id) }}" class="admin-disputes-item-view-btn">
-                                View Details
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-    </div>
-
-    {{-- Tab Switching JavaScript --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.admin-disputes-tab');
-            const tabContents = document.querySelectorAll('.admin-disputes-tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Hide all tab contents
-                    tabContents.forEach(content => content.classList.add('hidden'));
-                    
-                    // Show the selected tab content
-                    const tabContentId = tab.dataset.tab + '-tab-content';
-                    document.getElementById(tabContentId).classList.remove('hidden');
-                });
-            });
-        });
-    </script>
 </div>
 @endsection

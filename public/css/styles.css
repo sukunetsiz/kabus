@@ -11506,3 +11506,155 @@ font-weight:700;
 font-size:24px;
 color:#bb86fc
 }
+
+.disputes-index-container {
+max-width:1200px;
+margin:20px auto;
+padding:0 20px
+}
+
+.disputes-index-card {
+background-color:#1e1e1e;
+border-radius:12px;
+padding:30px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c;
+margin-top:-20px
+}
+
+.disputes-index-title {
+color:#bb86fc;
+font-size:28px;
+margin-bottom:25px;
+text-align:center;
+font-weight:700;
+border-bottom:2px solid #bb86fc;
+padding-bottom:15px
+}
+
+.disputes-index-empty {
+text-align:center;
+padding:40px;
+color:#a0a0a0;
+font-size:18px;
+background-color:#292929;
+border-radius:8px
+}
+
+.disputes-index-back-btn {
+display:inline-block;
+margin-top:15px;
+background-color:#bb86fc;
+color:#121212;
+padding:12px 24px;
+border-radius:8px;
+text-decoration:none;
+font-weight:700;
+transition:all .3s ease;
+text-transform:uppercase;
+letter-spacing:1px
+}
+
+.disputes-index-back-btn:hover {
+background-color:#96c;
+transform:translateY(-2px);
+box-shadow:0 4px 15px #bb86fc4d
+}
+
+.disputes-index-table-container {
+overflow-x:auto;
+margin-bottom:-30px
+}
+
+.disputes-index-table {
+width:100%;
+border-collapse:separate;
+border-spacing:0 10px
+}
+
+.disputes-index-table th {
+background-color:#292929;
+color:#bb86fc;
+font-weight:700;
+padding:15px;
+text-align:center;
+text-transform:uppercase;
+font-size:.9em
+}
+
+.disputes-index-table tr {
+background-color:#292929;
+transition:all .3s ease
+}
+
+.disputes-index-table tr:hover {
+transform:translateY(-2px);
+box-shadow:0 4px 10px #bb86fc33
+}
+
+.disputes-index-table td {
+padding:15px;
+color:#e0e0e0;
+text-align:center
+}
+
+.disputes-index-status {
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-weight:700;
+font-size:.85em;
+text-transform:uppercase
+}
+.disputes-index-status-active {
+background-color:#E53B69;
+color:#000
+}
+
+.disputes-index-status-vendor_prevails {
+background-color:#1D84B5;
+color:#000
+}
+
+.disputes-index-status-buyer_prevails {
+background-color:#FFB627;
+color:#000
+}
+
+.disputes-index-action-btn {
+display:inline-block;
+padding:8px 16px;
+background-color:#bb86fc;
+color:#121212;
+border-radius:4px;
+font-weight:700;
+text-decoration:none;
+transition:all .3s ease;
+text-align:center;
+margin-right:5px
+}
+
+.disputes-index-action-btn:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
+.disputes-index-pagination-container {
+margin-top:20px;
+display:flex;
+justify-content:center
+}
+
+.admin-dispute-index-resolver {
+font-size:.8em;
+color:#a0a0a0;
+margin-top:5px;
+font-style:italic
+}
+
+.vendor-dispute-index-resolution {
+font-size:.8em;
+color:#a0a0a0;
+margin-top:5px;
+font-style:italic
+}

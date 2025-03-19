@@ -133,12 +133,11 @@ class DisputesController extends Controller
      */
     public function adminIndex()
     {
-        $activeDisputes = Dispute::getActiveDisputes();
-        $resolvedDisputes = Dispute::getResolvedDisputes();
+        // Query all disputes, ordering by created_at descending
+        $disputes = Dispute::orderBy('created_at', 'desc')->get();
         
         return view('admin.disputes.index', [
-            'activeDisputes' => $activeDisputes,
-            'resolvedDisputes' => $resolvedDisputes
+            'disputes' => $disputes
         ]);
     }
 
