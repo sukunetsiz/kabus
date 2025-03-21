@@ -19,7 +19,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [X] Finish functionality for creating and editing digital, cargo, and dead drop products.
 
 #### April 4th Goals (v1.0)
-- [ ] Implement a feature to allow users and vendors to create and manage disputes.
+- [X] Implement a feature to allow users and vendors to create and manage disputes.
 - [X] Add product review functionality.
 - [X] Finish proof of concept for optional Baklava CAPTCHA
 - [ ] Add walletless escrow mechanism for buying products, making the script fully functional.

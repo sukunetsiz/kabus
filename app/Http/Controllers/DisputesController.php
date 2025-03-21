@@ -124,8 +124,17 @@ class DisputesController extends Controller
         ]);
         $message->save();
         
-        return redirect()->route('disputes.show', $dispute->id)
-            ->with('success', 'Message added successfully.');
+        // Redirect based on user role
+        if ($isAdmin) {
+            return redirect()->route('admin.disputes.show', $dispute->id)
+                ->with('success', 'Message added successfully.');
+        } elseif ($isVendor) {
+            return redirect()->route('vendor.disputes.show', $dispute->id)
+                ->with('success', 'Message added successfully.');
+        } else {
+            return redirect()->route('disputes.show', $dispute->id)
+                ->with('success', 'Message added successfully.');
+        }
     }
 
     /**

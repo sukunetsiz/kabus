@@ -76,7 +76,8 @@ class Dispute extends Model
      */
     public function messages()
     {
-        return $this->hasMany(DisputeMessage::class, 'dispute_id');
+        return $this->hasMany(DisputeMessage::class, 'dispute_id')
+            ->orderBy('created_at', 'asc');
     }
 
     /**

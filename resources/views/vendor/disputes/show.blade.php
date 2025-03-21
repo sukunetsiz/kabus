@@ -1,53 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<div>
-    <div>
-        <h1>Dispute Details</h1>
+
+<div class="disputes-show-container">
+    <div class="disputes-show-header">
+        <h1 class="disputes-show-title">Dispute Details</h1>
         <div>
-            <a href="{{ route('vendor.disputes.index') }}">
+            <a href="{{ route('vendor.disputes.index') }}" class="disputes-show-back-link">
                 Return to Disputes
             </a>
         </div>
     </div>
 
     {{-- Dispute Info --}}
-    <div>
+    <div class="disputes-show-card">
         <div>
             <div>
-                <h2>Order Information</h2>
-                <div>
-                    Status: <span>{{ $dispute->getFormattedStatus() }}</span>
+                <h2 class="disputes-show-section-title">Order Information</h2>
+                <div class="disputes-show-status">
+                    <span class="disputes-show-status-badge disputes-show-status-{{ strtolower($dispute->status) }}">
+                        {{ $dispute->getFormattedStatus() }}
+                    </span>
                 </div>
             </div>
             
-            <div>
-                <div>
-                    <div>Order ID</div>
-                    <div>{{ substr($dispute->order->id, 0, 8) }}</div>
+            <div class="disputes-show-info-grid">
+                <div class="disputes-show-info-item">
+                    <div class="disputes-show-info-label">Order ID</div>
+                    <div class="disputes-show-info-value">{{ substr($dispute->order->id, 0, 8) }}</div>
                 </div>
-                <div>
-                    <div>Created</div>
-                    <div>{{ $dispute->created_at->format('Y-m-d / H:i') }}</div>
+                <div class="disputes-show-info-item">
+                    <div class="disputes-show-info-label">Created</div>
+                    <div class="disputes-show-info-value">{{ $dispute->created_at->format('Y-m-d / H:i') }}</div>
                 </div>
-                <div>
-                    <div>Buyer</div>
-                    <div>{{ $dispute->order->user->username }}</div>
+                <div class="disputes-show-info-item">
+                    <div class="disputes-show-info-label">Buyer</div>
+                    <div class="disputes-show-info-value">{{ $dispute->order->user->username }}</div>
                 </div>
-                <div>
-                    <div>Reason for Dispute</div>
-                    <div>{{ $dispute->reason }}</div>
+                <div class="disputes-show-info-item">
+                    <div class="disputes-show-info-label">Reason for Dispute</div>
+                    <div class="disputes-show-info-value">{{ $dispute->reason }}</div>
                 </div>
                 @if($dispute->resolved_at)
-                    <div>
-                        <div>Resolved On</div>
-                        <div>{{ $dispute->resolved_at->format('Y-m-d / H:i') }}</div>
+                    <div class="disputes-show-info-item">
+                        <div class="disputes-show-info-label">Resolved On</div>
+                        <div class="disputes-show-info-value">{{ $dispute->resolved_at->format('Y-m-d / H:i') }}</div>
                     </div>
                 @endif
             </div>
             
-            <div>
-                <a href="{{ route('vendor.sales.show', $dispute->order->unique_url) }}">
+            <div style="text-align: center;">
+                <a href="{{ route('vendor.sales.show', $dispute->order->unique_url) }}" class="disputes-show-order-btn">
                     View Order Details
                 </a>
             </div>
@@ -55,20 +58,28 @@
     </div>
 
     {{-- Dispute Chat --}}
-    <div>
+    <div class="disputes-show-card">
         <div>
-            <h2>Dispute Messages</h2>
+            <h2 class="disputes-show-section-title">Dispute Messages</h2>
             
-            <div>
+            <div class="disputes-show-messages-list">
                 @if($dispute->messages->isEmpty())
-                    <div>
+                    <div class="disputes-show-empty-message">
                         No messages in this dispute yet.
                     </div>
                 @else
                     @foreach($dispute->messages as $message)
-                        <div>
-                            <div>
-                                <div>
+                        <div class="disputes-show-message 
+                            @if($message->isFromAdmin())
+                                disputes-show-message-admin
+                            @elseif($message->isFromBuyer())
+                                disputes-show-message-buyer
+                            @elseif($message->isFromVendor())
+                                disputes-show-message-vendor
+                            @endif
+                        ">
+                            <div class="disputes-show-message-header">
+                                <div class="disputes-show-message-user">
                                     @if($message->isFromAdmin())
                                         Admin: {{ $message->user->username }}
                                     @elseif($message->isFromBuyer())
@@ -79,11 +90,11 @@
                                         {{ $message->user->username }}
                                     @endif
                                 </div>
-                                <div>
+                                <div class="disputes-show-message-time">
                                     {{ $message->created_at->format('Y-m-d / H:i') }}
                                 </div>
                             </div>
-                            <div>
+                            <div class="disputes-show-message-content">
                                 {{ $message->message }}
                             </div>
                         </div>
@@ -96,23 +107,24 @@
                 <div>
                     <form action="{{ route('disputes.add-message', $dispute->id) }}" method="POST">
                         @csrf
-                        <div>
-                            <label for="message">Add a Message</label>
+                        <div class="disputes-show-form-group">
+                            <label for="message" class="disputes-show-form-label">Add a Message</label>
                             <textarea 
                                 id="message" 
                                 name="message" 
+                                class="disputes-show-textarea"
                                 placeholder="Type your message here..." 
                                 required 
                                 minlength="1" 
                                 maxlength="1000"></textarea>
                         </div>
                         <div>
-                            <button type="submit">Send Message</button>
+                            <button type="submit" class="disputes-show-submit-btn">Send Message</button>
                         </div>
                     </form>
                 </div>
             @else
-                <div>
+                <div class="disputes-show-resolved-message">
                     <p>This dispute has been resolved. No new messages can be added.</p>
                 </div>
             @endif
