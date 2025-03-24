@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('disputes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->string('id', 30)->primary();
             $table->uuid('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->string('status')->default('active'); // active, vendor_prevails, buyer_prevails
@@ -24,8 +24,8 @@ return new class extends Migration
         });
 
         Schema::create('dispute_messages', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('dispute_id');
+            $table->string('id', 30)->primary();
+            $table->string('dispute_id', 30);
             $table->foreign('dispute_id')->references('id')->on('disputes')->onDelete('cascade');
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

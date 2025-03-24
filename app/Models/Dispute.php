@@ -48,9 +48,9 @@ class Dispute extends Model
         parent::boot();
 
         static::creating(function (Model $model) {
-            // Set UUID if not set
+            // Set 30-character alphanumeric string if not set
             if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
+                $model->{$model->getKeyName()} = Str::random(30);
             }
         });
     }
@@ -221,9 +221,9 @@ class DisputeMessage extends Model
         parent::boot();
 
         static::creating(function (Model $model) {
-            // Set UUID if not set
+            // Set 30-character alphanumeric string if not set
             if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
+                $model->{$model->getKeyName()} = Str::random(30);
             }
         });
     }

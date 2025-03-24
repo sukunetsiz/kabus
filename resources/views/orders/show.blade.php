@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="orders-show-container">
     <div class="orders-show-header">
         <h1 class="orders-show-title">Order Details</h1>
@@ -12,7 +13,7 @@
         <div class="orders-show-status-card orders-show-status-{{ $order->status }}">
             <h2 class="orders-show-status-title">Status: {{ $order->getFormattedStatus() }}</h2>
             
-            <div class="orders-show-status-steps {{ $order->status === 'cancelled' ? 'with-cancelled' : '' }}">
+            <div class="orders-show-status-steps {{ $order->status === 'cancelled' ? 'with-cancelled' : '' }} {{ isset($dispute) && $dispute ? 'with-disputed' : '' }}">
                 <div class="orders-show-status-step {{ $order->status === 'waiting_payment' || $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && !$order->paid_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">1</div>
                     <div class="orders-show-status-step-label">Waiting for Payment</div>
@@ -48,6 +49,11 @@
                             <div class="orders-show-status-cancelled-x">X</div>
                         </div>
                     @endif
+                    @if(isset($dispute) && $dispute)
+                        <div class="orders-show-status-disputed-marker">
+                            <div class="orders-show-status-disputed-question">?</div>
+                        </div>
+                    @endif
                 </div>
                 <div class="orders-show-status-step {{ $order->is_completed ? 'active' : '' }}">
                     <div class="orders-show-status-step-number">4</div>
@@ -71,38 +77,13 @@
                             <button type="submit" class="orders-show-action-btn orders-show-confirm-delivery-btn">Confirm Product as Delivered</button>
                         </form>
                         
-                        <!-- Open Dispute Button -->
-                        <button type="button" onclick="toggleDisputeForm()" class="orders-show-action-btn orders-show-dispute-btn">Open Dispute</button>
-                        
-                        <!-- Dispute Form (hidden by default) -->
-                        <div id="disputeFormContainer" class="orders-show-dispute-form-container" style="display: none;">
-                            <form action="{{ route('disputes.store', $order->unique_url) }}" method="POST" class="orders-show-dispute-form">
-                                @csrf
-                                <div class="orders-show-dispute-form-heading">Open a Dispute</div>
-                                <div class="orders-show-dispute-form-desc">
-                                    Please explain why you are opening this dispute. Be specific and provide any relevant details.
-                                </div>
-                                <textarea name="reason" class="orders-show-dispute-textarea" placeholder="Reason for dispute..." required minlength="10" maxlength="500"></textarea>
-                                <div class="orders-show-dispute-form-actions">
-                                    <button type="button" onclick="toggleDisputeForm()" class="orders-show-dispute-cancel-btn">Cancel</button>
-                                    <button type="submit" class="orders-show-dispute-submit-btn">Submit Dispute</button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
-                    
-                    <!-- JavaScript for toggling dispute form -->
-                    <script>
-                        function toggleDisputeForm() {
-                            var form = document.getElementById('disputeFormContainer');
-                            form.style.display = form.style.display === 'none' ? 'block' : 'none';
-                        }
-                    </script>
                 @endif
             @endif
         </div>
     </div>
 
+    {{-- The rest of the code remains unchanged --}}
     {{-- Order Details --}}
     <div class="orders-show-details-container">
         <div class="orders-show-details-card">
@@ -213,6 +194,25 @@
         </div>
     </div>
 
+    {{-- Dispute Form Section --}}
+    @if($isBuyer && $order->status === 'product_delivered')
+        <div class="orders-show-dispute-form-container">
+            <div class="orders-show-dispute-form-card">
+                <h2 class="orders-show-dispute-form-title">Do You Want to Open a Dispute?</h2>
+                <form action="{{ route('disputes.store', $order->unique_url) }}" method="POST">
+                    @csrf
+                    <div class="orders-show-dispute-form-description">
+                        Please explain why you are opening this dispute. Be specific and provide any relevant details.
+                    </div>
+                    <textarea name="reason" placeholder="Reason for dispute..." required minlength="10" maxlength="500" class="orders-show-dispute-form-textarea"></textarea>
+                    <div class="orders-show-dispute-form-submit">
+                        <button type="submit" class="orders-show-dispute-form-button">Submit Dispute</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
     {{-- Message Section --}}
     @if($order->encrypted_message)
         <div class="orders-show-message-container">
@@ -228,25 +228,25 @@
     {{-- Dispute Section --}}
     @if($dispute)
         <div class="orders-show-dispute-container">
-            <div class="orders-show-dispute-card orders-show-dispute-status-{{ $dispute->status }}">
+            <div class="orders-show-dispute-card">
                 <h2 class="orders-show-dispute-title">Dispute Information</h2>
-                <div class="orders-show-dispute-status">Status: {{ $dispute->getFormattedStatus() }}</div>
-                
-                <div class="orders-show-dispute-reason">
-                    <h3 class="orders-show-dispute-reason-title">Reason:</h3>
-                    <div class="orders-show-dispute-reason-content">{{ $dispute->reason }}</div>
+                <div class="orders-show-dispute-status orders-show-dispute-status-{{ strtolower($dispute->status) }}">
+                    Status: {{ $dispute->getFormattedStatus() }}
                 </div>
+            
+                <div class="orders-show-dispute-info">
+                    <h3 class="orders-show-dispute-section-title">Reason:</h3>
+                    <div class="orders-show-dispute-text">{{ $dispute->reason }}</div>
                 
-                @if($dispute->resolved_at)
-                    <div class="orders-show-dispute-resolution">
-                        <div class="orders-show-dispute-resolved-at">
+                    @if($dispute->resolved_at)
+                        <div class="orders-show-dispute-resolved-date">
                             Resolved on: {{ $dispute->resolved_at->format('Y-m-d / H:i') }}
                         </div>
-                    </div>
-                @endif
+                    @endif
+                </div>
                 
-                <div class="orders-show-dispute-actions">
-                    <a href="{{ route('disputes.show', $dispute->id) }}" class="orders-show-dispute-chat-btn">
+                <div class="orders-show-dispute-link-container">
+                    <a href="{{ route('disputes.show', $dispute->id) }}" class="orders-show-dispute-link">
                         View Dispute Chat
                     </a>
                 </div>
@@ -315,4 +315,3 @@
 </div>
 
 @endsection
-
