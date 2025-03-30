@@ -8,9 +8,33 @@ use App\Models\Dispute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\XmrPriceController;
+use MoneroIntegrations\MoneroPhp\walletRPC;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\Log;
 
 class OrdersController extends Controller
 {
+    protected $walletRPC;
+    
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $config = config('monero');
+        try {
+            $this->walletRPC = new walletRPC(
+                $config['host'],
+                $config['port'],
+                $config['ssl']
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to initialize Monero RPC connection: ' . $e->getMessage());
+        }
+    }
     /**
      * Display a listing of the user's orders.
      */
@@ -42,6 +66,59 @@ class OrdersController extends Controller
         // Determine if the current user is the buyer or vendor
         $isBuyer = $order->user_id === Auth::id();
 
+        // For buyers with unpaid orders, check if a payment address exists
+        // and generate one if needed
+        $qrCode = null;
+        if ($isBuyer && $order->status === Orders::STATUS_WAITING_PAYMENT) {
+            // Generate payment address if not exists
+            if (empty($order->payment_address)) {
+                try {
+                    // Get current XMR/USD rate
+                    $xmrPriceController = new XmrPriceController();
+                    $xmrRate = $xmrPriceController->getXmrPrice();
+                    
+                    if ($xmrRate === 'UNAVAILABLE') {
+                        return redirect()->back()->with('error', 'Unable to get XMR price. Please try again later.');
+                    }
+                    
+                    // Calculate required XMR amount
+                    $requiredXmrAmount = $order->calculateRequiredXmrAmount($xmrRate);
+                    
+                    // Update order with XMR details
+                    $order->required_xmr_amount = $requiredXmrAmount;
+                    $order->xmr_usd_rate = $xmrRate;
+                    $order->save();
+                    
+                    // Generate payment address
+                    if (!$order->generatePaymentAddress($this->walletRPC)) {
+                        return redirect()->back()->with('error', 'Unable to generate payment address. Please try again.');
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Error setting up payment: ' . $e->getMessage());
+                    return redirect()->back()->with('error', 'Error setting up payment: ' . $e->getMessage());
+                }
+            }
+            
+            // Check for new payments
+            try {
+                $order->checkPayments($this->walletRPC);
+            } catch (\Exception $e) {
+                Log::error('Error checking payments: ' . $e->getMessage());
+            }
+            
+            // Refresh order data after potential updates
+            $order->refresh();
+            
+            // Generate QR code if payment is not completed
+            if (!$order->is_paid && $order->payment_address) {
+                try {
+                    $qrCode = $this->generateQrCode($order->payment_address);
+                } catch (\Exception $e) {
+                    Log::error('Error generating QR code: ' . $e->getMessage());
+                }
+            }
+        }
+
         // If the user is the buyer and the order is completed, prepare existing reviews for each order item.
         if ($isBuyer && $order->status === 'completed') {
             foreach ($order->items as $item) {
@@ -57,14 +134,15 @@ class OrdersController extends Controller
         return view('orders.show', [
             'order' => $order,
             'isBuyer' => $isBuyer,
-            'dispute' => $dispute
+            'dispute' => $dispute,
+            'qrCode' => $qrCode
         ]);
     }
 
     /**
      * Create a new order from the cart items.
      */
-    public function store(Request $request, XmrPriceController $xmrPriceController)
+    public function store(Request $request)
     {
         try {
             $user = Auth::user();
@@ -87,38 +165,38 @@ class OrdersController extends Controller
             Cart::where('user_id', $user->id)->delete();
             
             return redirect()->route('orders.show', $order->unique_url)
-                ->with('success', 'Order created successfully.');
+                ->with('success', 'Order created successfully. Please complete the payment.');
                 
         } catch (\Exception $e) {
+            Log::error('Failed to create order: ' . $e->getMessage());
             return redirect()->route('cart.checkout')
                 ->with('error', 'Failed to create order. Please try again.');
         }
     }
 
     /**
-     * Mark the order as paid.
+     * Generate a QR code for the given address.
      */
-    public function markAsPaid($uniqueUrl)
+    private function generateQrCode($address)
     {
-        $order = Orders::findByUrl($uniqueUrl);
-        
-        if (!$order) {
-            abort(404);
+        try {
+            $result = Builder::create()
+                ->writer(new PngWriter())
+                ->writerOptions([])
+                ->data($address)
+                ->encoding(new Encoding('UTF-8'))
+                ->errorCorrectionLevel(ErrorCorrectionLevel::High)
+                ->size(300)
+                ->margin(10)
+                ->build();
+            
+            return $result->getDataUri();
+        } catch (\Exception $e) {
+            Log::error('Error generating QR code: ' . $e->getMessage());
+            return null;
         }
-
-        // Verify ownership - only the buyer can mark as paid
-        if ($order->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        if ($order->markAsPaid()) {
-            return redirect()->route('orders.show', $order->unique_url)
-                ->with('success', 'Payment confirmed. The vendor has been notified.');
-        }
-
-        return redirect()->route('orders.show', $order->unique_url)
-            ->with('error', 'Unable to confirm payment at this time.');
     }
+
 
     /**
      * Mark the order as delivered.

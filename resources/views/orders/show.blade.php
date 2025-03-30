@@ -64,12 +64,6 @@
             {{-- Status-based Actions (without cancel button) --}}
             @if($isBuyer)
                 @if($order->status === 'waiting_payment')
-                    <div class="orders-show-actions">
-                        <form action="{{ route('orders.mark-paid', $order->unique_url) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="orders-show-action-btn orders-show-payment-done-btn">Payment Done</button>
-                        </form>
-                    </div>
                 @elseif($order->status === 'product_delivered')
                     <div class="orders-show-actions">
                         <form action="{{ route('orders.mark-completed', $order->unique_url) }}" method="POST" class="orders-show-action-form">
@@ -83,7 +77,106 @@
         </div>
     </div>
 
-    {{-- The rest of the code remains unchanged --}}
+    {{-- Monero Payment Section (for waiting_payment status) --}}
+    @if($isBuyer && $order->status === 'waiting_payment')
+        <div>
+            <div>
+                <h2>Payment Information</h2>
+                
+                <div>
+                    <div>
+                        <span>Required Amount:</span>
+                        <span>
+                            ɱ{{ number_format($order->required_xmr_amount, 12) }} XMR
+                        </span>
+                    </div>
+                    
+                    <div>
+                        <span>USD/XMR Rate:</span>
+                        <span>
+                            ${{ number_format($order->xmr_usd_rate, 2) }} per XMR
+                        </span>
+                    </div>
+                    
+                    <div>
+                        <span>Minimum Payment:</span>
+                        <span>
+                            ɱ{{ number_format($order->required_xmr_amount * 0.1, 12) }} XMR (10%)
+                        </span>
+                    </div>
+                    
+                    @if($order->total_received_xmr > 0 && !$order->is_paid)
+                        <div>
+                            <span>Amount Received:</span>
+                            <div>
+                                <span>
+                                    ɱ{{ number_format($order->total_received_xmr, 12) }} XMR
+                                </span>
+                                <span>
+                                    Remaining: ɱ{{ number_format($order->required_xmr_amount - $order->total_received_xmr, 12) }} XMR
+                                </span>
+                            </div>
+                        </div>
+                    @endif
+                    
+                    <div>
+                        <span>Payment Status:</span>
+                        <div>
+                            @if($order->is_paid)
+                                <span>
+                                    Payment Completed
+                                </span>
+                            @elseif($order->total_received_xmr > 0 && $order->total_received_xmr < $order->required_xmr_amount)
+                                <span>
+                                    Insufficient Amount
+                                </span>
+                            @else
+                                <span>
+                                    Awaiting Payment
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                
+                @if($order->expires_at)
+                    <div>
+                        <p>Payment window expires: {{ $order->expires_at->diffForHumans() }}</p>
+                    </div>
+                @endif
+            </div>
+            
+            @if(!$order->is_paid)
+                <div>
+                    @if($qrCode)
+                        <h2>Scan QR Code</h2>
+                        <div>
+                            <img src="{{ $qrCode }}" alt="Payment QR Code">
+                        </div>
+                    @endif
+                    
+                    <h2>Payment Address</h2>
+                    <div>
+                        {{ $order->payment_address }}
+                    </div>
+                    
+                    <div>
+                        <a href="{{ route('orders.show', $order->unique_url) }}">
+                            Refresh to check for new transactions
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <p>
+                        Please send exactly ɱ{{ number_format($order->required_xmr_amount, 12) }} XMR to the address above. 
+                        The payment will be detected once confirmed on the blockchain.
+                    </p>
+                </div>
+            @endif
+        </div>
+    @endif
+
     {{-- Order Details --}}
     <div class="orders-show-details-container">
         <div class="orders-show-details-card">

@@ -44,7 +44,14 @@ class Orders extends Model
         'paid_at',
         'delivered_at',
         'completed_at',
-        'disputed_at'
+        'disputed_at',
+        'payment_address',
+        'payment_address_index',
+        'required_xmr_amount',
+        'total_received_xmr',
+        'xmr_usd_rate',
+        'expires_at',
+        'payment_completed_at'
     ];
 
     /**
@@ -56,6 +63,9 @@ class Orders extends Model
         'subtotal' => 'decimal:2',
         'commission' => 'decimal:2',
         'total' => 'decimal:2',
+        'required_xmr_amount' => 'decimal:12',
+        'total_received_xmr' => 'decimal:12',
+        'xmr_usd_rate' => 'decimal:2',
         'is_paid' => 'boolean',
         'is_delivered' => 'boolean',
         'is_completed' => 'boolean',
@@ -64,6 +74,8 @@ class Orders extends Model
         'delivered_at' => 'datetime',
         'completed_at' => 'datetime',
         'disputed_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'payment_completed_at' => 'datetime',
     ];
 
     /**
@@ -129,6 +141,113 @@ class Orders extends Model
     public function dispute()
     {
         return $this->hasOne(Dispute::class, 'order_id');
+    }
+
+    /**
+     * Generate a Monero subaddress for the order payment.
+     * 
+     * @param \MoneroIntegrations\MoneroPhp\walletRPC $walletRPC
+     * @return bool
+     */
+    public function generatePaymentAddress($walletRPC)
+    {
+        try {
+            // Only generate an address if none exists
+            if (empty($this->payment_address)) {
+                $result = $walletRPC->create_address(0, "Order Payment " . $this->id);
+                
+                $this->payment_address = $result['address'];
+                $this->payment_address_index = $result['address_index'];
+                $this->expires_at = now()->addMinutes((int) config('monero.address_expiration_time', 1440));
+                $this->save();
+            }
+            
+            return true;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to generate payment address: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Check for and process new payments.
+     * 
+     * @param \MoneroIntegrations\MoneroPhp\walletRPC $walletRPC
+     * @return bool
+     */
+    public function checkPayments($walletRPC)
+    {
+        if ($this->is_paid || $this->status !== self::STATUS_WAITING_PAYMENT) {
+            return false;
+        }
+
+        try {
+            // Check for new payments
+            $transfers = $walletRPC->get_transfers([
+                'in' => true,
+                'pool' => true,
+                'subaddr_indices' => [$this->payment_address_index]
+            ]);
+
+            // Calculate minimum accepted payment amount (10% of required amount)
+            $minPaymentPercentage = 0.10; // Could also use a config value like for advertisements
+            $minAcceptedAmount = $this->required_xmr_amount * $minPaymentPercentage;
+
+            $totalReceived = 0;
+            foreach (['in', 'pool'] as $type) {
+                if (isset($transfers[$type])) {
+                    foreach ($transfers[$type] as $transfer) {
+                        // Only count payments that meet the minimum threshold
+                        $amount = $transfer['amount'] / 1e12;
+                        if ($amount >= $minAcceptedAmount) {
+                            $totalReceived += $amount;
+                        }
+                    }
+                }
+            }
+
+            // Update received amount
+            $this->total_received_xmr = $totalReceived;
+
+            // Check if payment is completed
+            if ($totalReceived >= $this->required_xmr_amount && !$this->is_paid) {
+                $this->status = self::STATUS_PAYMENT_RECEIVED;
+                $this->is_paid = true;
+                $this->paid_at = now();
+                $this->payment_completed_at = now();
+            }
+
+            $this->save();
+            return true;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error checking order payments: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Check if the payment has expired.
+     *
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        return $this->expires_at && $this->expires_at->isPast();
+    }
+
+    /**
+     * Calculate required XMR amount based on USD price and current XMR rate.
+     *
+     * @param float $xmrUsdRate
+     * @return float
+     */
+    public function calculateRequiredXmrAmount($xmrUsdRate)
+    {
+        if ($xmrUsdRate <= 0) {
+            throw new \InvalidArgumentException('XMR rate must be greater than zero');
+        }
+        
+        return $this->total / $xmrUsdRate;
     }
 
     /**

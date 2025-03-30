@@ -23,3 +23,15 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [X] Add product review functionality.
 - [X] Finish proof of concept for optional Baklava CAPTCHA
 - [ ] Add walletless escrow mechanism for buying products, making the script fully functional.
+
+Following the v1.0 release, development will continue with additional milestones to further enhance Kabus Monero Marketplace Script:
+
+- [ ] Implement enhanced log tracking for improved incident monitoring.
+- [ ] Introduce private vendor shops that are accessible only to referenced users for a more exclusive marketplace experience.
+- [ ] Add site-wide Markdown support.
+- [ ] Enable image uploads for dead drop listings.
+- [ ] Include I2P eepsite guide in installation docs.
+- [ ] Develop I2P address generator script.
+- [ ] Upgrade to Laravel 12.
+- [ ] Improve notifications system with more detailed messages.
+- [ ] Set up a private Jabber server to receive notifications in real time.

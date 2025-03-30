@@ -20,6 +20,11 @@ return new class extends Migration
             $table->decimal('commission', 10, 2);
             $table->decimal('total', 10, 2);
             $table->string('status');
+            $table->string('payment_address')->nullable();
+            $table->integer('payment_address_index')->nullable();
+            $table->decimal('required_xmr_amount', 18, 12)->nullable();
+            $table->decimal('total_received_xmr', 18, 12)->default(0);
+            $table->decimal('xmr_usd_rate', 10, 2)->nullable();
             $table->text('shipping_address')->nullable();
             $table->text('delivery_option')->nullable();
             $table->text('encrypted_message')->nullable();
@@ -27,9 +32,11 @@ return new class extends Migration
             $table->boolean('is_delivered')->default(false);
             $table->boolean('is_completed')->default(false);
             $table->timestamps();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->timestamp('completed_at')->nullable();
+            $table->timestamp('payment_completed_at')->nullable();
         });
 
         Schema::create('order_items', function (Blueprint $table) {
