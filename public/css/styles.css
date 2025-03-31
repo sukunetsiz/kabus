@@ -9769,7 +9769,7 @@ background-color:#ffc107;
 color:#000
 }
 
-.orders-index-status-product_delivered {
+.orders-index-status-product_sent {
 background-color:#4caf50;
 color:#000
 }
@@ -9899,7 +9899,7 @@ border-left:4px solid #ffc107;
 border-right:4px solid #ffc107
 }
 
-.orders-show-status-product_delivered {
+.orders-show-status-product_sent {
 border-left:4px solid #4caf50;
 border-right:4px solid #4caf50
 }
@@ -10811,6 +10811,194 @@ border-left:4px solid #27B4D2;
 border-right:4px solid #27B4D2
 }
 
+.orders-show-payment-container {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+margin-bottom:30px
+}
+
+.orders-show-payment-card {
+background-color:#1e1e1e;
+border-radius:12px;
+padding:25px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c
+}
+
+.orders-show-payment-subtitle {
+color:#bb86fc;
+font-size:20px;
+margin-bottom:20px;
+font-weight:700;
+text-align:center
+}
+
+.orders-show-payment-details {
+display:flex;
+flex-direction:column;
+gap:15px
+}
+
+.orders-show-payment-row {
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+padding:10px;
+border-bottom:1px solid #3c3c3c
+}
+
+.orders-show-payment-label {
+color:#e0e0e0;
+font-weight:700;
+flex:1
+}
+
+.orders-show-payment-value {
+color:#e0e0e0;
+text-align:right;
+flex:2
+}
+
+.orders-show-payment-value-group {
+flex:2;
+text-align:right
+}
+
+.orders-show-payment-amount {
+color:#bb86fc;
+font-weight:700;
+display:block
+}
+
+.orders-show-payment-remaining {
+color:#cf6679;
+display:block;
+margin-top:5px
+}
+
+.orders-show-payment-status-wrapper {
+flex:2;
+text-align:right
+}
+
+.orders-show-payment-status {
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-weight:700;
+font-size:14px
+}
+
+.orders-show-payment-status-completed {
+background-color:#1b5e20;
+color:#e8f5e9
+}
+
+.orders-show-payment-status-insufficient {
+background-color:#ffc107;
+color:#121212
+}
+
+.orders-show-payment-status-awaiting {
+background-color:#292929;
+color:#e0e0e0;
+border:1px solid #3c3c3c
+}
+
+.orders-show-payment-expiry {
+text-align:center;
+margin-top:15px;
+padding:12px;
+background-color:#cf66791a;
+border:1px solid #cf6679;
+border-radius:8px;
+animation:pulse 2s infinite
+}
+
+.orders-show-payment-expiry p {
+margin:0;
+font-weight:500;
+color:#cf6679
+}
+
+@keyframes pulse {
+0% {
+box-shadow:0 0 0 0 #cf667966
+}
+
+70% {
+box-shadow:0 0 0 8px #cf667900
+}
+
+100% {
+box-shadow:0 0 0 0 #cf667900
+}
+}
+
+.orders-show-payment-disclaimer {
+text-align:center;
+margin-top:12px;
+padding:10px;
+background-color:#1e1e1eb3;
+border:1px solid #3c3c3c;
+border-radius:8px;
+font-size:14px
+}
+
+.orders-show-payment-disclaimer p {
+margin:0;
+color:#bbb;
+font-style:italic;
+line-height:1.4
+}
+
+.orders-show-payment-address {
+background-color:#292929;
+padding:15px;
+border-radius:8px;
+word-break:break-all;
+text-align:center;
+border:1px solid #3c3c3c;
+color:#e0e0e0;
+margin-top:5px
+}
+
+.orders-show-payment-qr {
+text-align:center;
+margin:20px 0
+}
+
+.orders-show-payment-qr-image {
+max-width:240px;
+height:auto;
+border:4px solid #bb86fc;
+border-radius:8px
+}
+
+.orders-show-payment-refresh {
+text-align:center;
+margin:20px 0 0
+}
+
+.orders-show-payment-refresh-btn {
+display:inline-block;
+padding:12px 24px;
+background-color:#bb86fc;
+color:#121212;
+border-radius:8px;
+text-decoration:none;
+font-weight:700;
+transition:all .3s ease;
+text-transform:uppercase;
+letter-spacing:1px
+}
+
+.orders-show-payment-refresh-btn:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
 .sales-index-container {
 max-width:1200px;
 margin:20px auto;
@@ -10901,7 +11089,7 @@ background-color:#ffc107;
 color:#000
 }
 
-.sales-index-status-product_delivered {
+.sales-index-status-product_sent {
 background-color:#4caf50;
 color:#000
 }

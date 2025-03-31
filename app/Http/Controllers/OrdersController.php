@@ -52,6 +52,9 @@ class OrdersController extends Controller
      */
     public function show($uniqueUrl)
     {
+        // Process any orders that need auto status changes
+        Orders::processAllAutoStatusChanges();
+        
         $order = Orders::findByUrl($uniqueUrl);
         
         if (!$order) {
@@ -67,11 +70,47 @@ class OrdersController extends Controller
         $isBuyer = $order->user_id === Auth::id();
 
         // For buyers with unpaid orders, check if a payment address exists
-        // and generate one if needed
+        // and handle payment processing
         $qrCode = null;
         if ($isBuyer && $order->status === Orders::STATUS_WAITING_PAYMENT) {
-            // Generate payment address if not exists
-            if (empty($order->payment_address)) {
+            // First check if the order has an expired payment
+            if ($order->isExpired() && !empty($order->payment_address)) {
+                // Handle expired payment (cancels the order)
+                $order->handleExpiredPayment();
+                
+                // Refresh the order after cancellation
+                $order->refresh();
+                
+                if ($order->status === Orders::STATUS_CANCELLED) {
+                    return redirect()->route('orders.show', $order->unique_url)
+                        ->with('info', 'This order has been automatically cancelled because the payment window has expired.');
+                }
+            }
+            
+            // Check if the order should be auto-cancelled (not sent within 96 hours)
+            if ($order->shouldAutoCancelIfNotSent()) {
+                $order->autoCancelIfNotSent();
+                $order->refresh();
+                
+                if ($order->status === Orders::STATUS_CANCELLED) {
+                    return redirect()->route('orders.show', $order->unique_url)
+                        ->with('info', 'This order has been automatically cancelled because the vendor did not mark it as sent within 96 hours (4 days) after payment.');
+                }
+            }
+            
+            // Check if the order should be auto-completed (not marked completed within 192 hours after being sent)
+            if ($order->shouldAutoCompleteIfNotConfirmed()) {
+                $order->autoCompleteIfNotConfirmed();
+                $order->refresh();
+                
+                if ($order->status === Orders::STATUS_COMPLETED) {
+                    return redirect()->route('orders.show', $order->unique_url)
+                        ->with('info', 'This order has been automatically marked as completed because it was not confirmed within 192 hours (8 days) after being marked as sent.');
+                }
+            }
+            
+            // Only generate a payment address if none exists and the order isn't cancelled
+            if (empty($order->payment_address) && $order->status === Orders::STATUS_WAITING_PAYMENT) {
                 try {
                     // Get current XMR/USD rate
                     $xmrPriceController = new XmrPriceController();
@@ -131,11 +170,22 @@ class OrdersController extends Controller
         // Get dispute if it exists
         $dispute = $order->dispute;
         
+        // Calculate total number of items, accounting for bulk options
+        $totalItems = 0;
+        foreach($order->items as $item) {
+            if($item->bulk_option && isset($item->bulk_option['amount'])) {
+                $totalItems += $item->quantity * $item->bulk_option['amount'];
+            } else {
+                $totalItems += $item->quantity;
+            }
+        }
+        
         return view('orders.show', [
             'order' => $order,
             'isBuyer' => $isBuyer,
             'dispute' => $dispute,
-            'qrCode' => $qrCode
+            'qrCode' => $qrCode,
+            'totalItems' => $totalItems
         ]);
     }
 
@@ -199,9 +249,9 @@ class OrdersController extends Controller
 
 
     /**
-     * Mark the order as delivered.
+     * Mark the order as sent.
      */
-    public function markAsDelivered($uniqueUrl)
+    public function markAsSent($uniqueUrl)
     {
         $order = Orders::findByUrl($uniqueUrl);
         
@@ -209,18 +259,18 @@ class OrdersController extends Controller
             abort(404);
         }
 
-        // Verify ownership - only the vendor can mark as delivered
+        // Verify ownership - only the vendor can mark as sent
         if ($order->vendor_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
-        if ($order->markAsDelivered()) {
+        if ($order->markAsSent()) {
             return redirect()->route('vendor.sales.show', $order->unique_url)
-                ->with('success', 'Product marked as delivered. The buyer has been notified.');
+                ->with('success', 'Product marked as sent. The buyer has been notified.');
         }
 
         return redirect()->route('vendor.sales.show', $order->unique_url)
-            ->with('error', 'Unable to mark as delivered at this time.');
+            ->with('error', 'Unable to mark as sent at this time.');
     }
 
     /**

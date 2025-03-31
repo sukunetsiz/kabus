@@ -14,7 +14,7 @@
             <h2 class="orders-show-status-title">Status: {{ $sale->getFormattedStatus() }}</h2>
             
             <div class="orders-show-status-steps {{ $sale->status === 'cancelled' ? 'with-cancelled' : '' }} {{ isset($sale->dispute) && $sale->dispute ? 'with-disputed' : '' }}">
-                <div class="orders-show-status-step {{ $sale->status === 'waiting_payment' || $sale->is_paid || $sale->is_delivered || $sale->is_completed ? 'active' : '' }} {{ $sale->status === 'cancelled' && !$sale->paid_at ? 'cancelled-step' : '' }}">
+                <div class="orders-show-status-step {{ $sale->status === 'waiting_payment' || $sale->is_paid || $sale->is_sent || $sale->is_completed ? 'active' : '' }} {{ $sale->status === 'cancelled' && !$sale->paid_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">1</div>
                     <div class="orders-show-status-step-label">Waiting for Payment</div>
                     @if($sale->paid_at)
@@ -26,25 +26,25 @@
                         </div>
                     @endif
                 </div>
-                <div class="orders-show-status-step {{ $sale->is_paid || $sale->is_delivered || $sale->is_completed ? 'active' : '' }} {{ $sale->status === 'cancelled' && $sale->paid_at && !$sale->delivered_at ? 'cancelled-step' : '' }}">
+                <div class="orders-show-status-step {{ $sale->is_paid || $sale->is_sent || $sale->is_completed ? 'active' : '' }} {{ $sale->status === 'cancelled' && $sale->paid_at && !$sale->sent_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">2</div>
                     <div class="orders-show-status-step-label">Payment Received</div>
-                    @if($sale->delivered_at)
-                        <div class="orders-show-status-step-date">{{ $sale->delivered_at->format('Y-m-d / H:i') }}</div>
+                    @if($sale->sent_at)
+                        <div class="orders-show-status-step-date">{{ $sale->sent_at->format('Y-m-d / H:i') }}</div>
                     @endif
-                    @if($sale->status === 'cancelled' && $sale->paid_at && !$sale->delivered_at)
+                    @if($sale->status === 'cancelled' && $sale->paid_at && !$sale->sent_at)
                         <div class="orders-show-status-cancelled-marker">
                             <div class="orders-show-status-cancelled-x">X</div>
                         </div>
                     @endif
                 </div>
-                <div class="orders-show-status-step {{ $sale->is_delivered || $sale->is_completed ? 'active' : '' }} {{ $sale->status === 'cancelled' && $sale->delivered_at && !$sale->completed_at ? 'cancelled-step' : '' }}">
+                <div class="orders-show-status-step {{ $sale->is_sent || $sale->is_completed ? 'active' : '' }} {{ $sale->status === 'cancelled' && $sale->sent_at && !$sale->completed_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">3</div>
-                    <div class="orders-show-status-step-label">Product Delivered</div>
+                    <div class="orders-show-status-step-label">Product Sent</div>
                     @if($sale->completed_at)
                         <div class="orders-show-status-step-date">{{ $sale->completed_at->format('Y-m-d / H:i') }}</div>
                     @endif
-                    @if($sale->status === 'cancelled' && $sale->delivered_at && !$sale->completed_at)
+                    @if($sale->status === 'cancelled' && $sale->sent_at && !$sale->completed_at)
                         <div class="orders-show-status-cancelled-marker">
                             <div class="orders-show-status-cancelled-x">X</div>
                         </div>
@@ -63,12 +63,23 @@
 
             {{-- Status-based Actions for Vendor --}}
             @if($sale->status === 'payment_received')
+                {{-- Auto-cancel notice --}}
+                <div>
+                    <p><strong>Important Notice:</strong> This order will be automatically cancelled if not marked as sent within 
+                    <strong>96 hours (4 days)</strong> after payment was received.</p>
+                    
+                    @if($sale->getAutoCancelDeadline())
+                        <p>Auto-cancel deadline: <strong>{{ $sale->getAutoCancelDeadline()->format('Y-m-d H:i') }}</strong> 
+                        ({{ $sale->getAutoCancelDeadline()->diffForHumans() }})</p>
+                    @endif
+                </div>
+                
                 <div class="orders-show-actions">
                     {{-- Delivery text input form --}}
                     <form action="{{ route('vendor.sales.update-delivery-text', $sale->unique_url) }}" method="POST" class="sales-show-delivery-form">
                         @csrf
                         <h3 class="sales-show-delivery-title">Delivery Information</h3>
-                        <p class="sales-show-delivery-desc">Please enter delivery information for each product below before marking the order as delivered</p>
+                        <p class="sales-show-delivery-desc">Please enter delivery information for each product below before marking the order as sent</p>
 
                         @foreach($sale->items as $item)
                             @if($item->product)
@@ -90,7 +101,7 @@
                         <button type="submit" class="orders-show-action-btn sales-show-update-btn">Update Delivery Information</button>
                     </form>
 
-                    <form action="{{ route('orders.mark-delivered', $sale->unique_url) }}" method="POST" class="sales-show-deliver-form">
+                    <form action="{{ route('orders.mark-sent', $sale->unique_url) }}" method="POST" class="sales-show-deliver-form">
                         @csrf
                         <button type="submit" class="orders-show-action-btn sales-show-deliver-btn">Deliver Products</button>
                     </form>
@@ -108,23 +119,6 @@
             @endif
     </div>
 
-    {{-- Buyer Information --}}
-    <div class="orders-show-details-container">
-        <div class="orders-show-details-card">
-            <h2 class="orders-show-details-title">Buyer Information</h2>
-            
-            <div class="orders-show-info-grid">
-                <div class="orders-show-info-item">
-                    <div class="orders-show-info-label">Username</div>
-                    <div class="orders-show-info-value">{{ $sale->user->username }}</div>
-                </div>
-                <div class="orders-show-info-item">
-                    <div class="orders-show-info-label">Order Date</div>
-                    <div class="orders-show-info-value">{{ $sale->created_at->format('Y-m-d / H:i') }}</div>
-                </div>
-            </div>
-        </div>
-    </div>
     
     {{-- Dispute Section --}}
     @if($sale->dispute)
@@ -162,6 +156,14 @@
             
             <div class="orders-show-info-grid">
                 <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">Order Date</div>
+                    <div class="orders-show-info-value">{{ $sale->created_at->format('Y-m-d / H:i') }}</div>
+                </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">Buyer</div>
+                    <div class="orders-show-info-value">{{ $sale->user->username }}</div>
+                </div>
+                <div class="orders-show-info-item">
                     <div class="orders-show-info-label">Subtotal</div>
                     <div class="orders-show-info-value">${{ number_format($sale->subtotal, 2) }}</div>
                 </div>
@@ -172,6 +174,18 @@
                 <div class="orders-show-info-item">
                     <div class="orders-show-info-label">Total</div>
                     <div class="orders-show-info-value total">${{ number_format($sale->total, 2) }}</div>
+                </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">Total Items</div>
+                    <div class="orders-show-info-value">{{ $totalItems }}</div>
+                </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">XMR/USD Rate</div>
+                    <div class="orders-show-info-value">${{ number_format($sale->xmr_usd_rate, 2) }}</div>
+                </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">Monero Amount</div>
+                    <div class="orders-show-info-value total">ɱ{{ number_format($sale->required_xmr_amount, 12) }}</div>
                 </div>
             </div>
         </div>
@@ -208,8 +222,8 @@
                                     </div>
                                 @endif
                                 
-                                {{-- Display delivery text when order is delivered or completed --}}
-                                @if(($sale->status === 'product_delivered' || $sale->status === 'completed') && $item->delivery_text)
+                                {{-- Display delivery text when order is sent or completed --}}
+                                @if(($sale->status === 'product_sent' || $sale->status === 'completed') && $item->delivery_text)
                                     <div class="orders-show-item-delivery-text-container">
                                         <h4>Delivery Information:</h4>
                                         <div class="orders-show-item-delivery-text">

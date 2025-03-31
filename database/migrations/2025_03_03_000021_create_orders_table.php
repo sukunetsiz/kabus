@@ -29,12 +29,12 @@ return new class extends Migration
             $table->text('delivery_option')->nullable();
             $table->text('encrypted_message')->nullable();
             $table->boolean('is_paid')->default(false);
-            $table->boolean('is_delivered')->default(false);
+            $table->boolean('is_sent')->default(false);
             $table->boolean('is_completed')->default(false);
             $table->timestamps();
             $table->timestamp('expires_at')->nullable();
             $table->timestamp('paid_at')->nullable();
-            $table->timestamp('delivered_at')->nullable();
+            $table->timestamp('sent_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamp('payment_completed_at')->nullable();
         });

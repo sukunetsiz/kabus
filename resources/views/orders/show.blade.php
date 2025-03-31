@@ -14,7 +14,7 @@
             <h2 class="orders-show-status-title">Status: {{ $order->getFormattedStatus() }}</h2>
             
             <div class="orders-show-status-steps {{ $order->status === 'cancelled' ? 'with-cancelled' : '' }} {{ isset($dispute) && $dispute ? 'with-disputed' : '' }}">
-                <div class="orders-show-status-step {{ $order->status === 'waiting_payment' || $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && !$order->paid_at ? 'cancelled-step' : '' }}">
+                <div class="orders-show-status-step {{ $order->status === 'waiting_payment' || $order->is_paid || $order->is_sent || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && !$order->paid_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">1</div>
                     <div class="orders-show-status-step-label">Waiting for Payment</div>
                     @if($order->paid_at)
@@ -26,25 +26,25 @@
                         </div>
                     @endif
                 </div>
-                <div class="orders-show-status-step {{ $order->is_paid || $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->paid_at && !$order->delivered_at ? 'cancelled-step' : '' }}">
+                <div class="orders-show-status-step {{ $order->is_paid || $order->is_sent || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->paid_at && !$order->sent_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">2</div>
                     <div class="orders-show-status-step-label">Payment Received</div>
-                    @if($order->delivered_at)
-                        <div class="orders-show-status-step-date">{{ $order->delivered_at->format('Y-m-d / H:i') }}</div>
+                    @if($order->sent_at)
+                        <div class="orders-show-status-step-date">{{ $order->sent_at->format('Y-m-d / H:i') }}</div>
                     @endif
-                    @if($order->status === 'cancelled' && $order->paid_at && !$order->delivered_at)
+                    @if($order->status === 'cancelled' && $order->paid_at && !$order->sent_at)
                         <div class="orders-show-status-cancelled-marker">
                             <div class="orders-show-status-cancelled-x">X</div>
                         </div>
                     @endif
                 </div>
-                <div class="orders-show-status-step {{ $order->is_delivered || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->delivered_at && !$order->completed_at ? 'cancelled-step' : '' }}">
+                <div class="orders-show-status-step {{ $order->is_sent || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->sent_at && !$order->completed_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">3</div>
-                    <div class="orders-show-status-step-label">Product Delivered</div>
+                    <div class="orders-show-status-step-label">Product Sent</div>
                     @if($order->completed_at)
                         <div class="orders-show-status-step-date">{{ $order->completed_at->format('Y-m-d / H:i') }}</div>
                     @endif
-                    @if($order->status === 'cancelled' && $order->delivered_at && !$order->completed_at)
+                    @if($order->status === 'cancelled' && $order->sent_at && !$order->completed_at)
                         <div class="orders-show-status-cancelled-marker">
                             <div class="orders-show-status-cancelled-x">X</div>
                         </div>
@@ -64,114 +64,130 @@
             {{-- Status-based Actions (without cancel button) --}}
             @if($isBuyer)
                 @if($order->status === 'waiting_payment')
-                @elseif($order->status === 'product_delivered')
+                @elseif($order->status === 'payment_received')
+                    <div>
+                        <p>This order will be automatically cancelled if the vendor does not mark it as sent within 
+                        <strong>96 hours (4 days)</strong> after payment was received.</p>
+                        
+                        @if($order->getAutoCancelDeadline())
+                            <p>Auto-cancel deadline: <strong>{{ $order->getAutoCancelDeadline()->format('Y-m-d H:i') }}</strong> 
+                            ({{ $order->getAutoCancelDeadline()->diffForHumans() }})</p>
+                        @endif
+                    </div>
+                @elseif($order->status === 'product_sent')
                     <div class="orders-show-actions">
                         <form action="{{ route('orders.mark-completed', $order->unique_url) }}" method="POST" class="orders-show-action-form">
                             @csrf
-                            <button type="submit" class="orders-show-action-btn orders-show-confirm-delivery-btn">Confirm Product as Delivered</button>
+                            <button type="submit" class="orders-show-action-btn orders-show-confirm-delivery-btn">Confirm Order</button>
                         </form>
-                        
                     </div>
+                    
+                    @if(!$order->is_disputed)
+                        <div>
+                            <p>This order will be automatically marked as completed if not confirmed within 
+                            <strong>192 hours (8 days)</strong> after being marked as sent.</p>
+                            
+                            @if($order->getAutoCompleteDeadline())
+                                <p>Auto-complete deadline: <strong>{{ $order->getAutoCompleteDeadline()->format('Y-m-d H:i') }}</strong> 
+                                ({{ $order->getAutoCompleteDeadline()->diffForHumans() }})</p>
+                            @endif
+                        </div>
+                    @endif
                 @endif
             @endif
         </div>
     </div>
 
-    {{-- Monero Payment Section (for waiting_payment status) --}}
+        {{-- Monero Payment Section (for waiting_payment status) --}}
     @if($isBuyer && $order->status === 'waiting_payment')
-        <div>
-            <div>
-                <h2>Payment Information</h2>
-                
-                <div>
-                    <div>
-                        <span>Required Amount:</span>
-                        <span>
-                            ɱ{{ number_format($order->required_xmr_amount, 12) }} XMR
+        <div class="orders-show-payment-container">
+            <div class="orders-show-payment-card">
+                <h2 class="orders-show-payment-subtitle">Payment Information</h2>
+            
+                <div class="orders-show-payment-details">
+                    <div class="orders-show-payment-row">
+                        <span class="orders-show-payment-label">Required Amount:</span>
+                        <span class="orders-show-payment-value">
+                            <span class="orders-show-payment-amount">ɱ{{ number_format($order->required_xmr_amount, 12) }} XMR</span>
                         </span>
                     </div>
-                    
-                    <div>
-                        <span>USD/XMR Rate:</span>
-                        <span>
+                
+                    <div class="orders-show-payment-row">
+                        <span class="orders-show-payment-label">USD/XMR Rate:</span>
+                        <span class="orders-show-payment-value">
                             ${{ number_format($order->xmr_usd_rate, 2) }} per XMR
                         </span>
                     </div>
-                    
-                    <div>
-                        <span>Minimum Payment:</span>
-                        <span>
-                            ɱ{{ number_format($order->required_xmr_amount * 0.1, 12) }} XMR (10%)
+                
+                    <div class="orders-show-payment-row">
+                        <span class="orders-show-payment-label">Minimum Payment:</span>
+                        <span class="orders-show-payment-value">
+                            <span class="orders-show-payment-amount">ɱ{{ number_format($order->required_xmr_amount * 0.1, 12) }} XMR (10%)</span>
                         </span>
                     </div>
-                    
+                
                     @if($order->total_received_xmr > 0 && !$order->is_paid)
-                        <div>
-                            <span>Amount Received:</span>
-                            <div>
-                                <span>
-                                    ɱ{{ number_format($order->total_received_xmr, 12) }} XMR
-                                </span>
-                                <span>
+                        <div class="orders-show-payment-row">
+                            <span class="orders-show-payment-label">Amount Received:</span>
+                            <div class="orders-show-payment-value-group">
+                                <span class="orders-show-payment-amount">ɱ{{ number_format($order->total_received_xmr, 12) }} XMR</span>
+                                <span class="orders-show-payment-remaining">
                                     Remaining: ɱ{{ number_format($order->required_xmr_amount - $order->total_received_xmr, 12) }} XMR
                                 </span>
                             </div>
                         </div>
                     @endif
-                    
-                    <div>
-                        <span>Payment Status:</span>
-                        <div>
+                
+                    <div class="orders-show-payment-row">
+                        <span class="orders-show-payment-label">Payment Status:</span>
+                        <div class="orders-show-payment-status-wrapper">
                             @if($order->is_paid)
-                                <span>
+                                <span class="orders-show-payment-status orders-show-payment-status-completed">
                                     Payment Completed
                                 </span>
                             @elseif($order->total_received_xmr > 0 && $order->total_received_xmr < $order->required_xmr_amount)
-                                <span>
+                                <span class="orders-show-payment-status orders-show-payment-status-insufficient">
                                     Insufficient Amount
                                 </span>
                             @else
-                                <span>
+                                <span class="orders-show-payment-status orders-show-payment-status-awaiting">
                                     Awaiting Payment
                                 </span>
                             @endif
                         </div>
                     </div>
                 </div>
-                
+            
                 @if($order->expires_at)
-                    <div>
-                        <p>Payment window expires: {{ $order->expires_at->diffForHumans() }}</p>
+                    <div class="orders-show-payment-expiry">
+                        <p>The payment window expires in {{ $order->expires_at->diffForHumans() }}. Your order will be automatically canceled if the required amount of Monero for the purchase hasn't been met, and any incomplete amount will not be returned to your address after automatic cancellation.</p>
+                    </div>
+
+                    <div class="orders-show-payment-disclaimer">
+                        <p>After completing the order, if you (the buyer) or the vendor cancels the order, a small cancellation fee will be applied to protect our website and prevent spam. This means you will receive slightly less than the original amount when your money is refunded.</p>
                     </div>
                 @endif
             </div>
-            
+        
             @if(!$order->is_paid)
-                <div>
+                <div class="orders-show-payment-card">
                     @if($qrCode)
-                        <h2>Scan QR Code</h2>
-                        <div>
-                            <img src="{{ $qrCode }}" alt="Payment QR Code">
+                        <h2 class="orders-show-payment-subtitle">Scan QR Code</h2>
+                        <div class="orders-show-payment-qr">
+                            <img src="{{ $qrCode }}" alt="Payment QR Code" class="orders-show-payment-qr-image">
                         </div>
                     @endif
-                    
-                    <h2>Payment Address</h2>
-                    <div>
+                
+                    <h2 class="orders-show-payment-subtitle" style="margin-top: 20px;">Payment Address</h2>
+                    <div class="orders-show-payment-address">
                         {{ $order->payment_address }}
                     </div>
-                    
-                    <div>
-                        <a href="{{ route('orders.show', $order->unique_url) }}">
+                
+                    <div class="orders-show-payment-refresh">
+                        <a href="{{ route('orders.show', $order->unique_url) }}" class="orders-show-payment-refresh-btn">
                             Refresh to check for new transactions
                         </a>
                     </div>
-                </div>
-                
-                <div>
-                    <p>
-                        Please send exactly ɱ{{ number_format($order->required_xmr_amount, 12) }} XMR to the address above. 
-                        The payment will be detected once confirmed on the blockchain.
-                    </p>
                 </div>
             @endif
         </div>
@@ -203,12 +219,24 @@
                     <div class="orders-show-info-label">Total</div>
                     <div class="orders-show-info-value total">${{ number_format($order->total, 2) }}</div>
                 </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">Total Items</div>
+                    <div class="orders-show-info-value">{{ $totalItems }}</div>
+                </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">XMR/USD Rate</div>
+                    <div class="orders-show-info-value">${{ number_format($order->xmr_usd_rate, 2) }}</div>
+                </div>
+                <div class="orders-show-info-item">
+                    <div class="orders-show-info-label">Monero Amount</div>
+                    <div class="orders-show-info-value total">ɱ{{ number_format($order->required_xmr_amount, 12) }}</div>
+                </div>
             </div>
         </div>
     </div>
 
     {{-- Cancel Button Section (new location) --}}
-    @if($isBuyer && ($order->status === 'waiting_payment' || $order->status === 'payment_received' || $order->status === 'product_delivered'))
+    @if($isBuyer && ($order->status === 'waiting_payment' || $order->status === 'payment_received' || $order->status === 'product_sent'))
     <div class="orders-show-cancel-container">
         <form action="{{ route('orders.mark-cancelled', $order->unique_url) }}" method="POST">
             @csrf
@@ -248,8 +276,8 @@
                                     </div>
                                 @endif
                                 
-                                {{-- Display delivery text when order is delivered or completed --}}
-                                @if(($order->status === 'product_delivered' || $order->status === 'completed') && $item->delivery_text)
+                                {{-- Display delivery text when order is sent or completed --}}
+                                @if(($order->status === 'product_sent' || $order->status === 'completed') && $item->delivery_text)
                                     <div class="orders-show-item-delivery-text-container">
                                         <h4>Delivery Information:</h4>
                                         <div class="orders-show-item-delivery-text">
@@ -288,7 +316,7 @@
     </div>
 
     {{-- Dispute Form Section --}}
-    @if($isBuyer && $order->status === 'product_delivered')
+    @if($isBuyer && $order->status === 'product_sent')
         <div class="orders-show-dispute-form-container">
             <div class="orders-show-dispute-form-card">
                 <h2 class="orders-show-dispute-form-title">Do You Want to Open a Dispute?</h2>

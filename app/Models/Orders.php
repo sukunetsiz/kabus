@@ -16,7 +16,7 @@ class Orders extends Model
     // Order status constants
     public const STATUS_WAITING_PAYMENT = 'waiting_payment';
     public const STATUS_PAYMENT_RECEIVED = 'payment_received';
-    public const STATUS_PRODUCT_DELIVERED = 'product_delivered';
+    public const STATUS_PRODUCT_SENT = 'product_sent';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_DISPUTED = 'disputed';
@@ -38,11 +38,11 @@ class Orders extends Model
         'delivery_option',
         'encrypted_message',
         'is_paid',
-        'is_delivered',
+        'is_sent',
         'is_completed',
         'is_disputed',
         'paid_at',
-        'delivered_at',
+        'sent_at',
         'completed_at',
         'disputed_at',
         'payment_address',
@@ -67,11 +67,11 @@ class Orders extends Model
         'total_received_xmr' => 'decimal:12',
         'xmr_usd_rate' => 'decimal:2',
         'is_paid' => 'boolean',
-        'is_delivered' => 'boolean',
+        'is_sent' => 'boolean',
         'is_completed' => 'boolean',
         'is_disputed' => 'boolean',
         'paid_at' => 'datetime',
-        'delivered_at' => 'datetime',
+        'sent_at' => 'datetime',
         'completed_at' => 'datetime',
         'disputed_at' => 'datetime',
         'expires_at' => 'datetime',
@@ -234,6 +234,193 @@ class Orders extends Model
     {
         return $this->expires_at && $this->expires_at->isPast();
     }
+    
+    /**
+     * Handle expired payment by automatically cancelling the order.
+     * 
+     * @return bool
+     */
+    public function handleExpiredPayment(): bool
+    {
+        // Only handle orders in waiting_payment status
+        if ($this->status !== self::STATUS_WAITING_PAYMENT) {
+            return false;
+        }
+        
+        // Check if payment has expired
+        if (!$this->isExpired()) {
+            return false;
+        }
+        
+        // Cancel the order
+        return $this->markAsCancelled();
+    }
+    
+    /**
+     * Check if the order should be auto-cancelled because it hasn't been marked as sent
+     * within 96 hours (4 days) of payment being received.
+     * 
+     * @return bool
+     */
+    public function shouldAutoCancelIfNotSent(): bool
+    {
+        // Only handle orders in payment_received status
+        if ($this->status !== self::STATUS_PAYMENT_RECEIVED) {
+            return false;
+        }
+        
+        // Check if 96 hours (4 days) have passed since payment was received
+        if (!$this->paid_at || $this->paid_at->addHours(96)->isFuture()) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Auto-cancel an order that hasn't been marked as sent within the time limit.
+     * 
+     * @return bool
+     */
+    public function autoCancelIfNotSent(): bool
+    {
+        if (!$this->shouldAutoCancelIfNotSent()) {
+            return false;
+        }
+        
+        // Cancel the order
+        return $this->markAsCancelled();
+    }
+    
+    /**
+     * Check if the order should be auto-completed because it hasn't been marked as completed
+     * within 192 hours (8 days) of being marked as sent.
+     * 
+     * @return bool
+     */
+    public function shouldAutoCompleteIfNotConfirmed(): bool
+    {
+        // Only handle orders in product_sent status
+        if ($this->status !== self::STATUS_PRODUCT_SENT) {
+            return false;
+        }
+        
+        // Don't auto-complete if there's an active dispute
+        if ($this->is_disputed || $this->status === self::STATUS_DISPUTED) {
+            return false;
+        }
+        
+        // Check if 192 hours (8 days) have passed since product was marked as sent
+        if (!$this->sent_at || $this->sent_at->addHours(192)->isFuture()) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Auto-complete an order that hasn't been marked as completed within the time limit.
+     * 
+     * @return bool
+     */
+    public function autoCompleteIfNotConfirmed(): bool
+    {
+        if (!$this->shouldAutoCompleteIfNotConfirmed()) {
+            return false;
+        }
+        
+        // Complete the order
+        return $this->markAsCompleted();
+    }
+    
+    /**
+     * Get the time remaining before an order is auto-cancelled if not marked as sent.
+     * 
+     * @return \Illuminate\Support\Carbon|null
+     */
+    public function getAutoCancelDeadline()
+    {
+        if ($this->status !== self::STATUS_PAYMENT_RECEIVED || !$this->paid_at) {
+            return null;
+        }
+        
+        return $this->paid_at->addHours(96);
+    }
+    
+    /**
+     * Get the time remaining before an order is auto-completed if not marked as completed.
+     * 
+     * @return \Illuminate\Support\Carbon|null
+     */
+    public function getAutoCompleteDeadline()
+    {
+        if ($this->status !== self::STATUS_PRODUCT_SENT || !$this->sent_at || $this->is_disputed) {
+            return null;
+        }
+        
+        return $this->sent_at->addHours(192);
+    }
+    
+    /**
+     * Find all orders that need to be auto-cancelled because they haven't been
+     * marked as sent within 96 hours of payment received.
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function findOrdersToAutoCancel()
+    {
+        return self::where('status', self::STATUS_PAYMENT_RECEIVED)
+            ->whereNotNull('paid_at')
+            ->where('paid_at', '<=', now()->subHours(96))
+            ->get();
+    }
+    
+    /**
+     * Find all orders that need to be auto-completed because they haven't been
+     * marked as completed within 192 hours of being marked as sent.
+     * 
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function findOrdersToAutoComplete()
+    {
+        return self::where('status', self::STATUS_PRODUCT_SENT)
+            ->where('is_disputed', false)
+            ->whereNotNull('sent_at')
+            ->where('sent_at', '<=', now()->subHours(192))
+            ->get();
+    }
+    
+    /**
+     * Process all orders that need auto status changes.
+     * 
+     * @return array Array containing counts of cancelled and completed orders
+     */
+    public static function processAllAutoStatusChanges()
+    {
+        $cancelCount = 0;
+        $completeCount = 0;
+        
+        // Process auto-cancellations
+        $ordersToCancel = self::findOrdersToAutoCancel();
+        foreach ($ordersToCancel as $order) {
+            if ($order->autoCancelIfNotSent()) {
+                $cancelCount++;
+            }
+        }
+        
+        // Process auto-completions
+        $ordersToComplete = self::findOrdersToAutoComplete();
+        foreach ($ordersToComplete as $order) {
+            if ($order->autoCompleteIfNotConfirmed()) {
+                $completeCount++;
+            }
+        }
+        
+        return [
+            'cancelled' => $cancelCount,
+            'completed' => $completeCount
+        ];
+    }
 
     /**
      * Calculate required XMR amount based on USD price and current XMR rate.
@@ -268,17 +455,17 @@ class Orders extends Model
     }
 
     /**
-     * Mark the order as delivered.
+     * Mark the order as sent.
      */
-    public function markAsDelivered()
+    public function markAsSent()
     {
         if ($this->status !== self::STATUS_PAYMENT_RECEIVED) {
             return false;
         }
 
-        $this->status = self::STATUS_PRODUCT_DELIVERED;
-        $this->is_delivered = true;
-        $this->delivered_at = now();
+        $this->status = self::STATUS_PRODUCT_SENT;
+        $this->is_sent = true;
+        $this->sent_at = now();
         $this->save();
 
         return true;
@@ -289,7 +476,7 @@ class Orders extends Model
      */
     public function markAsCompleted()
     {
-        if ($this->status !== self::STATUS_PRODUCT_DELIVERED && $this->status !== self::STATUS_DISPUTED) {
+        if ($this->status !== self::STATUS_PRODUCT_SENT && $this->status !== self::STATUS_DISPUTED) {
             return false;
         }
 
@@ -363,7 +550,7 @@ class Orders extends Model
         return match($this->status) {
             self::STATUS_WAITING_PAYMENT => 'Waiting for Payment',
             self::STATUS_PAYMENT_RECEIVED => 'Payment Received',
-            self::STATUS_PRODUCT_DELIVERED => 'Product Delivered',
+            self::STATUS_PRODUCT_SENT => 'Product Sent',
             self::STATUS_COMPLETED => 'Order Completed',
             self::STATUS_CANCELLED => 'Order Cancelled',
             self::STATUS_DISPUTED => 'Order Disputed',
@@ -376,8 +563,8 @@ class Orders extends Model
      */
     public function openDispute($reason)
     {
-        // Only allow disputes for orders in "product delivered" status
-        if ($this->status !== self::STATUS_PRODUCT_DELIVERED) {
+        // Only allow disputes for orders in "product sent" status
+        if ($this->status !== self::STATUS_PRODUCT_SENT) {
             return false;
         }
 

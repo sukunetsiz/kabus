@@ -73,7 +73,7 @@ class DisputesController extends Controller
         
         if (!$dispute) {
             return redirect()->route('orders.show', $order->unique_url)
-                ->with('error', 'Unable to open dispute. Disputes can only be opened for orders with "Product Delivered" status.');
+                ->with('error', 'Unable to open dispute. Disputes can only be opened for orders with "Product Sent" status.');
         }
         
         // Add the initial message from the buyer

@@ -176,7 +176,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrdersController::class, 'index'])->name('orders.index');
     Route::get('/orders/{uniqueUrl}', [OrdersController::class, 'show'])->name('orders.show');
     Route::post('/orders', [OrdersController::class, 'store'])->name('orders.store');
-    Route::post('/orders/{uniqueUrl}/mark-delivered', [OrdersController::class, 'markAsDelivered'])->name('orders.mark-delivered');
+    Route::post('/orders/{uniqueUrl}/mark-sent', [OrdersController::class, 'markAsSent'])->name('orders.mark-sent');
     Route::post('/orders/{uniqueUrl}/mark-completed', [OrdersController::class, 'markAsCompleted'])->name('orders.mark-completed');
     Route::post('/orders/{uniqueUrl}/mark-cancelled', [OrdersController::class, 'markAsCancelled'])->name('orders.mark-cancelled');
     Route::post('/orders/{uniqueUrl}/review/{orderItemId}', [OrdersController::class, 'submitReview'])->name('orders.submit-review');

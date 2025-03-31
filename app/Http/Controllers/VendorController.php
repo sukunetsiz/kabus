@@ -87,6 +87,9 @@ class VendorController extends Controller
      */
     public function showSale($uniqueUrl)
     {
+        // Process any orders that need auto status changes
+        Orders::processAllAutoStatusChanges();
+        
         $sale = Orders::findByUrl($uniqueUrl);
         
         if (!$sale) {
@@ -98,8 +101,41 @@ class VendorController extends Controller
             abort(403, 'Unauthorized access.');
         }
         
+        // Check if the order should be auto-cancelled (not sent within 96 hours)
+        if ($sale->shouldAutoCancelIfNotSent()) {
+            $sale->autoCancelIfNotSent();
+            $sale->refresh();
+            
+            if ($sale->status === Orders::STATUS_CANCELLED) {
+                return redirect()->route('vendor.sales.show', $sale->unique_url)
+                    ->with('info', 'This order has been automatically cancelled because it was not marked as sent within 96 hours (4 days) after payment.');
+            }
+        }
+        
+        // Check if the order should be auto-completed (not marked completed within 192 hours after being sent)
+        if ($sale->shouldAutoCompleteIfNotConfirmed()) {
+            $sale->autoCompleteIfNotConfirmed();
+            $sale->refresh();
+            
+            if ($sale->status === Orders::STATUS_COMPLETED) {
+                return redirect()->route('vendor.sales.show', $sale->unique_url)
+                    ->with('info', 'This order has been automatically marked as completed because it was not confirmed within 192 hours (8 days) after being marked as sent.');
+            }
+        }
+        
+        // Calculate total number of items, accounting for bulk options
+        $totalItems = 0;
+        foreach($sale->items as $item) {
+            if($item->bulk_option && isset($item->bulk_option['amount'])) {
+                $totalItems += $item->quantity * $item->bulk_option['amount'];
+            } else {
+                $totalItems += $item->quantity;
+            }
+        }
+        
         return view('vendor.sales.show', [
-            'sale' => $sale
+            'sale' => $sale,
+            'totalItems' => $totalItems
         ]);
     }
 
