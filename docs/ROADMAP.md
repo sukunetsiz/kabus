@@ -22,7 +22,7 @@ On January 1st, I created the Kabus Marketplace Script repository, marking the b
 - [X] Implement a feature to allow users and vendors to create and manage disputes.
 - [X] Add product review functionality.
 - [X] Finish proof of concept for optional Baklava CAPTCHA
-- [ ] Add walletless escrow mechanism for buying products, making the script fully functional.
+- [X] Add walletless escrow mechanism for buying products, making the script fully functional.
 
 Following the v1.0 release, development will continue with additional milestones to further enhance Kabus Monero Marketplace Script:
 

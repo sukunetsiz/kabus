@@ -626,6 +626,61 @@ class Orders extends Model
     }
 
     /**
+     * Check if a user has too many cancelled orders from a specific vendor.
+     * 
+     * @param int $userId
+     * @param int $vendorId
+     * @param int $limit
+     * @return bool
+     */
+    public static function hasExcessiveCancelledOrders($userId, $vendorId, $limit = 4)
+    {
+        $cancelledCount = self::where('user_id', $userId)
+            ->where('vendor_id', $vendorId)
+            ->where('status', self::STATUS_CANCELLED)
+            ->count();
+            
+        return $cancelledCount >= $limit;
+    }
+    
+    /**
+     * Check if a user has a pending payment order from a specific vendor.
+     * 
+     * @param int $userId
+     * @param int $vendorId
+     * @return bool
+     */
+    public static function hasPendingPaymentOrder($userId, $vendorId)
+    {
+        return self::where('user_id', $userId)
+            ->where('vendor_id', $vendorId)
+            ->where('status', self::STATUS_WAITING_PAYMENT)
+            ->exists();
+    }
+    
+    /**
+     * Check if a user can create a new order with a specific vendor.
+     * 
+     * @param int $userId
+     * @param int $vendorId
+     * @return array [bool $canCreate, string $reason]
+     */
+    public static function canCreateNewOrder($userId, $vendorId)
+    {
+        // Check for excessive cancelled orders
+        if (self::hasExcessiveCancelledOrders($userId, $vendorId)) {
+            return [false, 'You have too many cancelled orders with this vendor. Please contact support.'];
+        }
+        
+        // Check for pending payment orders
+        if (self::hasPendingPaymentOrder($userId, $vendorId)) {
+            return [false, 'You already have a pending payment order with this vendor. Please complete or cancel it before creating a new order.'];
+        }
+        
+        return [true, ''];
+    }
+
+    /**
      * Create an order from cart items.
      */
     public static function createFromCart($user, $cartItems, $subtotal, $commission, $total)

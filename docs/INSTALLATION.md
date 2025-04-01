@@ -209,51 +209,24 @@ Now we need to configure Nginx to serve our marketplace. Let's create a new serv
 sudo nano /etc/nginx/sites-available/kabus
 ```
 
-Copy and paste the following configuration into the file. This is a secure configuration that includes various security headers and proper PHP handling:
+Copy and paste the following configuration into the file. This is a simple Nginx configuration:
 ```nginx
 server {
     listen 80;
     listen [::]:80;
-    # Set root directive with your /public Laravel directory
+
     root /var/www/kabus/public;
-    # Set index directive
-    index index.php index.html index.htm;
-    # Set server_name directive with your domain
-    server_name domain.com;
-    # Remove Server header
-    server_tokens off;
-    # Security headers
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-Frame-Options "DENY" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()" always;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    # Add error page for maintenance mode
+    index index.php;
+
     error_page 503 /maintenance.php;
+
     location / {
-        # Check for maintenance file before trying normal routes
         if (-f $document_root/../storage/framework/down) {
             return 503;
         }
         try_files $uri $uri/ /index.php?$query_string;
     }
-    
-    # Deny access to hidden files (starting with .)
-    location ~ /\. {
-        deny all;
-        access_log off;
-        log_not_found off;
-    }
-    
-    # Deny access to the BitKeeper directory explicitly
-    location ~* /BitKeeper {
-        deny all;
-        access_log off;
-        log_not_found off;
-    }
-    
-    # pass PHP scripts to FastCGI server
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
@@ -261,14 +234,6 @@ server {
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        
-        # Pass all security headers to PHP
-        fastcgi_param HTTP_X_CONTENT_TYPE_OPTIONS $sent_http_x_content_type_options;
-        fastcgi_param HTTP_X_FRAME_OPTIONS $sent_http_x_frame_options;
-        fastcgi_param HTTP_X_XSS_PROTECTION $sent_http_x_xss_protection;
-        fastcgi_param HTTP_REFERRER_POLICY $sent_http_referrer_policy;
-        fastcgi_param HTTP_PERMISSIONS_POLICY $sent_http_permissions_policy;
-        fastcgi_param HTTP_STRICT_TRANSPORT_SECURITY $sent_http_strict_transport_security;
     }
 }
 ```
@@ -295,7 +260,7 @@ If you see a message saying the test is successful, we can safely restart Nginx:
 sudo systemctl restart nginx
 ```
 
-Now our Nginx server is configured with proper security settings and is ready to serve our marketplace application.
+Now our Nginx server is configured and is ready to serve our marketplace application.
 You can visit localhost in your browser to test if your marketplace is working properly. Stay tuned for our next guide where we'll show you how to configure Tor and publish your marketplace as a hidden service on the Tor network!
 
 ## Installing and Configuring Tor Hidden Service

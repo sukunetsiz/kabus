@@ -202,6 +202,16 @@ class OrdersController extends Controller
                 return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
             }
             
+            // Get vendor ID from cart items
+            $vendorId = $cartItems->first()->product->user_id;
+            
+            // Check if user can create a new order with this vendor (spam prevention)
+            [$canCreate, $reason] = Orders::canCreateNewOrder($user->id, $vendorId);
+            
+            if (!$canCreate) {
+                return redirect()->route('cart.checkout')->with('error', $reason);
+            }
+            
             // Calculate order totals
             $subtotal = Cart::getCartTotal($user);
             $commissionPercentage = config('marketplace.commission_percentage');

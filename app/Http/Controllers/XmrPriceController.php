@@ -24,7 +24,7 @@ class XmrPriceController extends Controller
                 ]);
                 $data = json_decode($response->getBody(), true);
                 if (isset($data['monero']['usd'])) {
-                    return intval($data['monero']['usd']);
+                    return number_format($data['monero']['usd'], 2, '.', '');
                 }
             } catch (\Exception $e) {
                 Log::warning('CoinGecko API error: ' . $e->getMessage());
@@ -41,7 +41,7 @@ class XmrPriceController extends Controller
                 ]);
                 $data = json_decode($response->getBody(), true);
                 if (isset($data['USD'])) {
-                    return intval($data['USD']);
+                    return number_format($data['USD'], 2, '.', '');
                 }
             } catch (ConnectException $e) {
                 Log::error('CryptoCompare API Connection error: ' . $e->getMessage());

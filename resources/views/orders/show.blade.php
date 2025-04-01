@@ -17,8 +17,8 @@
                 <div class="orders-show-status-step {{ $order->status === 'waiting_payment' || $order->is_paid || $order->is_sent || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && !$order->paid_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">1</div>
                     <div class="orders-show-status-step-label">Waiting for Payment</div>
-                    @if($order->paid_at)
-                        <div class="orders-show-status-step-date">{{ $order->paid_at->format('Y-m-d / H:i') }}</div>
+                    @if($order->created_at)
+                        <div class="orders-show-status-step-date">{{ $order->created_at->format('Y-m-d / H:i') }}</div>
                     @endif
                     @if($order->status === 'cancelled' && !$order->paid_at)
                         <div class="orders-show-status-cancelled-marker">
@@ -29,8 +29,8 @@
                 <div class="orders-show-status-step {{ $order->is_paid || $order->is_sent || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->paid_at && !$order->sent_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">2</div>
                     <div class="orders-show-status-step-label">Payment Received</div>
-                    @if($order->sent_at)
-                        <div class="orders-show-status-step-date">{{ $order->sent_at->format('Y-m-d / H:i') }}</div>
+                    @if($order->paid_at)
+                        <div class="orders-show-status-step-date">{{ $order->paid_at->format('Y-m-d / H:i') }}</div>
                     @endif
                     @if($order->status === 'cancelled' && $order->paid_at && !$order->sent_at)
                         <div class="orders-show-status-cancelled-marker">
@@ -41,8 +41,8 @@
                 <div class="orders-show-status-step {{ $order->is_sent || $order->is_completed ? 'active' : '' }} {{ $order->status === 'cancelled' && $order->sent_at && !$order->completed_at ? 'cancelled-step' : '' }}">
                     <div class="orders-show-status-step-number">3</div>
                     <div class="orders-show-status-step-label">Product Sent</div>
-                    @if($order->completed_at)
-                        <div class="orders-show-status-step-date">{{ $order->completed_at->format('Y-m-d / H:i') }}</div>
+                    @if($order->sent_at)
+                        <div class="orders-show-status-step-date">{{ $order->sent_at->format('Y-m-d / H:i') }}</div>
                     @endif
                     @if($order->status === 'cancelled' && $order->sent_at && !$order->completed_at)
                         <div class="orders-show-status-cancelled-marker">
@@ -58,6 +58,9 @@
                 <div class="orders-show-status-step {{ $order->is_completed ? 'active' : '' }}">
                     <div class="orders-show-status-step-number">4</div>
                     <div class="orders-show-status-step-label">Order Completed</div>
+                    @if($order->completed_at)
+                        <div class="orders-show-status-step-date">{{ $order->completed_at->format('Y-m-d / H:i') }}</div>
+                    @endif
                 </div>
             </div>
 
@@ -65,7 +68,7 @@
             @if($isBuyer)
                 @if($order->status === 'waiting_payment')
                 @elseif($order->status === 'payment_received')
-                    <div>
+                    <div class="orders-show-status-explanation">
                         <p>This order will be automatically cancelled if the vendor does not mark it as sent within 
                         <strong>96 hours (4 days)</strong> after payment was received.</p>
                         
@@ -83,7 +86,7 @@
                     </div>
                     
                     @if(!$order->is_disputed)
-                        <div>
+                        <div class="orders-show-status-explanation">
                             <p>This order will be automatically marked as completed if not confirmed within 
                             <strong>192 hours (8 days)</strong> after being marked as sent.</p>
                             

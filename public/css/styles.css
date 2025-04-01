@@ -10999,6 +10999,75 @@ background-color:#96c;
 transform:translateY(-2px)
 }
 
+.orders-show-status-explanation {
+max-width:700px;
+margin:20px auto 0;
+padding:20px;
+background:linear-gradient(to right,#292929 0%,#2d2d2d 50%,#292929 100%);
+background-size:200% auto;
+border-radius:12px;
+border:1px solid #3c3c3c;
+box-shadow:0 4px 15px #0000004d;
+text-align:center;
+position:relative;
+overflow:hidden;
+animation:gradient-sweep 8s ease infinite
+}
+
+.orders-show-status-explanation::before {
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:3px;
+background:linear-gradient(to right,transparent,#bb86fc,transparent);
+animation:highlight-sweep 6s ease infinite
+}
+
+.orders-show-status-explanation p {
+margin:0 0 15px;
+font-size:15px;
+line-height:1.6;
+color:#e0e0e0;
+text-align:center;
+position:relative;
+z-index:1
+}
+
+.orders-show-status-explanation strong {
+color:#bb86fc;
+font-weight:700
+}
+
+@keyframes gradient-sweep {
+0% {
+background-position:0 center
+}
+
+50% {
+background-position:100% center
+}
+
+100% {
+background-position:0 center
+}
+}
+
+@keyframes highlight-sweep {
+0% {
+transform:translateX(-100%)
+}
+
+50% {
+transform:translateX(100%)
+}
+
+100% {
+transform:translateX(-100%)
+}
+}
+
 .sales-index-container {
 max-width:1200px;
 margin:20px auto;

@@ -66,15 +66,17 @@ color:#e0e0e0
 .maintenance-info {
 background-color:#292929;
 border-left:4px solid #bb86fc;
+border-right:4px solid #bb86fc;
 padding:20px;
 text-align:left;
 margin:20px 0;
-border-radius:0 8px 8px 0
+border-radius:8px
 }
 
 .maintenance-info strong {
 color:#bb86fc;
 display:block;
+text-align:center;
 margin-bottom:10px
 }
 

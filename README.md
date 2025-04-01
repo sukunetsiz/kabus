@@ -10,18 +10,11 @@ Built with PHP 8.3 and Laravel 11.
 
 ## Core Features
 
-### Security & Privacy
-- **PGP Integration**: Mandatory PGP key confirmation for vendors to verify key ownership
-- **Two-Factor Authentication**: Enhanced security through PGP-based 2FA
-- **Mnemonic Recovery**: Built-in mnemonic phrase generation for key recovery
-- **No JavaScript**: Built entirely with pure PHP and does not utilize JavaScript in any capacity.
-
 ### Monero Integration
 - **Vendor Registration Payment**: Monero Wallet RPC integration that generates a wallet address for vendor fee payments, with support for separate transactions and a 24-hour payment window
 - **Product Advertising Payment**: Integrated payment system for vendors to advertise their products on the homepage through Monero transactions
-- **Return Address System**: Simple validation for user's Monero return addresses
-
-*Note: Product purchasing with Monero is planned for future updates. Currently, Monero integration is only used for vendor registration fees and product advertisement payments*
+- **Product Purchasing**: Integrated Monero payment system for secure and anonymous product transactions
+- **Return Address System**: Validation for user's Monero return addresses
 
 ![Vendor Registration Payment](docs/1.png)
 
@@ -32,11 +25,17 @@ Built with PHP 8.3 and Laravel 11.
 - **Messaging System**: Secure communication between users
 - **Admin Panel**: Complete administrative control interface
 - **Vendor Panel**: Dedicated interface for vendor operations
-
-### Additional Features
 - **Reference System**: Optional referral code requirement for registration
 - **Educational Resources**: Comprehensive guides on Monero, Tor, KeePassXC and Kleopatra usage for new users
 - **Support System**: Integrated help desk functionality
+- **Disputes System**: Facilitates resolution of order-related issues between buyers and vendors with administrative intervention when necessary
+
+### Security & Privacy
+- **Walletless Escrow System**: No user wallets; payments are made per order and escrowed until order resolution
+- **PGP Integration**: Mandatory PGP key confirmation for vendors to verify key ownership
+- **Two-Factor Authentication**: Enhanced security through PGP-based 2FA
+- **Mnemonic Recovery**: Built-in mnemonic phrase generation for key recovery
+- **No JavaScript**: Built entirely with pure PHP and does not utilize JavaScript in any capacity
 
 ### Other Screenshots
 
