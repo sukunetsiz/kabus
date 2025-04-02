@@ -19,10 +19,8 @@
                             @endif
                         </a>
                     @endauth
-                    <span class="brand-text">
-                        {{ config('app.name') }}
-                    <img src="{{ asset('favicon.ico') }}" alt="Logo" class="brand-logo">
-                        Script
+                    <span class="brand-gap">
+                    <img src="{{ asset('images/kabus.png') }}" alt="Logo" class="brand-logo">
                     </span>
                     @auth
                         <a href="{{ route('notifications.index') }}" class="right-icon-btn">

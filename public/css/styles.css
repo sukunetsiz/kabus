@@ -72,7 +72,9 @@ font-size:28px;
 font-weight:700;
 display:flex;
 align-items:center;
-justify-content:center
+justify-content:center;
+height:44px;
+overflow:visible
 }
 
 .btn,.btn-nav {
@@ -1066,15 +1068,15 @@ transform:translateY(-2px)
 color:#ff3838
 }
 
-.brand-text {
-margin:0 40px;
-color:#bb86fc
+.brand-gap {
+margin:0 140px
 }
 
 .brand-logo {
-height:40px;
+height:80px;
 width:auto;
-vertical-align:middle
+vertical-align:middle;
+object-fit:contain
 }
 
 .pgp-confirm-container {

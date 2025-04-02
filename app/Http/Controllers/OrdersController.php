@@ -301,7 +301,7 @@ class OrdersController extends Controller
 
         if ($order->markAsCompleted()) {
             return redirect()->route('orders.show', $order->unique_url)
-                ->with('success', 'Order marked as completed. Thank you for your purchase.');
+                ->with('success', 'Order marked as completed and payment has been sent to the vendor. Thank you for your purchase.');
         }
 
         return redirect()->route('orders.show', $order->unique_url)

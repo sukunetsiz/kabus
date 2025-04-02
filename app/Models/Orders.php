@@ -51,7 +51,10 @@ class Orders extends Model
         'total_received_xmr',
         'xmr_usd_rate',
         'expires_at',
-        'payment_completed_at'
+        'payment_completed_at',
+        'vendor_payment_amount',
+        'vendor_payment_address',
+        'vendor_payment_at'
     ];
 
     /**
@@ -65,6 +68,7 @@ class Orders extends Model
         'total' => 'decimal:2',
         'required_xmr_amount' => 'decimal:12',
         'total_received_xmr' => 'decimal:12',
+        'vendor_payment_amount' => 'decimal:12',
         'xmr_usd_rate' => 'decimal:2',
         'is_paid' => 'boolean',
         'is_sent' => 'boolean',
@@ -76,6 +80,7 @@ class Orders extends Model
         'disputed_at' => 'datetime',
         'expires_at' => 'datetime',
         'payment_completed_at' => 'datetime',
+        'vendor_payment_at' => 'datetime',
     ];
 
     /**
@@ -514,7 +519,75 @@ class Orders extends Model
             }
         }
 
+        // Process automatic payment to vendor
+        $this->processVendorPayment();
+
         return true;
+    }
+
+    /**
+     * Process automatic payment to vendor when order is completed.
+     * 
+     * @return bool
+     */
+    public function processVendorPayment()
+    {
+        // Only process payment if we have received Monero for this order
+        if (!$this->total_received_xmr || $this->total_received_xmr <= 0) {
+            \Illuminate\Support\Facades\Log::error("Order {$this->id} has no received XMR to pay vendor");
+            return false;
+        }
+
+        try {
+            // Calculate vendor payment amount (total received minus commission)
+            // Commission is subtotal * commission_percentage, but we have it already calculated in the order
+            $commissionRatio = $this->commission / $this->subtotal;
+            $vendorPaymentAmount = $this->total_received_xmr * (1 - $commissionRatio);
+
+            // Get vendor
+            $vendor = $this->vendor;
+            if (!$vendor) {
+                \Illuminate\Support\Facades\Log::error("Order {$this->id} has no associated vendor");
+                return false;
+            }
+
+            // Get a random return address for the vendor
+            $returnAddress = $vendor->returnAddresses()->inRandomOrder()->first();
+            if (!$returnAddress) {
+                \Illuminate\Support\Facades\Log::error("Vendor {$vendor->id} has no return addresses for payment");
+                return false;
+            }
+
+            // Initialize Monero wallet RPC
+            $config = config('monero');
+            $walletRPC = new \MoneroIntegrations\MoneroPhp\walletRPC(
+                $config['host'],
+                $config['port'],
+                $config['ssl'],
+                30000  // 30 second timeout
+            );
+
+            // Process payment to vendor
+            $result = $walletRPC->transfer([
+                'address' => $returnAddress->monero_address,
+                'amount' => $vendorPaymentAmount,
+                'priority' => 1
+            ]);
+
+            // Log successful payment
+            \Illuminate\Support\Facades\Log::info("Vendor payment processed: Order {$this->id}, Amount: {$vendorPaymentAmount} XMR, Address: {$returnAddress->monero_address}");
+
+            // Update order with payment details
+            $this->vendor_payment_amount = $vendorPaymentAmount;
+            $this->vendor_payment_address = $returnAddress->monero_address;
+            $this->vendor_payment_at = now();
+            $this->save();
+
+            return true;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Error processing vendor payment for order {$this->id}: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**

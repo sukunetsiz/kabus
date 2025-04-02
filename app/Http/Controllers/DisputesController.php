@@ -188,7 +188,7 @@ class DisputesController extends Controller
             }
             
             return redirect()->route('admin.disputes.show', $dispute->id)
-                ->with('success', 'Dispute resolved in favor of the vendor.');
+                ->with('success', 'Dispute resolved in favor of the vendor. Payment has been sent to the vendor.');
         }
         
         return redirect()->route('admin.disputes.show', $dispute->id)

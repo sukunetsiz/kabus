@@ -1,6 +1,14 @@
-# [Installation Guide](docs/INSTALLATION.md)
+<div align="center">
+  <h1><a href="docs/INSTALLATION.md">Installation Guide</a></h1>
+</div>
 
-# Kabus - Monero Marketplace Script
+<div align="center">
+  <img src="public/images/kabus.png" alt="Kabus Logo">
+</div>
+
+<div align="center">
+  <h1>Kabus - Monero Marketplace Script</h1>
+</div>
 
 ## Introduction
 
@@ -61,9 +69,13 @@ Built with PHP 8.3 and Laravel 11.
 ---
 ![Vendors Page](docs/12.png)
 ---
-# [View the Roadmap](docs/ROADMAP.md)
+<div align="center">
+  <h1><a href="docs/ROADMAP.md">View the Roadmap</a></h1>
+</div>
 
-# [Monero Wallet RPC Guide](docs/CONNECTING-MONERO-RPC.md)
+<div align="center">
+  <h1><a href="docs/CONNECTING-MONERO-RPC.md">Monero Wallet RPC Guide</a></h1>
+</div>
 
 ### Supporting Development
 The Kabus marketplace script is maintained as an open source project dedicated to improving privacy-focused commerce. If you'd like to support ongoing development and maintenance:

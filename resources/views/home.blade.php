@@ -100,26 +100,36 @@
 
     @if(count($adSlots) === 0)
     <div class="home-welcome-message">
-        <h1 class="home-title">Welcome to Kabus v0.9.4</h1>
-        
+        <h1 class="home-title">Welcome to Kabus</h1>
+    
         <p class="home-text">Dear users,</p>
-        
-        <p class="home-text">We are currently in the beta testing phase. Our marketplace script is not yet fully functional and is not suitable for trading at this time.</p>
-        
-        <p class="home-text">Project timeline:</p>
-        
+    
+        <p class="home-text">
+            I am excited to announce the official release of Kabus! Our marketplace script is now fully functional and ready for trading.
+        </p>
+    
+        <p class="home-text">
+            Thank you for your valuable feedback during the beta phase. It has helped me enhance the platform to better meet your needs.
+        </p>
+    
+        <p class="home-text">What's Next:</p>
+    
         <ul class="home-list">
-            <li>January 1, 2025: Our introduction phase has begun</li>
-            <li>April 4, 2025: Full service launch is planned</li>
+            <li>Continuous updates and new feature integrations</li>
+            <li>Your contributions and suggestions are always welcome on our GitHub page (github.com/sukunetsiz/kabus)</li>
         </ul>
-        
+    
         <div class="home-important">
-            <strong>Important Note</strong>
-            <p class="home-text" style="margin-bottom: 0;">Memberships created during this test version should be deleted before the platform launch.</p>
+            <strong>Security Reminder</strong>
+            <p class="home-text"">
+            Please use this marketplace script with caution. Despite my best efforts, there might be unfound vulnerabilities. I recommend that you do not use this script directly; instead, review and edit it according to your needs. Remember the most important rule of the internet: don't trust, verify.
+            </p>
         </div>
-        
-        <p class="home-text">We kindly ask you to follow our developments closely and thank you for your patience.</p>
-        
+    
+        <p class="home-text">
+            We look forward to growing and evolving together with you. Stay tuned for more updates!
+        </p>
+    
         <div class="home-signature">
             <p>Best regards,<br>sukunetsiz</p>
         </div>
