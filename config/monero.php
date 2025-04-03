@@ -72,4 +72,16 @@ return [
     |
     */
     'advertisement_minimum_payment_percentage' => env('MONERO_ADVERTISEMENT_MINIMUM_PAYMENT_PERCENTAGE', 0.10),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cancelled Order Refund Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for refunds on cancelled orders:
+    | - commission_percentage: Percentage of the total that is kept as commission when an order is cancelled
+    |   For example, if set to 1, a user who cancels an order will receive 99% of their payment back.
+    |
+    */
+    'cancelled_order_commission_percentage' => env('MONERO_CANCELLED_ORDER_COMMISSION_PERCENTAGE', 1.0),
 ];

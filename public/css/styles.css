@@ -2853,6 +2853,7 @@ box-shadow:0 4px 10px #bb86fc4d
 .admin-support-show-closed-message {
 background-color:#292929;
 border-left:4px solid #cf6679;
+border-right:4px solid #cf6679;
 color:#e0e0e0;
 padding:12px 15px;
 border-radius:6px;
@@ -3173,7 +3174,8 @@ background-color:#292929
 }
 
 .support-create-cancel:hover {
-background-color:#3c3c3c;
+background-color:#bb86fc;
+color:#121212;
 transform:translateY(-2px)
 }
 
@@ -3458,6 +3460,7 @@ box-shadow:0 4px 10px #bb86fc4d
 .support-show-closed-message {
 background-color:#292929;
 border-left:4px solid #cf6679;
+border-right:4px solid #cf6679;
 color:#e0e0e0;
 padding:12px 15px;
 border-radius:6px;
@@ -4930,14 +4933,17 @@ transform:translateY(-2px)
 
 .products-index-button-secondary {
 background-color:#292929;
-color:#e0e0e0;
-border:1px solid #3c3c3c
+color:#bb86fc;
+border:1px solid #3c3c3c;
+border-radius:6px;
+transition:all .3s ease
 }
 
 .products-index-button-secondary:hover {
-background-color:#3c3c3c;
-border-color:#bb86fc;
-transform:translateY(-2px)
+background-color:#bb86fc;
+color:#121212;
+transform:translateY(-2px);
+border-color:#bb86fc
 }
 
 .products-index-empty {
@@ -6273,7 +6279,7 @@ text-align:center
 }
 
 .login-throttle-button:hover {
-background-color:#996cff;
+background-color:#96c;
 transform:translateY(-2px)
 }
 
@@ -7282,7 +7288,7 @@ margin-top:1rem
 }
 
 .admin-pop-up-create-submit:hover {
-background:#996cff;
+background:#96c;
 transform:translateY(-2px)
 }
 
@@ -7344,7 +7350,7 @@ margin:0 auto
 }
 
 .pop-up-close-btn:hover {
-background:#996cff;
+background:#96c;
 transform:translateY(-2px)
 }
 
@@ -8054,7 +8060,8 @@ font-weight:700
 
 .cart-checkout-vendor-badge {
 background-color:#FF4500;
-color:#e0e0e0;
+color:#121212;
+font-weight:700;
 padding:4px 12px;
 border-radius:16px;
 font-size:14px;
@@ -8157,7 +8164,7 @@ font-size:14px
 }
 
 .cart-checkout-message-content {
-width:96%;
+width:94%;
 min-height:120px;
 padding:15px;
 background-color:#1e1e1e;
@@ -8247,7 +8254,7 @@ flex:1;
 display:inline-block;
 padding:12px;
 background-color:#292929;
-color:#e0e0e0;
+color:#bb86fc;
 border:1px solid #3c3c3c;
 border-radius:8px;
 font-weight:700;
@@ -8257,8 +8264,8 @@ transition:all .3s ease
 }
 
 .cart-checkout-back-btn:hover {
-background-color:#3c3c3c;
-border-color:#bb86fc;
+background-color:#bb86fc;
+color:#121212;
 transform:translateY(-2px)
 }
 
@@ -8821,7 +8828,7 @@ margin:0 auto
 }
 
 .become-vendor-application-submit-btn:hover {
-background-color:#996cff;
+background-color:#96c;
 transform:translateY(-2px)
 }
 
@@ -9763,7 +9770,7 @@ text-transform:uppercase
 
 .orders-index-status-waiting_payment {
 background-color:#ff3838;
-color:#fff
+color:#121212
 }
 
 .orders-index-status-payment_received {
@@ -11152,7 +11159,7 @@ text-transform:uppercase
 
 .sales-index-status-waiting_payment {
 background-color:#ff3838;
-color:#fff
+color:#121212
 }
 
 .sales-index-status-payment_received {

@@ -69,6 +69,14 @@ Built with PHP 8.3 and Laravel 11.
 ---
 ![Vendors Page](docs/12.png)
 ---
+![Settings Page](docs/13.png)
+---
+![Messages Page](docs/14.png)
+---
+![Create Pop-up Page](docs/15.png)
+---
+![Dispute Details Page](docs/16.png)
+---
 <div align="center">
   <h1><a href="docs/ROADMAP.md">View the Roadmap</a></h1>
 </div>
@@ -81,7 +89,7 @@ Built with PHP 8.3 and Laravel 11.
 The Kabus marketplace script is maintained as an open source project dedicated to improving privacy-focused commerce. If you'd like to support ongoing development and maintenance:
 
 - **Monero Donations**: Direct support through Monero payments
-- **Donation Address:** `8AfRSCLzLR7PuFjdztbxDaWyXkYXtbLfUQK8iP27bcyu6yDQYQHncfGMZjX7cee9tTU9Qu1hsax93KFQcnhApKEr5pgP1N5`
+- **Donation Address:** `89p3o8Umho9haXyAJHMwrfeeqea2UoJaZ6sknFvYVAitMFKJYTW54huh1enTQHBwdaWq5duyZ4ZsZjVcHQyiRZmfGbQMhce`
 - **Code Contributions**: Pull requests and improvements are welcome
 - **Bug Reports**: Help improve platform stability by reporting issues
 - **Feature Suggestions**: Share ideas for enhancing marketplace functionality

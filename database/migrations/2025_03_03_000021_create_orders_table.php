@@ -40,6 +40,9 @@ return new class extends Migration
             $table->decimal('vendor_payment_amount', 18, 12)->nullable();
             $table->string('vendor_payment_address')->nullable();
             $table->timestamp('vendor_payment_at')->nullable();
+            $table->decimal('buyer_refund_amount', 18, 12)->nullable();
+            $table->string('buyer_refund_address')->nullable();
+            $table->timestamp('buyer_refund_at')->nullable();
         });
 
         Schema::create('order_items', function (Blueprint $table) {

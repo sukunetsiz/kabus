@@ -54,7 +54,10 @@ class Orders extends Model
         'payment_completed_at',
         'vendor_payment_amount',
         'vendor_payment_address',
-        'vendor_payment_at'
+        'vendor_payment_at',
+        'buyer_refund_amount',
+        'buyer_refund_address',
+        'buyer_refund_at'
     ];
 
     /**
@@ -69,6 +72,7 @@ class Orders extends Model
         'required_xmr_amount' => 'decimal:12',
         'total_received_xmr' => 'decimal:12',
         'vendor_payment_amount' => 'decimal:12',
+        'buyer_refund_amount' => 'decimal:12',
         'xmr_usd_rate' => 'decimal:2',
         'is_paid' => 'boolean',
         'is_sent' => 'boolean',
@@ -81,6 +85,7 @@ class Orders extends Model
         'expires_at' => 'datetime',
         'payment_completed_at' => 'datetime',
         'vendor_payment_at' => 'datetime',
+        'buyer_refund_at' => 'datetime',
     ];
 
     /**
@@ -591,6 +596,72 @@ class Orders extends Model
     }
 
     /**
+     * Process automatic refund to buyer when an order is cancelled.
+     * 
+     * @return bool
+     */
+    public function processBuyerRefund()
+    {
+        // Only process refund if we have received Monero for this order
+        if (!$this->total_received_xmr || $this->total_received_xmr <= 0) {
+            \Illuminate\Support\Facades\Log::info("Order {$this->id} has no received XMR to refund to buyer");
+            return false;
+        }
+        
+        try {
+            // Get the commission percentage for cancelled orders
+            $commissionPercentage = config('monero.cancelled_order_commission_percentage', 1.0);
+            
+            // Calculate buyer refund amount (total received minus commission)
+            $buyerRefundAmount = $this->total_received_xmr * (1 - ($commissionPercentage / 100));
+            
+            // Get buyer
+            $buyer = $this->user;
+            if (!$buyer) {
+                \Illuminate\Support\Facades\Log::error("Order {$this->id} has no associated buyer");
+                return false;
+            }
+            
+            // Get a random return address for the buyer
+            $returnAddress = $buyer->returnAddresses()->inRandomOrder()->first();
+            if (!$returnAddress) {
+                \Illuminate\Support\Facades\Log::error("Buyer {$buyer->id} has no return addresses for refund");
+                return false;
+            }
+            
+            // Initialize Monero wallet RPC
+            $config = config('monero');
+            $walletRPC = new \MoneroIntegrations\MoneroPhp\walletRPC(
+                $config['host'],
+                $config['port'],
+                $config['ssl'],
+                30000  // 30 second timeout
+            );
+            
+            // Process refund to buyer
+            $result = $walletRPC->transfer([
+                'address' => $returnAddress->monero_address,
+                'amount' => $buyerRefundAmount,
+                'priority' => 1
+            ]);
+            
+            // Log successful refund
+            \Illuminate\Support\Facades\Log::info("Buyer refund processed: Order {$this->id}, Amount: {$buyerRefundAmount} XMR, Address: {$returnAddress->monero_address}");
+            
+            // Update order with refund details
+            $this->buyer_refund_amount = $buyerRefundAmount;
+            $this->buyer_refund_address = $returnAddress->monero_address;
+            $this->buyer_refund_at = now();
+            $this->save();
+            
+            return true;
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Error processing buyer refund for order {$this->id}: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Mark the order as cancelled.
      */
     public function markAsCancelled()
@@ -611,6 +682,17 @@ class Orders extends Model
         }
         
         $this->save();
+        
+        // Process refund to buyer based on the order status
+        if ($currentStatus === self::STATUS_WAITING_PAYMENT) {
+            // No refund needed as the user hasn't paid
+            return true;
+        } elseif ($currentStatus === self::STATUS_PAYMENT_RECEIVED || 
+                  $currentStatus === self::STATUS_PRODUCT_SENT || 
+                  $currentStatus === self::STATUS_DISPUTED) {
+            // Process refund for orders that have been paid for
+            $this->processBuyerRefund();
+        }
 
         return true;
     }
