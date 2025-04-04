@@ -28,11 +28,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\LoginThrottle;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\VendorMiddleware;
+use App\Http\Middleware\CheckBanned;
 
 // -----------------------------------------------------------------------------
 // Base Route
 // -----------------------------------------------------------------------------
-
 // When users first enter the site, they are taken to the login page.
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 
@@ -53,6 +53,9 @@ Route::get('/canary', function () {
 // -----------------------------------------------------------------------------
 
 Route::middleware('guest')->group(function () {
+    // New route for banned users
+    Route::get('/banned', [AuthController::class, 'showBanned'])->name('banned');
+
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -69,15 +72,14 @@ Route::middleware('guest')->group(function () {
     Route::get('/2fa/challenge', [AuthController::class, 'showPgp2FAChallenge'])->name('pgp.2fa.challenge');
     Route::post('/2fa/verify', [AuthController::class, 'verifyPgp2FAChallenge'])->name('pgp.2fa.verify');
 
-    // New route for banned users
-    Route::get('/banned', [AuthController::class, 'showBanned'])->name('banned');
 });
 
 // -----------------------------------------------------------------------------
 // Routes for Authenticated Users
 // -----------------------------------------------------------------------------
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', CheckBanned::class])->group(function () {
+    //Route::get('/banned', [AuthController::class, 'showBanned'])->name('banned');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/home', [HomeController::class, 'dismissPopup'])->name('popup.dismiss');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
