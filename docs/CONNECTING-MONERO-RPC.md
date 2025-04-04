@@ -59,7 +59,6 @@ Use the following command to start the RPC server (replace the wallet-file locat
 ./monero-wallet-rpc \
 --rpc-bind-port 18082 \
 --daemon-host xmr.surveillance.monster:443 \
---confirm-external-bind \
 --wallet-file /root/Downloads/monero-x86_64-linux-gnu-v0.18.3.4/kabus-wallet \
 --prompt-for-password \
 --trusted-daemon \
