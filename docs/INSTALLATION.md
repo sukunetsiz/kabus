@@ -239,15 +239,6 @@ server {
 	log_not_found off;
     }
 
-    location /images {
-	proxy_pass http://your_address;
-	proxy_hide_header Location;
-    }
-
-    location /api/soap/ {
-	add_header Access-Control-Allow_Origin "http://your_address" always;
-    } 
-
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
