@@ -215,6 +215,12 @@ server {
     listen 80;
     listen [::]:80;
 
+    add_header X-Frame-Options "SAMEORIGIN" always;
+
+    add_header X-Content-Type-Options "nosniff" always;
+
+    add_header Contetnt-Security-Policy "default-srsc 'self';" always;
+
     root /var/www/kabus/public;
     index index.php;
 
@@ -227,6 +233,21 @@ server {
         try_files $uri $uri/ /index.php?$query_string;
     }
 
+    location ~ /\.ht {
+	deny all;
+	access_log off;
+	log_not_found off;
+    }
+
+    location /images {
+	proxy_pass http://your_address;
+	proxy_hide_header Location;
+    }
+
+    location /api/soap/ {
+	add_header Access-Control-Allow_Origin "http://your_address" always;
+    } 
+
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
@@ -236,6 +257,7 @@ server {
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 }
+
 ```
 
 After pasting the configuration, save and exit the editor by pressing CTRL+X, then 'y', and finally Enter.
