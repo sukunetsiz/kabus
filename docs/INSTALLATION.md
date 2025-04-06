@@ -219,8 +219,6 @@ server {
 
     add_header X-Content-Type-Options "nosniff" always;
 
-    add_header Content-Security-Policy "default-src 'self';" always;
-
     root /var/www/kabus/public;
     index index.php;
 
