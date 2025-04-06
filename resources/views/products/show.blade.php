@@ -67,6 +67,13 @@
                             </div>
                         @endif
                     </div>
+                    
+                    {{-- Message to Vendor Button --}}
+                    <div class="products-show-message-to-vendor">
+                        <a href="{{ route('messages.create', ['username' => $product->user->username]) }}" class="products-show-message-to-vendor-button">
+                            Message to Vendor
+                        </a>
+                    </div>
                 </div>
 
                 {{-- Center Column (Product Images) --}}

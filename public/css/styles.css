@@ -7528,8 +7528,7 @@ gap:4px
 
 .products-show-info > div {
 color:#e0e0e0;
-padding:10px;
-border-bottom:1px solid #3c3c3c
+padding:10px
 }
 
 .products-show-info span {
@@ -7989,6 +7988,30 @@ font-weight:700
 text-align:center;
 color:#a0a0a0;
 font-style:italic
+}
+
+.products-show-message-to-vendor {
+text-align:center;
+padding:15px;
+border-top:1px solid #3c3c3c
+}
+
+.products-show-message-to-vendor-button {
+display:inline-block;
+background-color:#03DAC6;
+color:#121212;
+padding:12px 24px;
+border-radius:8px;
+text-decoration:none;
+font-weight:700;
+transition:all .3s ease;
+width:84%;
+box-sizing:border-box
+}
+
+.products-show-message-to-vendor-button:hover {
+background-color:#018786;
+transform:translateY(-2px)
 }
 
 .cart-checkout-container {

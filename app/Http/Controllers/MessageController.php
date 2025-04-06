@@ -118,9 +118,10 @@ class MessageController extends Controller
         return redirect()->route('messages.show', $conversation);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('messages.create');
+        $username = $request->query('username');
+        return view('messages.create', ['username' => $username]);
     }
 
     public function startConversation(Request $request)

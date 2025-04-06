@@ -53,7 +53,7 @@ Route::get('/canary', function () {
 // -----------------------------------------------------------------------------
 
 Route::middleware('guest')->group(function () {
-    // New route for banned users
+    // Route for banned users
     Route::get('/banned', [AuthController::class, 'showBanned'])->name('banned');
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -79,7 +79,6 @@ Route::middleware('guest')->group(function () {
 // -----------------------------------------------------------------------------
 
 Route::middleware(['auth', CheckBanned::class])->group(function () {
-    //Route::get('/banned', [AuthController::class, 'showBanned'])->name('banned');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/home', [HomeController::class, 'dismissPopup'])->name('popup.dismiss');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

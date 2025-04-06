@@ -21,7 +21,7 @@
                             class="messages-create-input @error('username') messages-create-input-error @enderror" 
                             required 
                             placeholder="Enter recipient's username" 
-                            value="{{ old('username') }}"
+                            value="{{ old('username', $username ?? '') }}"
                         >
                         @error('username')
                             <div class="messages-create-error">{{ $message }}</div>
