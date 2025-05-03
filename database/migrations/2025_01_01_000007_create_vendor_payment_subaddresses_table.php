@@ -16,7 +16,7 @@ class CreateVendorPaymentSubaddressesTable extends Migration
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->decimal('total_received', 18, 12)->default(0);
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();
             
             // Application fields
             $table->text('application_text')->nullable();

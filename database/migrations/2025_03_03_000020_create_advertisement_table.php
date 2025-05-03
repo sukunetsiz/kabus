@@ -26,7 +26,7 @@ return new class extends Migration
             $table->decimal('required_amount', 12, 12);
             $table->boolean('payment_completed')->default(false);
             $table->timestamp('payment_completed_at')->nullable();
-            $table->timestamp('expires_at');
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
             
             // Ensure only one active advertisement per slot
