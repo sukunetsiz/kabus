@@ -53,6 +53,40 @@
                 @endif
             </div>
 
+            {{-- Vendor Review Statistics Section --}}
+            <div class="vendors-show-review-stats">
+                <h2>Review Statistics</h2>
+                
+                @if($totalReviews > 0)
+                    <div class="vendors-show-review-percentage">
+                        <span class="vendors-show-review-percentage-value">{{ number_format($positivePercentage, 1) }}%</span>
+                        <span class="vendors-show-review-percentage-label">Positive Reviews</span>
+                    </div>
+                    <div class="vendors-show-review-counts">
+                        <div class="vendors-show-review-count-item">
+                            <span class="vendors-show-review-count-label">Positive</span>
+                            <span class="vendors-show-review-count-value">{{ $positiveCount }}</span>
+                        </div>
+                        <div class="vendors-show-review-count-item">
+                            <span class="vendors-show-review-count-label">Mixed</span>
+                            <span class="vendors-show-review-count-value">{{ $mixedCount }}</span>
+                        </div>
+                        <div class="vendors-show-review-count-item">
+                            <span class="vendors-show-review-count-label">Negative</span>
+                            <span class="vendors-show-review-count-value">{{ $negativeCount }}</span>
+                        </div>
+                        <div class="vendors-show-review-count-item">
+                            <span class="vendors-show-review-count-label">Total</span>
+                            <span class="vendors-show-review-count-value">{{ $totalReviews }}</span>
+                        </div>
+                    </div>
+                @else
+                    <div class="vendors-show-review-empty">
+                        <p>No reviews yet for this vendor's products.</p>
+                    </div>
+                @endif
+            </div>
+
             {{-- Products Section --}}
             <div class="vendors-show-products">
                 <h2>Products Offered by {{ $vendor->username }}</h2>

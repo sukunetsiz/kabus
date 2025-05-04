@@ -4604,6 +4604,7 @@ padding:25px
 .vendors-show-policy h2 {
 color:#bb86fc;
 font-size:24px;
+margin-top:0px;
 margin-bottom:20px;
 padding-bottom:10px;
 border-bottom:2px dashed #3c3c3c;
@@ -4622,6 +4623,125 @@ text-align:center
 color:#e0e0e0;
 line-height:1.6;
 white-space:pre-wrap
+}
+
+.vendors-show-review-stats {
+background-color:#292929;
+border-radius:12px;
+padding:22px;
+margin:25px auto;
+box-shadow:0 4px 20px #0000004d;
+border:1px solid #3c3c3c;
+max-width:85%
+}
+
+.vendors-show-review-stats h2 {
+color:#bb86fc;
+font-size:22px;
+margin-top:0;
+margin-bottom:18px;
+text-align:center;
+padding-bottom:10px;
+border-bottom:2px dashed #3c3c3c
+}
+
+.vendors-show-review-percentage {
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-bottom:20px;
+position:relative
+}
+
+.vendors-show-review-percentage:after {
+content:"";
+position:absolute;
+bottom:-10px;
+left:50%;
+transform:translateX(-50%);
+width:50%;
+height:1px;
+background:linear-gradient(to right,transparent,#bb86fc,transparent)
+}
+
+.vendors-show-review-percentage-value {
+font-size:42px;
+font-weight:700;
+color:#bb86fc;
+margin-bottom:2px;
+line-height:1.1
+}
+
+.vendors-show-review-percentage-label {
+font-size:15px;
+color:#e0e0e0;
+text-transform:uppercase;
+letter-spacing:1px
+}
+
+.vendors-show-review-counts {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-top:20px;
+width:90%;
+margin-left:auto;
+margin-right:auto
+}
+
+.vendors-show-review-count-item {
+background-color:#1e1e1e;
+border-radius:8px;
+padding:12px 8px;
+text-align:center;
+border:1px solid #3c3c3c;
+display:flex;
+flex-direction:column;
+gap:4px
+}
+
+.vendors-show-review-count-label {
+color:#a0a0a0;
+font-size:13px;
+text-transform:uppercase;
+letter-spacing:.5px
+}
+
+.vendors-show-review-count-value {
+font-size:20px;
+font-weight:700;
+color:#bb86fc
+}
+
+.vendors-show-review-count-item:nth-child(1) .vendors-show-review-count-value {
+color:#4CAF50
+}
+
+.vendors-show-review-count-item:nth-child(2) .vendors-show-review-count-value {
+color:#ffc107
+}
+
+.vendors-show-review-count-item:nth-child(3) .vendors-show-review-count-value {
+color:#ff3838
+}
+
+.vendors-show-review-count-item:nth-child(4) .vendors-show-review-count-value {
+color:#bb86fc
+}
+
+.vendors-show-review-empty {
+background-color:#1e1e1e;
+border-radius:8px;
+padding:20px;
+text-align:center;
+border:1px solid #3c3c3c;
+width:80%;
+margin:0 auto
+}
+
+.vendors-show-review-empty p {
+color:#a0a0a0;
+font-size:15px
 }
 
 .product-card {

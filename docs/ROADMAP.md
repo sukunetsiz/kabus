@@ -37,5 +37,5 @@ Following the v1.0 release, development will continue with additional milestones
 - [ ] Set up a private Jabber server to receive notifications in real time.
 - [ ] Vendor experience (leveling) system.
 - [X] Direct‐message button on the product details page.
-- [ ] All Reviews section on vendor profiles.
+- [X] All Reviews section on vendor profiles.
 - [X] Vendor refund policy on both vendor and product details page.
