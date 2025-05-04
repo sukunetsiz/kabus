@@ -4594,6 +4594,36 @@ display:flex;
 justify-content:center
 }
 
+.vendors-show-policy {
+margin-top:10px;
+background-color:#292929;
+border-radius:12px;
+padding:25px
+}
+
+.vendors-show-policy h2 {
+color:#bb86fc;
+font-size:24px;
+margin-bottom:20px;
+padding-bottom:10px;
+border-bottom:2px dashed #3c3c3c;
+text-align:center
+}
+
+.vendors-show-policy-content {
+background-color:#1e1e1e;
+border-radius:8px;
+padding:20px;
+border:1px solid #3c3c3c;
+text-align:center
+}
+
+.vendors-show-policy-content p {
+color:#e0e0e0;
+line-height:1.6;
+white-space:pre-wrap
+}
+
 .product-card {
 background-color:#292929;
 border-radius:12px;
@@ -8012,6 +8042,40 @@ box-sizing:border-box
 .products-show-message-to-vendor-button:hover {
 background-color:#018786;
 transform:translateY(-2px)
+}
+
+.products-show-vendor-policy-section {
+max-width:1100px;
+margin:10px auto;
+padding:0 20px
+}
+
+.products-show-vendor-policy-container {
+background-color:#1e1e1e;
+border-radius:12px;
+padding:25px;
+box-shadow:0 6px 25px #0000004d;
+border:1px solid #3c3c3c
+}
+
+.products-show-vendor-policy-container h2 {
+color:#bb86fc;
+font-size:24px;
+margin-top:0;
+margin-bottom:20px;
+text-align:center;
+padding-bottom:10px;
+border-bottom:2px dashed #bb86fc
+}
+
+.products-show-vendor-policy-content {
+background-color:#292929;
+border-radius:8px;
+padding:20px;
+border:1px solid #3c3c3c;
+color:#e0e0e0;
+line-height:1.6;
+text-align:center
 }
 
 .cart-checkout-container {

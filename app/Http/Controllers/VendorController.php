@@ -211,11 +211,13 @@ class VendorController extends Controller
     {
         $request->validate([
             'description' => 'required|string|min:8|max:800',
+            'vendor_policy' => 'nullable|string|max:2000',
             'vacation_mode' => 'required|in:0,1',
         ], [
             'description.required' => 'A description is required.',
             'description.min' => 'Description must be at least 8 characters.',
             'description.max' => 'Description cannot exceed 800 characters.',
+            'vendor_policy.max' => 'Vendor policy cannot exceed 2000 characters.',
             'vacation_mode.in' => 'Invalid vacation mode value.'
         ]);
 
@@ -227,6 +229,7 @@ class VendorController extends Controller
         }
         
         $vendorProfile->description = $request->description;
+        $vendorProfile->vendor_policy = $request->vendor_policy;
         $vendorProfile->vacation_mode = (bool) $request->vacation_mode;
         $vendorProfile->save();
 

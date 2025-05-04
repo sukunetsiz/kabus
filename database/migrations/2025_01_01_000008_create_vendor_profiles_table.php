@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('user_id');
             $table->text('description')->nullable();
+            $table->text('vendor_policy')->nullable();
             $table->boolean('vacation_mode')->default(false);
             $table->timestamps();
 

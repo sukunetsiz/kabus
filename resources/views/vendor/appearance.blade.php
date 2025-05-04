@@ -57,6 +57,22 @@
                 @enderror
             </div>
 
+            <div class="vendor-panel-appearance-form-group">
+                <label class="vendor-panel-appearance-textarea-label">
+                    Vendor Policy
+                    <span class="vendor-panel-appearance-char-limit">(up to 2000 characters)</span>
+                </label>
+                <textarea
+                    name="vendor_policy"
+                    class="vendor-panel-appearance-textarea"
+                    maxlength="2000"
+                >{{ old('vendor_policy', $vendorProfile->vendor_policy) }}</textarea>
+                
+                @error('vendor_policy')
+                    <p class="vendor-panel-appearance-error">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="vendor-panel-appearance-submit">
                 <button type="submit" class="vendor-panel-appearance-submit-btn">
                     Save Changes

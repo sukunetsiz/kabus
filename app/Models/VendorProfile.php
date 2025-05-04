@@ -16,6 +16,7 @@ class VendorProfile extends Model
      */
     protected $fillable = [
         'description',
+        'vendor_policy',
         'vacation_mode'
     ];
 

@@ -138,7 +138,7 @@ class ProductController extends Controller
             // Load necessary relationships
             $product->load([
                 'user:id,username',
-                'user.vendorProfile:id,user_id,vacation_mode',
+                'user.vendorProfile:id,user_id,vacation_mode,vendor_policy',
                 'category:id,name'
             ]);
 

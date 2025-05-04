@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="vendors-show-container">
     @if($vacation_mode)
         <div class="vendors-show-vacation-notice">
@@ -101,6 +102,16 @@
                     </div>
                 @endif
             </div>
+
+            {{-- Vendor Policy Section --}}
+            @if($vendor->vendorProfile && $vendor->vendorProfile->vendor_policy)
+                <div class="vendors-show-policy">
+                    <h2>Vendor Policy</h2>
+                    <div class="vendors-show-policy-content">
+                        <p>{{ $vendor->vendorProfile->vendor_policy }}</p>
+                    </div>
+                </div>
+            @endif
         </div>
     @endif
 </div>
