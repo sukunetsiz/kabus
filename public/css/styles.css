@@ -9,6 +9,10 @@ flex-direction:column;
 min-height:100vh
 }
 
+html {
+scroll-behavior:smooth
+}
+
 .container {
 max-width:1200px;
 margin:0 auto;
@@ -12230,4 +12234,39 @@ transition:all .3s ease
 outline:none;
 border-color:#bb86fc;
 box-shadow:0 0 0 2px #bb86fc1a
+}
+
+.scroll-button {
+position:fixed;
+width:40px;
+height:40px;
+border-radius:50%;
+background-color:#292929;
+color:#e0e0e0;
+display:flex;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+font-size:20px;
+z-index:1000;
+border:2px solid #3c3c3c;
+box-shadow:0 4px 10px #0000004d;
+transition:all .3s ease
+}
+
+.scroll-button:hover {
+background-color:#bb86fc;
+color:#121212;
+border-color:#bb86fc;
+transform:translateY(-2px)
+}
+
+.scroll-top {
+right:20px;
+bottom:20px
+}
+
+.scroll-bottom {
+left:20px;
+bottom:20px
 }

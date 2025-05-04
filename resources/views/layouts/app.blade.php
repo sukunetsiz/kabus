@@ -6,9 +6,8 @@
     <title>@yield('title', config('app.name'))</title>
     <link rel="icon" type="image/png" href="{{ asset('images/kabus.png') }}">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-
 </head>
-<body class="dark-mode">
+<body id="top" class="dark-mode">
     @include('components.navbar')
     <div class="content-wrapper">
         @auth
@@ -64,5 +63,9 @@
             });
         </script>
     @endif
+    
+    <a href="#top" class="scroll-button scroll-top" title="Scroll to top">˄</a>
+    <a href="#bottom" class="scroll-button scroll-bottom" title="Scroll to bottom">˅</a>
+    <div id="bottom"></div>
 </body>
 </html>
