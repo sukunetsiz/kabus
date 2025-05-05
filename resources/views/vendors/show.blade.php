@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="vendors-show-container">
     @if($vacation_mode)
         <div class="vendors-show-vacation-notice">
@@ -147,6 +146,45 @@
                 </div>
             @endif
         </div>
+        
+        {{-- Vendor's All Reviews Section --}}
+        @if(!$vacation_mode && isset($allReviews) && !$allReviews->isEmpty())
+            <h2 class="vendors-show-reviews-title">{{ $vendor->username }}'s All Reviews</h2>
+        
+            <div class="products-show-reviews-list">
+                @foreach($allReviews as $review)
+                    <div class="products-show-review-item">
+                        <div class="products-show-review-header">
+                            <div class="products-show-review-user">
+                                <div class="products-show-review-avatar">
+                                    <img src="{{ $review->user->profile ? $review->user->profile->profile_picture_url : asset('images/default-profile-picture.png') }}" 
+                                         alt="{{ $review->user->username }}'s Profile Picture">
+                                </div>
+                                <div class="products-show-review-username">
+                                    <div>{{ $review->user->username }}'s review for 
+                                        <a href="{{ route('products.show', $review->product->slug) }}" class="vendors-show-product-link">{{ $review->product->name }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="products-show-review-meta">
+                                <div class="products-show-review-date">{{ $review->getFormattedDate() }}</div>
+                                <div class="products-show-review-sentiment products-show-review-sentiment-{{ strtolower($review->sentiment) }}">
+                                    {{ ucfirst($review->sentiment) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products-show-review-content">
+                            {{ $review->review_text }}
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+    
+            {{-- Reviews Pagination --}}
+            <div class="vendors-show-pagination">
+                {{ $allReviews->appends(request()->except('reviews_page'))->links() }}
+            </div>
+        @endif
     @endif
 </div>
 @endsection

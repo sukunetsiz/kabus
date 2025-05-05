@@ -4748,6 +4748,49 @@ color:#a0a0a0;
 font-size:15px
 }
 
+.vendors-show-reviews-title {
+color:#121212;
+background-color:#bb86fc;
+font-size:24px;
+text-align:center;
+margin:30px auto;
+padding:12px 30px;
+font-weight:700;
+display:inline-block;
+border-radius:50px;
+position:relative;
+left:50%;
+transform:translateX(-50%)
+}
+
+.vendors-show-product-link {
+color:#bb86fc;
+text-decoration:none;
+position:relative;
+transition:all .3s ease;
+font-weight:700
+}
+
+.vendors-show-product-link::after {
+content:'';
+position:absolute;
+width:0;
+height:2px;
+bottom:-2px;
+left:0;
+background-color:#bb86fc;
+transition:width .3s ease
+}
+
+.vendors-show-product-link:hover {
+color:#d0a4ff;
+transform:translateY(-1px)
+}
+
+.vendors-show-product-link:hover::after {
+width:100%
+}
+
 .product-card {
 background-color:#292929;
 border-radius:12px;
@@ -7748,7 +7791,7 @@ color:#121212
 }
 
 .products-show-wishlist-button:hover {
-background-color:#96c;
+background-color:#b4464f;
 transform:translateY(-2px)
 }
 

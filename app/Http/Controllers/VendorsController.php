@@ -68,6 +68,18 @@ class VendorsController extends Controller
                 
             // Calculate review statistics for all vendor products
             $reviewStats = $this->calculateVendorReviewStatistics($vendor->id);
+            
+            // Get all product IDs for this vendor
+            $productIds = Product::where('user_id', $vendor->id)->pluck('id')->toArray();
+            
+            // Get all reviews for all vendor products with pagination
+            $allReviews = collect();
+            if (!empty($productIds)) {
+                $allReviews = ProductReviews::whereIn('product_id', $productIds)
+                    ->with(['user:id,username', 'product:id,name,slug'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(8, ['*'], 'reviews_page');
+            }
 
             return view('vendors.show', [
                 'vendor' => $vendor,
@@ -77,7 +89,8 @@ class VendorsController extends Controller
                 'mixedCount' => $reviewStats['mixed'],
                 'negativeCount' => $reviewStats['negative'],
                 'totalReviews' => $reviewStats['total'],
-                'positivePercentage' => $reviewStats['positivePercentage']
+                'positivePercentage' => $reviewStats['positivePercentage'],
+                'allReviews' => $allReviews
             ]);
         } catch (Exception $e) {
             Log::error('Error fetching vendor details: ' . $e->getMessage(), ['username' => $username]);
