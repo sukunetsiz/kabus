@@ -57,13 +57,13 @@
             <!-- PGP Key Section -->
             <div class="settings-index-manage-pgp-key-container">
                 <div class="settings-index-card">
-                    <div class="settings-index-card-header">Manage PGP Key</div>
+                    <div class="settings-index-card-header">Add PGP Key</div>
                     <div class="settings-index-card-body text-center">
                         <form method="POST" action="{{ route('settings.updatePgpKey') }}">
                             @csrf
                             <div class="settings-index-page-form-group">
                                 <label for="public_key">PGP Public Key</label>
-                                <textarea id="public_key" class="settings-index-page-form-control @error('public_key') is-invalid @enderror" name="public_key" rows="10" required>{{ old('public_key', $user->pgpKey->public_key ?? '') }}</textarea>
+                                <textarea id="public_key" class="settings-index-page-form-control @error('public_key') is-invalid @enderror" name="public_key" rows="10" required>{{ old('public_key') }}</textarea>
                                 @error('public_key')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -72,7 +72,7 @@
                             </div>
                             <p>You can check the Guides section to learn about PGP.</p>
                             <button type="submit" class="btn-submit">
-                                {{ $user->pgpKey ? 'Update PGP Key' : 'Add PGP Key' }}
+                                Update PGP Key
                             </button>
                         </form>
                     </div>

@@ -295,16 +295,4 @@
     @endif
 </div>
 
-{{-- Vendor Policy Section --}}
-@if(!$vendor_on_vacation && $product->user->vendorProfile && $product->user->vendorProfile->vendor_policy)
-<div class="products-show-vendor-policy-section">
-    <div class="products-show-vendor-policy-container">
-        <h2>{{ $product->user->username }}'s Vendor Policy</h2>
-        <div class="products-show-vendor-policy-content">
-            {!! nl2br(e($product->user->vendorProfile->vendor_policy)) !!}
-        </div>
-    </div>
-</div>
-@endif
-
 @endsection
