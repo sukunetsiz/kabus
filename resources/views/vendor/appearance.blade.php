@@ -42,6 +42,32 @@
             </div>
 
             <div class="vendor-panel-appearance-form-group">
+                <label class="vendor-panel-appearance-vacation-label">
+                    <span>Private Shop Mode</span>
+                    <label class="vendor-panel-appearance-switch">
+                        <input 
+                            type="hidden"
+                            name="private_shop_mode"
+                            value="0"
+                        >
+                        <input 
+                            type="checkbox"
+                            name="private_shop_mode"
+                            value="1"
+                            {{ $vendorProfile->private_shop_mode ? 'checked' : '' }}
+                        >
+                        <span class="vendor-panel-appearance-slider"></span>
+                    </label>
+                </label>
+                <p class="vendor-panel-appearance-help-text">
+                    When enabled, your store will be hidden from the public, but users who have saved your reference code will still be able to view your products.
+                </p>
+                @error('private_shop_mode')
+                    <p class="vendor-panel-appearance-error">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="vendor-panel-appearance-form-group">
                 <label class="vendor-panel-appearance-textarea-label">
                     Store Description
                     <span class="vendor-panel-appearance-char-limit">(8-800 characters)</span>

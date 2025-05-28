@@ -17,7 +17,8 @@ class VendorProfile extends Model
     protected $fillable = [
         'description',
         'vendor_policy',
-        'vacation_mode'
+        'vacation_mode',
+        'private_shop_mode'
     ];
 
     /**
@@ -27,6 +28,7 @@ class VendorProfile extends Model
      */
     protected $casts = [
         'vacation_mode' => 'boolean',
+        'private_shop_mode' => 'boolean',
     ];
 
     /**

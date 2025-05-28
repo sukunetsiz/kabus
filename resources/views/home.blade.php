@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 @if($popup)
 <input type="checkbox" id="pop-up-toggle" checked>
 <div class="pop-up-container">
@@ -20,6 +21,9 @@
 
 <div class="home-container">
     @if(count($adSlots) > 0)
+        <div class="home-advertisement-title-wrapper">
+            <h2 class="home-advertisement-heading">Advertised Products</h2>
+        </div>
         <div class="home-advertisement-container">
             @for($i = 1; $i <= 8; $i++)
                 @if(isset($adSlots[$i]))
@@ -121,7 +125,7 @@
     
         <div class="home-important">
             <strong>Security Reminder</strong>
-            <p class="home-text"">
+            <p class="home-text">
             Please use this marketplace script with caution. Despite my best efforts, there might be unfound vulnerabilities. I recommend that you do not use this script directly; instead, review and edit it according to your needs. Remember the most important rule of the internet: don't trust, verify.
             </p>
         </div>

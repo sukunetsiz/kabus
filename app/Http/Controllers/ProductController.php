@@ -54,10 +54,30 @@ class ProductController extends Controller
             ->active()
             ->whereHas('user', function($query) {
                 $query->whereDoesntHave('vendorProfile', function($q) {
-                    $q->where('vacation_mode', true);
+                    $q->where(function($subQuery) {
+                        $subQuery->where('vacation_mode', true)
+                                ->orWhere(function($privShop) {
+                                    $privShop->where('private_shop_mode', true)
+                                            ->whereNotExists(function($ref) {
+                                                $ref->select(\DB::raw(1))
+                                                    ->from('private_shops')
+                                                    ->whereColumn('private_shops.vendor_id', 'users.id')
+                                                    ->where('private_shops.user_id', auth()->id() ?: 0);
+                                            });
+                                });
+                    });
                 })
                 ->orWhereHas('vendorProfile', function($q) {
-                    $q->where('vacation_mode', false);
+                    $q->where('vacation_mode', false)
+                      ->where(function($subQuery) {
+                          $subQuery->where('private_shop_mode', false)
+                                  ->orWhereExists(function($ref) {
+                                      $ref->select(\DB::raw(1))
+                                          ->from('private_shops')
+                                          ->whereColumn('private_shops.vendor_id', 'users.id')
+                                          ->where('private_shops.user_id', auth()->id() ?: 0);
+                                  });
+                      });
                 });
             });
 
@@ -138,7 +158,7 @@ class ProductController extends Controller
             // Load necessary relationships
             $product->load([
                 'user:id,username',
-                'user.vendorProfile:id,user_id,vacation_mode,vendor_policy',
+                'user.vendorProfile:id,user_id,vacation_mode,private_shop_mode,vendor_policy',
                 'category:id,name'
             ]);
 
@@ -147,8 +167,31 @@ class ProductController extends Controller
                 return view('products.show', [
                     'product' => $product,
                     'title' => $product->name,
-                    'vendor_on_vacation' => true
+                    'vendor_on_vacation' => true,
+                    'vendor_shop_private' => false
                 ]);
+            }
+
+            // Check if vendor is in private shop mode
+            if ($product->user->vendorProfile && $product->user->vendorProfile->private_shop_mode) {
+                // Check if current user has saved this vendor's reference code
+                $hasReferenceCode = false;
+                if (Auth::check()) {
+                    $hasReferenceCode = \DB::table('private_shops')
+                        ->where('user_id', Auth::id())
+                        ->where('vendor_id', $product->user->id)
+                        ->exists();
+                }
+
+                // If user hasn't saved the reference code, show private shop message
+                if (!$hasReferenceCode) {
+                    return view('products.show', [
+                        'product' => $product,
+                        'title' => $product->name,
+                        'vendor_on_vacation' => false,
+                        'vendor_shop_private' => true
+                    ]);
+                }
             }
 
             // Get the formatted measurement unit
@@ -173,6 +216,7 @@ class ProductController extends Controller
                 'product' => $product,
                 'title' => $product->name,
                 'vendor_on_vacation' => false,
+                'vendor_shop_private' => false,
                 'xmrPrice' => $xmrPrice,
                 'formattedMeasurementUnit' => $formattedMeasurementUnit,
                 'formattedBulkOptions' => $formattedBulkOptions,

@@ -8,6 +8,11 @@
             <h2>Product Currently Unavailable</h2>
             <p>This product is temporarily unavailable as the vendor is currently on vacation. Please check back later.</p>
         </div>
+    @elseif(isset($vendor_shop_private) && $vendor_shop_private)
+        <div class="products-show-vacation-notice">
+            <h2>Private Shop</h2>
+            <p>This product is only available to users who have saved the vendor's reference code. If you have the vendor's reference code, please add it on your References page.</p>
+        </div>
     @else
         <div class="products-show-main">
             {{-- Error Messages --}}
@@ -296,7 +301,7 @@
 </div>
 
 {{-- Vendor Policy Section --}}
-@if(!$vendor_on_vacation && $product->user->vendorProfile && $product->user->vendorProfile->vendor_policy)
+@if(!$vendor_on_vacation && !(isset($vendor_shop_private) && $vendor_shop_private) && $product->user->vendorProfile && $product->user->vendorProfile->vendor_policy)
 <div class="products-show-vendor-policy-section">
     <div class="products-show-vendor-policy-container">
         <h2>{{ $product->user->username }}'s Vendor Policy</h2>

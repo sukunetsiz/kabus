@@ -143,8 +143,10 @@ Route::middleware(['auth', CheckBanned::class])->group(function () {
     Route::delete('/profile/picture', [ProfileController::class, 'deleteProfilePicture'])->name('profile.delete_picture');
     Route::get('/profile/picture/{filename}', [ProfileController::class, 'getProfilePicture'])->name('profile.picture');
 
-    // References route
+    // References routes
     Route::get('/references', [ReferencesController::class, 'index'])->name('references.index');
+    Route::post('/references/vendor', [ReferencesController::class, 'storeVendorReference'])->name('references.store');
+    Route::delete('/references/vendor/{id}', [ReferencesController::class, 'removeVendorReference'])->name('references.remove');
 
     // PGP key confirmation routes
     Route::get('/pgp/confirm', [ProfileController::class, 'showPgpConfirmationForm'])->name('pgp.confirm');
