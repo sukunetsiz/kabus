@@ -63,7 +63,8 @@
                         <label for="message" class="support-show-label">Your Reply</label>
                         <textarea name="message" id="message" required rows="4"
                             class="support-show-textarea @error('message') is-invalid @enderror"
-                            placeholder="Write your message here">{{ old('message') }}</textarea>
+                            placeholder="Write your message here"
+                            minlength="8" maxlength="4000">{{ old('message') }}</textarea>
                         @error('message')
                             <p class="support-show-error">{{ $message }}</p>
                         @enderror
@@ -73,7 +74,8 @@
                         <span class="support-show-captcha-label">CAPTCHA</span>
                         <img class="support-show-captcha-image" src="{{ new Mobicms\Captcha\Image($captchaCode) }}" alt="CAPTCHA">
                         <input type="text" name="captcha" id="captcha" required
-                            class="support-show-captcha-input @error('captcha') is-invalid @enderror">
+                            class="support-show-captcha-input @error('captcha') is-invalid @enderror"
+                            minlength="2" maxlength="8">
                     </div>
                     @error('captcha')
                         <p class="support-show-error">{{ $message }}</p>

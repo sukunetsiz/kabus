@@ -27,7 +27,9 @@
                        id="monero_address" 
                        name="monero_address" 
                        placeholder="Enter your Monero refund address"
-                       required>
+                       required
+                       minlength="40"
+                       maxlength="160">
                 @error('monero_address')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>

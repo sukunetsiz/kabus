@@ -45,9 +45,9 @@ class SupportController extends Controller
     {
         try {
             $request->validate([
-                'title' => 'required|string|max:255',
-                'message' => 'required|string|max:5000',
-                'captcha' => 'required|string'
+                'title' => 'required|string|min:8|max:160',
+                'message' => 'required|string|min:8|max:4000',
+                'captcha' => 'required|string|min:2|max:8'
             ]);
 
             // Validate CAPTCHA
@@ -130,8 +130,8 @@ class SupportController extends Controller
             }
 
             $request->validate([
-                'message' => 'required|string|max:5000',
-                'captcha' => 'required|string'
+                'message' => 'required|string|min:8|max:4000',
+                'captcha' => 'required|string|min:2|max:8'
             ]);
 
             // Validate CAPTCHA

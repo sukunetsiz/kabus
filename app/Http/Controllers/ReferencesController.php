@@ -46,7 +46,7 @@ class ReferencesController extends Controller
     public function storeVendorReference(Request $request)
     {
         $validated = $request->validate([
-            'vendor_reference_id' => 'required|string',
+            'vendor_reference_id' => 'required|string|min:12|max:20',
         ]);
         
         $user = Auth::user();

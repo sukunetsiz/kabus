@@ -20,7 +20,7 @@
                     @csrf
                     <div class="pgp-confirm-form-group">
                         <label for="decrypted_message" class="pgp-confirm-label text-center">Decrypted Message</label>
-                        <textarea name="decrypted_message" id="decrypted_message" class="pgp-confirm-textarea @error('decrypted_message') pgp-confirm-is-invalid @enderror" rows="1" required></textarea>
+                        <textarea name="decrypted_message" id="decrypted_message" class="pgp-confirm-textarea @error('decrypted_message') pgp-confirm-is-invalid @enderror" rows="1" required minlength="16" maxlength="20"></textarea>
                         @error('decrypted_message')
                             <span class="pgp-confirm-invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

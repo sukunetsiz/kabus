@@ -32,7 +32,7 @@
                         <label for="profile_picture" class="btn btn-primary change-picture-btn">
                             Change Picture
                         </label>
-                        <input type="file" name="profile_picture" id="profile_picture" class="profile-picture-input @error('profile_picture') is-invalid @enderror">
+                        <input type="file" name="profile_picture" id="profile_picture" class="profile-picture-input @error('profile_picture') is-invalid @enderror" accept="image/jpeg, image/png, image/gif, image/webp">
                         @error('profile_picture')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -69,7 +69,7 @@
                     <h2 class="card-title text-center">Update Your Profile</h2>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="10">{{ old('description', $profile->description ? e(Crypt::decryptString($profile->description)) : '') }}</textarea>
+                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="10" required minlength="4" maxlength="1024">{{ old('description', $profile->description ? e(Crypt::decryptString($profile->description)) : '') }}</textarea>
                         @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

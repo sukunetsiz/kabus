@@ -67,7 +67,7 @@
                <form action="{{ route('references.store') }}" method="POST" class="references-index-form">
                    @csrf
                    <div class="references-index-input-group">
-                       <input type="text" name="vendor_reference_id" placeholder="Vendor Reference ID" required class="references-index-input">
+                       <input type="text" name="vendor_reference_id" placeholder="Vendor Reference ID" required minlength="12" maxlength="20" class="references-index-input">
                    </div>
                    <button type="submit" class="references-index-button">Add Vendor</button>
                </form>

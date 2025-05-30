@@ -46,7 +46,8 @@ class ReturnAddressController extends Controller
             'monero_address' => [
                 'required',
                 'string',
-                'max:255',
+                'min:40',
+                'max:160',
                 Rule::unique('return_addresses')->where(function ($query) {
                     return $query->where('user_id', Auth::id());
                 }),

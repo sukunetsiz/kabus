@@ -300,7 +300,13 @@ class ProfileController extends Controller
         }
 
         $request->validate([
-            'decrypted_message' => 'required|string',
+            'decrypted_message' => [
+                'required',
+                'string',
+                'regex:/^PGP-\d{10}-KEY$/'
+            ],
+        ], [
+            'decrypted_message.regex' => 'The decrypted message must be in the correct format (PGP-{number}-KEY).'
         ]);
 
         $originalMessage = session('pgp_confirmation_message');

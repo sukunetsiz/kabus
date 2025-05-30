@@ -31,7 +31,7 @@ class SettingsController extends Controller
         $this->checkRateLimit($request);
 
         $validator = Validator::make($request->all(), [
-            'current_password' => ['required'],
+            'current_password' => ['required', 'string', 'min:8', 'max:40'],
             'password' => [
                 'required',
                 'string',
@@ -43,6 +43,8 @@ class SettingsController extends Controller
             'password_confirmation' => ['required', 'string'],
         ], [
             'current_password.required' => 'Current password is required.',
+            'current_password.min' => 'Current password must be at least 8 characters.',
+            'current_password.max' => 'Current password cannot exceed 40 characters.',
             'password.required' => 'New password is required.',
             'password.string' => 'New password must be a string.',
             'password.min' => 'New password must be at least 8 characters.',
@@ -96,10 +98,12 @@ class SettingsController extends Controller
             'public_key' => [
                 'required',
                 'string',
+                'min:100',
                 'max:8000',
                 'regex:/^-----BEGIN PGP PUBLIC KEY BLOCK-----.*-----END PGP PUBLIC KEY BLOCK-----$/s'
             ],
         ], [
+            'public_key.min' => 'PGP public key must be at least 100 characters.',
             'public_key.max' => 'PGP public key must not exceed 8000 characters.',
             'public_key.regex' => 'PGP public key must be in the correct format.',
         ]);

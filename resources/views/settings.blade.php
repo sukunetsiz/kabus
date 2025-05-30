@@ -26,7 +26,7 @@
                             @csrf
                             <div class="settings-index-page-form-group">
                                 <label for="current_password">Current Password</label>
-                                <input id="current_password" type="password" class="settings-index-page-form-control @error('current_password') is-invalid @enderror" name="current_password" required autocomplete="current-password">
+                                <input id="current_password" type="password" class="settings-index-page-form-control @error('current_password') is-invalid @enderror" name="current_password" required minlength="8" maxlength="40" autocomplete="current-password">
                                 @error('current_password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -35,7 +35,7 @@
                             </div>
                             <div class="settings-index-page-form-group">
                                 <label for="password">New Password</label>
-                                <input id="password" type="password" class="settings-index-page-form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <input id="password" type="password" class="settings-index-page-form-control @error('password') is-invalid @enderror" name="password" required minlength="8" maxlength="40" autocomplete="new-password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="settings-index-page-form-group">
                                 <label for="password_confirmation">Confirm New Password</label>
-                                <input id="password_confirmation" type="password" class="settings-index-page-form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password_confirmation" type="password" class="settings-index-page-form-control" name="password_confirmation" required minlength="8" maxlength="40" autocomplete="new-password">
                             </div>
                             <button type="submit" class="btn-submit">
                                 Change Password
@@ -63,7 +63,7 @@
                             @csrf
                             <div class="settings-index-page-form-group">
                                 <label for="public_key">PGP Public Key</label>
-                                <textarea id="public_key" class="settings-index-page-form-control @error('public_key') is-invalid @enderror" name="public_key" rows="10" required>{{ old('public_key', $user->pgpKey->public_key ?? '') }}</textarea>
+                                <textarea id="public_key" class="settings-index-page-form-control @error('public_key') is-invalid @enderror" name="public_key" rows="10" required minlength="100" maxlength="8000">{{ old('public_key', $user->pgpKey->public_key ?? '') }}</textarea>
                                 @error('public_key')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -97,7 +97,7 @@
                                 @csrf
                                 <div>
                                     <label for="secret_phrase">Secret Phrase (4‑16 letters, no numbers)</label>
-                                    <input id="secret_phrase" type="text" name="secret_phrase" required>
+                                    <input id="secret_phrase" type="text" name="secret_phrase" required minlength="4" maxlength="16">
                                     @error('secret_phrase')
                                         <span class="settings-secret-error" role="alert">
                                             <strong>{{ $message }}</strong>
