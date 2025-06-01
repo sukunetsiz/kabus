@@ -1963,7 +1963,7 @@ background-color:#bb86fc;
 color:#121212
 }
 
-.user-list-btn-details:hover {
+.user-list-btn:hover {
 background-color:#96c;
 transform:translateY(-2px)
 }
@@ -2302,6 +2302,11 @@ background-color:#bb86fc;
 color:#121212
 }
 
+.user-details-btn-primary:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
 .user-details-btn-success {
 background-color:#4caf50;
 color:#fff
@@ -2312,9 +2317,19 @@ background-color:#cf6679;
 color:#121212
 }
 
+.user-details-btn-danger:hover {
+background-color:#b4464f;
+transform:translateY(-2px)
+}
+
 .user-details-btn-info {
 background-color:#03dac6;
 color:#121212
+}
+
+.user-details-btn-info:hover {
+background-color:#018786;
+transform:translateY(-2px)
 }
 
 .user-details-btn-secondary {
@@ -2332,11 +2347,6 @@ margin-right:auto
 display:block;
 margin-left:auto;
 margin-right:auto
-}
-
-.user-details-btn:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc4d
 }
 
 .user-details-ban-info {
@@ -2850,8 +2860,7 @@ letter-spacing:1px
 
 .admin-support-show-submit-btn:hover {
 background-color:#96c;
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc4d
+transform:translateY(-2px)
 }
 
 .admin-support-show-closed-message {
@@ -3457,8 +3466,7 @@ letter-spacing:1px
 
 .support-show-submit-btn:hover {
 background-color:#96c;
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc4d
+transform:translateY(-2px)
 }
 
 .support-show-closed-message {
@@ -5525,7 +5533,7 @@ border:1px solid #3c3c3c
 
 .messages-show-messages {
 display:flex;
-flex-direction:column;
+flex-direction:column-reverse;
 gap:15px;
 max-height:500px;
 overflow-y:auto;
@@ -6210,8 +6218,7 @@ font-size:.9em
 
 .my-products-index-btn-edit:hover {
 background-color:#96c;
-transform:translateY(-2px);
-box-shadow:0 4px 8px #bb86fc4d
+transform:translateY(-2px)
 }
 
 .my-products-index-btn-ad {
@@ -7899,12 +7906,17 @@ background-color:#bb86fc;
 color:#121212
 }
 
+.products-show-wishlist-add:hover {
+background-color:#96c;
+transform:translateY(-2px)
+}
+
 .products-show-wishlist-remove {
 background-color:#cf6679;
 color:#121212
 }
 
-.products-show-wishlist-button:hover {
+.products-show-wishlist-remove:hover {
 background-color:#b4464f;
 transform:translateY(-2px)
 }
@@ -10260,8 +10272,7 @@ color:#121212;
 background-color:#bb86fc;
 padding:10px 25px;
 border-radius:30px;
-display:inline-block;
-box-shadow:0 4px 15px #bb86fc4d
+display:inline-block
 }
 
 .orders-show-id {
@@ -12103,8 +12114,7 @@ display:inline-block
 .disputes-show-back-link:hover {
 background-color:#bb86fc;
 color:#121212;
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc4d
+transform:translateY(-2px)
 }
 
 .disputes-show-card {

@@ -44,7 +44,7 @@ class CartController extends Controller
     {
         try {
             $validated = $request->validate([
-                'quantity' => 'required|integer|min:1',
+                'quantity' => 'required|integer|min:1|max:80000',
                 'delivery_option' => 'required|integer|min:0',
                 'bulk_option' => 'nullable|integer|min:0'
             ]);
@@ -146,7 +146,7 @@ class CartController extends Controller
             }
 
             $validated = $request->validate([
-                'quantity' => 'required|integer|min:1'
+                'quantity' => 'required|integer|min:1|max:80000'
             ]);
 
             // Validate stock availability
@@ -236,7 +236,7 @@ class CartController extends Controller
 
             // Validate message
             $validated = $request->validate([
-                'message' => 'required|string|max:10000'
+                'message' => 'required|string|min:4|max:1600'
             ]);
 
             // Check if vendor has PGP key

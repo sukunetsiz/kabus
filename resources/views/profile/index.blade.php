@@ -32,7 +32,7 @@
                         <label for="profile_picture" class="btn btn-primary change-picture-btn">
                             Change Picture
                         </label>
-                        <input type="file" name="profile_picture" id="profile_picture" class="profile-picture-input @error('profile_picture') is-invalid @enderror" accept="image/jpeg, image/png, image/gif, image/webp">
+                        <input type="file" name="profile_picture" id="profile_picture" class="profile-picture-input @error('profile_picture') is-invalid @enderror">
                         @error('profile_picture')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -69,13 +69,13 @@
                     <h2 class="card-title text-center">Update Your Profile</h2>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="10" required minlength="4" maxlength="1024">{{ old('description', $profile->description ? e(Crypt::decryptString($profile->description)) : '') }}</textarea>
+                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="10" required minlength="4" maxlength="800">{{ old('description', $profile->description ? e(Crypt::decryptString($profile->description)) : '') }}</textarea>
                         @error('description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                        <small class="form-text text-muted text-center">You can write between 4 and 1024 characters. Letters, numbers, spaces and punctuation marks are allowed. Adding a description is required before adding a profile picture.</small>
+                        <small class="form-text text-muted text-center">You can write between 4 and 800 characters. Letters, numbers, spaces and punctuation marks are allowed. Adding a description is required before adding a profile picture.</small>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary update-profile-btn">Update Profile</button>

@@ -230,6 +230,7 @@
                                        name="quantity" 
                                        id="quantity" 
                                        min="1" 
+                                       max="80000"
                                        value="{{ old('quantity', 1) }}" 
                                        required>
                             </div>

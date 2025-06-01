@@ -64,7 +64,8 @@
                     </label>
                     <input type="text" name="name" id="name" required
                         class="products-common-create-input"
-                        value="{{ old('name') }}">
+                        value="{{ old('name') }}"
+                        minlength="4" maxlength="240">
                     @error('name')
                         <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
@@ -76,7 +77,8 @@
                         Description
                     </label>
                     <textarea name="description" id="description" rows="4" required
-                        class="products-common-create-textarea">{{ old('description') }}</textarea>
+                        class="products-common-create-textarea" 
+                        minlength="4" maxlength="2400">{{ old('description') }}</textarea>
                     @error('description')
                         <p class="products-common-create-error">{{ $message }}</p>
                     @enderror
@@ -91,7 +93,7 @@
                         <div class="products-common-create-price-symbol">
                             <span>$</span>
                         </div>
-                        <input type="number" name="price" id="price" required step="0.01" min="0"
+                        <input type="number" name="price" id="price" required step="0.01" min="0" max="80000"
                             class="products-common-create-price-input"
                             value="{{ old('price') }}">
                     </div>
@@ -131,7 +133,7 @@
                     <label for="stock_amount" class="products-common-create-label">
                         Stock Amount
                     </label>
-                    <input type="number" name="stock_amount" id="stock_amount" required min="0" max="999999"
+                    <input type="number" name="stock_amount" id="stock_amount" required min="0" max="80000"
                         class="products-common-create-input"
                         value="{{ old('stock_amount', 0) }}">
                     @error('stock_amount')
@@ -232,7 +234,8 @@
                                         : ($type === 'cargo' 
                                             ? 'e.g., Standard Delivery (3-5 business days via UPS), Express Shipping (1-2 business days via FedEx)'
                                             : 'e.g., Pickup near Central Park, NYC within 24 hours, Locker #31 at Union Station') }}"
-                                    {{ $i === 0 ? 'required' : '' }}>
+                                    {{ $i === 0 ? 'required' : '' }}
+                                    minlength="4" maxlength="160">
                                 @error('delivery_options.'.$i.'.description')
                                     <p class="products-common-create-error">{{ $message }}</p>
                                 @enderror
@@ -253,6 +256,7 @@
                                         id="delivery_options_{{ $i }}_price"
                                         step="0.01" 
                                         min="0"
+                                        max="80000"
                                         class="products-common-create-price-input"
                                         value="{{ old('delivery_options.'.$i.'.price') }}"
                                         placeholder="0.00"
@@ -292,8 +296,9 @@
                                 <input type="number" 
                                     name="bulk_options[{{ $i }}][amount]" 
                                     id="bulk_options_{{ $i }}_amount"
-                                    step="0.01"
+                                    step="1"
                                     min="0"
+                                    max="80000"
                                     class="products-common-create-input"
                                     value="{{ old('bulk_options.'.$i.'.amount') }}"
                                     placeholder="Enter bulk quantity">
@@ -317,6 +322,7 @@
                                         id="bulk_options_{{ $i }}_price"
                                         step="0.01" 
                                         min="0"
+                                        max="80000"
                                         class="products-common-create-price-input"
                                         value="{{ old('bulk_options.'.$i.'.price') }}"
                                         placeholder="Enter bulk price">

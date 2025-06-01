@@ -241,7 +241,7 @@ class BecomeVendorController extends Controller
         }
 
         $request->validate([
-            'application_text' => 'required|string|min:100|max:5000',
+            'application_text' => 'required|string|min:80|max:4000',
             'product_images' => [
                 'required',
                 'array',

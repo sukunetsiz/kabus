@@ -26,12 +26,17 @@
                     id="application_text" 
                     name="application_text" 
                     required
+                    minlength="80"
+                    maxlength="4000"
                     placeholder="Please provide:
 - Information about yourself
 - What products will you sell?
 - Your communication address
 - Previous references from other websites"
                 >{{ old('application_text') }}</textarea>
+                <small class="form-text text-muted">
+                    Your application must be between 80 and 4000 characters. Be detailed but concise.
+                </small>
             </div>
 
             <div class="become-vendor-application-form-group">

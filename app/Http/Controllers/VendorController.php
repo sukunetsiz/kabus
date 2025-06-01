@@ -211,14 +211,15 @@ class VendorController extends Controller
     {
         $request->validate([
             'description' => 'required|string|min:8|max:800',
-            'vendor_policy' => 'nullable|string|max:2000',
+            'vendor_policy' => 'nullable|string|min:8|max:1600',
             'vacation_mode' => 'required|in:0,1',
             'private_shop_mode' => 'required|in:0,1',
         ], [
             'description.required' => 'A description is required.',
             'description.min' => 'Description must be at least 8 characters.',
             'description.max' => 'Description cannot exceed 800 characters.',
-            'vendor_policy.max' => 'Vendor policy cannot exceed 2000 characters.',
+            'vendor_policy.min' => 'Vendor policy must be at least 8 characters.',
+            'vendor_policy.max' => 'Vendor policy cannot exceed 1600 characters.',
             'vacation_mode.in' => 'Invalid vacation mode value.',
             'private_shop_mode.in' => 'Invalid private shop mode value.'
         ]);
@@ -311,9 +312,9 @@ class VendorController extends Controller
         try {
             // Validate the request
             $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'price' => 'required|numeric|min:0',
+                'name' => 'required|string|min:4|max:240',
+                'description' => 'required|string|min:4|max:2400',
+                'price' => 'required|numeric|min:0|max:80000',
                 'category_id' => 'required|exists:categories,id',
                 'product_picture' => [
                     'nullable',
@@ -325,7 +326,7 @@ class VendorController extends Controller
                     'file',
                     'max:800', // 800KB max size
                 ],
-                'stock_amount' => 'required|integer|min:0|max:999999',
+                'stock_amount' => 'required|integer|min:0|max:80000',
                 'measurement_unit' => [
                     'required',
                     Rule::in(array_keys(Product::getMeasurementUnits()))
@@ -370,15 +371,15 @@ class VendorController extends Controller
 
             // Validate each delivery option
             foreach ($deliveryOptions as $index => $option) {
-                if (strlen($option['description']) > 255) {
+                if (strlen($option['description']) < 4 || strlen($option['description']) > 160) {
                     throw ValidationException::withMessages([
-                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description cannot exceed 255 characters."]
+                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description must be between 4 and 160 characters."]
                     ]);
                 }
 
-                if ($option['price'] < 0) {
+                if ($option['price'] < 0 || $option['price'] > 80000) {
                     throw ValidationException::withMessages([
-                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price cannot be negative."]
+                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price must be between 0 and 80000."]
                     ]);
                 }
             }
@@ -403,15 +404,15 @@ class VendorController extends Controller
 
                 // Validate each bulk option
                 foreach ($bulkOptions as $index => $option) {
-                    if ($option['amount'] <= 0) {
+                    if ($option['amount'] < 0 || $option['amount'] > 80000) {
                         throw ValidationException::withMessages([
-                            "bulk_options.{$index}.amount" => ['Amount must be greater than zero.']
+                            "bulk_options.{$index}.amount" => ['Amount must be between 0 and 80000.']
                         ]);
                     }
 
-                    if ($option['price'] <= 0) {
+                    if ($option['price'] < 0 || $option['price'] > 80000) {
                         throw ValidationException::withMessages([
-                            "bulk_options.{$index}.price" => ['Price must be greater than zero.']
+                            "bulk_options.{$index}.price" => ['Price must be between 0 and 80000.']
                         ]);
                     }
                 }
@@ -521,10 +522,10 @@ class VendorController extends Controller
         try {
             // Validate the request
             $validated = $request->validate([
-                'description' => 'required|string',
-                'price' => 'required|numeric|min:0',
+                'description' => 'required|string|min:4|max:2400',
+                'price' => 'required|numeric|min:0|max:80000',
                 'category_id' => 'required|exists:categories,id',
-                'stock_amount' => 'required|integer|min:0|max:999999',
+                'stock_amount' => 'required|integer|min:0|max:80000',
                 'measurement_unit' => [
                     'required',
                     Rule::in(array_keys(Product::getMeasurementUnits()))
@@ -569,15 +570,15 @@ class VendorController extends Controller
 
             // Validate each delivery option
             foreach ($deliveryOptions as $index => $option) {
-                if (strlen($option['description']) > 255) {
+                if (strlen($option['description']) < 4 || strlen($option['description']) > 160) {
                     throw ValidationException::withMessages([
-                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description cannot exceed 255 characters."]
+                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description must be between 4 and 160 characters."]
                     ]);
                 }
 
-                if ($option['price'] < 0) {
+                if ($option['price'] < 0 || $option['price'] > 80000) {
                     throw ValidationException::withMessages([
-                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price cannot be negative."]
+                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price must be between 0 and 80000."]
                     ]);
                 }
             }
@@ -602,15 +603,15 @@ class VendorController extends Controller
 
                 // Validate each bulk option
                 foreach ($bulkOptions as $index => $option) {
-                    if ($option['amount'] <= 0) {
+                    if ($option['amount'] < 0 || $option['amount'] > 80000) {
                         throw ValidationException::withMessages([
-                            "bulk_options.{$index}.amount" => ['Amount must be greater than zero.']
+                            "bulk_options.{$index}.amount" => ['Amount must be between 0 and 80000.']
                         ]);
                     }
 
-                    if ($option['price'] <= 0) {
+                    if ($option['price'] < 0 || $option['price'] > 80000) {
                         throw ValidationException::withMessages([
-                            "bulk_options.{$index}.price" => ['Price must be greater than zero.']
+                            "bulk_options.{$index}.price" => ['Price must be between 0 and 80000.']
                         ]);
                     }
                 }

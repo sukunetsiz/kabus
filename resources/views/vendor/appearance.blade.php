@@ -75,6 +75,8 @@
                 <textarea
                     name="description"
                     class="vendor-panel-appearance-textarea"
+                    required
+                    minlength="8"
                     maxlength="800"
                 >{{ old('description', $vendorProfile->description) }}</textarea>
                 
@@ -86,12 +88,13 @@
             <div class="vendor-panel-appearance-form-group">
                 <label class="vendor-panel-appearance-textarea-label">
                     Vendor Policy
-                    <span class="vendor-panel-appearance-char-limit">(up to 2000 characters)</span>
+                    <span class="vendor-panel-appearance-char-limit">(8-1600 characters)</span>
                 </label>
                 <textarea
                     name="vendor_policy"
                     class="vendor-panel-appearance-textarea"
-                    maxlength="2000"
+                    minlength="8"
+                    maxlength="1600"
                 >{{ old('vendor_policy', $vendorProfile->vendor_policy) }}</textarea>
                 
                 @error('vendor_policy')

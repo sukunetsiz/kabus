@@ -12,14 +12,14 @@
                 @enderror
                 <div class="form-group text-center">
                     <label for="password">New Password</label>
-                    <input type="password" name="password" id="password" required>
+                    <input type="password" name="password" id="password" class="form-control" minlength="8" maxlength="40" required>
                     @error('password')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="form-group text-center">
                     <label for="password_confirmation">Confirm New Password</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" required>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" minlength="8" maxlength="40" required>
                     @error('password_confirmation')
                         <span class="error">{{ $message }}</span>
                     @enderror

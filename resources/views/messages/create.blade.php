@@ -20,6 +20,7 @@
                             id="username" 
                             class="messages-create-input @error('username') messages-create-input-error @enderror" 
                             required 
+                            maxlength="16"
                             placeholder="Enter recipient's username" 
                             value="{{ old('username', $username ?? '') }}"
                         >
@@ -34,6 +35,8 @@
                             id="content" 
                             class="messages-create-textarea @error('content') messages-create-input-error @enderror" 
                             required 
+                            minlength="4"
+                            maxlength="1600"
                             placeholder="Type your message here..."
                         >{{ old('content') }}</textarea>
                         @error('content')

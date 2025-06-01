@@ -31,7 +31,8 @@
                                    id="vendor" 
                                    value="{{ $filters['vendor'] ?? '' }}"
                                    placeholder="Search vendor 🔎"
-                                   maxlength="50"
+                                   minlength="1"
+                                   maxlength="16"
                                    class="products-index-input @error('vendor') is-invalid @enderror">
                         </div>
                     </div>
@@ -85,7 +86,8 @@
                                id="search" 
                                value="{{ $filters['search'] ?? '' }}"
                                placeholder="Search by product title 🔎"
-                               maxlength="100"
+                               minlength="1"
+                               maxlength="80"
                                class="products-index-main-search-input @error('search') is-invalid @enderror">
                     </div>
                 </div>

@@ -440,12 +440,15 @@ class AuthController extends Controller
     public function verifyMnemonic(Request $request)
     {
         $this->validate($request, [
-            'username' => 'required|string|max:16',
-            'mnemonic' => 'required|string|max:512',
+            'username' => 'required|string|min:4|max:16|regex:/^[a-zA-Z0-9]+$/',
+            'mnemonic' => 'required|string|min:40|max:512',
         ], [
             'username.required' => 'Please enter your username.',
+            'username.min' => 'Username must be at least 4 characters.',
             'username.max' => 'Username cannot be longer than 16 characters.',
+            'username.regex' => 'Username can only contain letters and numbers.',
             'mnemonic.required' => 'Please enter your mnemonic phrase.',
+            'mnemonic.min' => 'Mnemonic phrase must be at least 40 characters.',
             'mnemonic.max' => 'Mnemonic phrase cannot be longer than 512 characters.',
         ]);
 

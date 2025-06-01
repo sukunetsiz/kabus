@@ -81,6 +81,7 @@
                                        name="quantity" 
                                        value="{{ $item->quantity }}"
                                        min="1"
+                                       max="80000"
                                        class="cart-index-quantity-input">
                                 <button type="submit" class="cart-index-update-btn">
                                     Update
@@ -151,6 +152,8 @@
                                 class="cart-index-message-textarea"
                                 placeholder="Enter your message here. It will be encrypted with the vendor's PGP key."
                                 required
+                                minlength="4"
+                                maxlength="1600"
                             ></textarea>
                             <button type="submit" class="cart-index-message-button">Encrypt & Save Message</button>
                         </form>

@@ -47,7 +47,7 @@ class MessageController extends Controller
         RateLimiter::hit('view-conversation:'.Auth::id());
 
         $this->authorize('view', $conversation);
-        $messages = $conversation->messages()->with('sender')->orderBy('created_at', 'desc')->paginate(50);
+        $messages = $conversation->messages()->with('sender')->orderBy('created_at', 'asc')->paginate(40);
         
         // Mark unread messages as read
         $unreadMessages = $messages->where('is_read', false)->where('sender_id', '!=', Auth::id());
@@ -70,7 +70,7 @@ class MessageController extends Controller
         }
 
         $validatedData = $request->validate([
-            'content' => 'required|string|min:1|max:1000',
+            'content' => 'required|string|min:4|max:1600',
         ]);
 
         $config = HTMLPurifier_Config::createDefault();
@@ -128,7 +128,7 @@ class MessageController extends Controller
     {
         $validatedData = $request->validate([
             'username' => 'required|string|alpha_num|max:16',
-            'content' => 'required|string|min:1|max:1000',
+            'content' => 'required|string|min:4|max:1600',
         ]);
 
         if ($validatedData['username'] === Auth::user()->username) {

@@ -33,8 +33,8 @@ class ProductController extends Controller
         try {
             // Validate all inputs
             $validated = $request->validate([
-                'search' => ['nullable', 'string', 'min:1', 'max:100'],
-                'vendor' => ['nullable', 'string', 'min:1', 'max:50'],
+                'search' => ['nullable', 'string', 'min:1', 'max:80'],
+                'vendor' => ['nullable', 'string', 'min:1', 'max:16'],
                 'type' => ['nullable', Rule::in([Product::TYPE_DIGITAL, Product::TYPE_CARGO, Product::TYPE_DEADDROP])],
                 'category' => ['nullable', 'integer', 'exists:categories,id'],
                 'sort_price' => ['nullable', Rule::in(['asc', 'desc'])],

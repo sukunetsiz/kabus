@@ -52,7 +52,8 @@
                         class="messages-show-input" 
                         placeholder="Type your message here..." 
                         required 
-                        maxlength="1000"
+                        minlength="4"
+                        maxlength="1600"
                     ></textarea>
                 </div>
                 <button type="submit" class="messages-show-submit">

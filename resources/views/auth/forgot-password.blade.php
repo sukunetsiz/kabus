@@ -13,14 +13,14 @@
                 @csrf
                 <div class="form-group text-center">
                     <label for="username">Username</label>
-                    <input type="text" name="username" id="username" class="form-control" value="{{ old('username') }}" required autofocus>
+                    <input type="text" name="username" id="username" class="form-control" value="{{ old('username') }}" minlength="4" maxlength="16" required autofocus>
                     @error('username')
                         <span class="error">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="form-group text-center">
                     <label for="mnemonic">12-Word Mnemonic Phrase</label>
-                    <input type="text" name="mnemonic" id="mnemonic" class="form-control" value="{{ old('mnemonic') }}" required>
+                    <input type="text" name="mnemonic" id="mnemonic" class="form-control" value="{{ old('mnemonic') }}" minlength="40" maxlength="512" required>
                     @error('mnemonic')
                         <span class="error">{{ $message }}</span>
                     @enderror

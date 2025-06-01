@@ -54,7 +54,7 @@ class ProfileController extends Controller
                     'required',
                     'string',
                     'min:4',
-                    'max:1024',
+                    'max:800',
                     'regex:/^[\p{L}\p{N}\s\p{P}]+$/u'
                 ],
                 'profile_picture' => [
