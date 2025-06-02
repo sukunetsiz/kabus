@@ -18,6 +18,26 @@ class CartController extends Controller
         $cartItems = Cart::where('user_id', Auth::id())
             ->with(['product', 'product.user'])
             ->get();
+            
+        // Check for and remove cart items with deleted products
+        $deletedProductItems = $cartItems->filter(function($item) {
+            return $item->hasDeletedProduct();
+        });
+        
+        if ($deletedProductItems->isNotEmpty()) {
+            // Remove cart items with deleted products
+            foreach ($deletedProductItems as $item) {
+                $item->delete();
+            }
+            
+            // Refresh cart items after removal
+            $cartItems = Cart::where('user_id', Auth::id())
+                ->with(['product', 'product.user'])
+                ->get();
+                
+            // Add notification
+            session()->flash('info', 'Some items were automatically removed from your cart because their products have been deleted.');
+        }
 
         $xmrPrice = $xmrPriceController->getXmrPrice();
         $cartTotal = Cart::getCartTotal(Auth::user());
@@ -267,6 +287,26 @@ class CartController extends Controller
         $cartItems = Cart::where('user_id', Auth::id())
             ->with(['product', 'product.user'])
             ->get();
+            
+        // Check for and remove cart items with deleted products
+        $deletedProductItems = $cartItems->filter(function($item) {
+            return $item->hasDeletedProduct();
+        });
+        
+        if ($deletedProductItems->isNotEmpty()) {
+            // Remove cart items with deleted products
+            foreach ($deletedProductItems as $item) {
+                $item->delete();
+            }
+            
+            // Refresh cart items after removal
+            $cartItems = Cart::where('user_id', Auth::id())
+                ->with(['product', 'product.user'])
+                ->get();
+                
+            // Add notification
+            session()->flash('info', 'Some items were automatically removed from your cart because their products have been deleted.');
+        }
         
         $subtotal = Cart::getCartTotal(Auth::user());
         $commissionPercentage = config('marketplace.commission_percentage');

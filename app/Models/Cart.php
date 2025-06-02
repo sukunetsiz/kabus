@@ -56,10 +56,31 @@ class Cart extends Model
 
     /**
      * Get the product in the cart.
+     * 
+     * This relationship can include soft-deleted products if needed.
+     * 
+     * @param bool $withTrashed Whether to include soft-deleted products
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product()
+    public function product($withTrashed = false)
     {
-        return $this->belongsTo(Product::class);
+        $relation = $this->belongsTo(Product::class);
+        
+        if ($withTrashed) {
+            $relation->withTrashed();
+        }
+        
+        return $relation;
+    }
+    
+    /**
+     * Check if the cart item has a deleted product.
+     * 
+     * @return bool
+     */
+    public function hasDeletedProduct()
+    {
+        return $this->product === null && $this->product(true)->first() !== null;
     }
 
     /**
