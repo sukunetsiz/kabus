@@ -1,22 +1,22 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-I am sukunetsiz, the creator and developer of the Kabus Monero Marketplace Script. As of May 5, 2025, I am writing this message while alive, safe, with internet access, and under no pressure or influence of any substance. To prove that this message is not automated, I will mention current news. Among this week’s top headlines, Alibaba has launched Qwen 3, a new open-source AI model, intensifying China’s AI race. Meanwhile, Turkish opposition leader Özgür Özel was assaulted in Istanbul, raising concerns over political safety.
+I am sukunetsiz, the creator and developer of the Kabus Monero Marketplace Script. As of June 6, 2025, I am writing this message while alive, safe, with internet access, and under no pressure or influence of any substance. To prove that this message is not automated, I will mention current news. Among this week’s top headlines, Anthropic has launched Claude 4, its next-gen AI model promising major gains in reasoning, speed, and multimodal processing. Meanwhile, Ukraine carried out a substantial drone attack deep inside Russia, hitting several strategic airbases in what Kyiv is calling “Operation Spiderweb”
 
 The purpose of creating Kabus was to contribute to the Monero ecosystem and ensure its growth. It was never created for any illegal purpose, nor does it encourage such activities. The aim of this marketplace script is to facilitate the sale of legal products online as anonymously as possible.
 
 Privacy is a human right, and it can never be taken away from anyone, nor should it even be suggested.
 -----BEGIN PGP SIGNATURE-----
 
-iQGzBAEBCgAdFiEEWYzNWVhBYephvoH2lVR7UxN3pzAFAmgYbY0ACgkQlVR7UxN3
-pzDecwv/R0Agzwvc7bkX4u6gedEcwc5JgLE5NtGOe1ict3e1i5GjPUd4DnCbJfkw
-1GKmfIgqLg3ZSglxRzoeFo7JBUuvgbNFFkCes6cP0/bMxrpwwqcwjIu0ELCsCuda
-e4h3O2G3e+bJFKJRwWGEZH7l7qvkfQsEz1dLSiwxLwSXgS9pk8A0RxYQAPi0dp1O
-jLpKrc/8tk8+8abuoUnCLWPm8mvWDAj7rA7MqbCRJZECawqG0ZkqkvZIvTdEYoAU
-XPAsJuophcuAaAfzd/jWHkk+s8Ude5874vUiZUXXDfBb9RIr/zE3bu2/LZlxbUaK
-VUfrhWVjU0P7Hb05C6B7H3CcHjj2bFCDpu1TONTJMZd5Ftr/6SnweNopPp3OdxoT
-k7c9hu/kWo7nzIvDiUjYRkOFQGD2GTYfKjGjnBxhABABC2LcCi4tPYxyLWI5+Xr1
-ne+stdzdhAqJQzPaV3FQ8Pn+2rGp+jq3ZxNr5ISvbP6Hn1PJBH02h7p7cpGoBTjh
-gtQpI14+
-=ZOIP
+iQGzBAEBCgAdFiEEWYzNWVhBYephvoH2lVR7UxN3pzAFAmhC54EACgkQlVR7UxN3
+pzDmfgv6AkPU5rZU0xzGtww1O0OZt3uJ48SmwNjeIVdK+H0JIenRhktOdezRD0Rq
+vm4A8Z8+mPCAFEmKLDHppg2SVMFtRZlpb4OxFsVuhV/FAVV2lgobvwcxCvuff/zC
+Ampye3GJe9g3IdIxFVidf2nKlS0JZ3OovUjJva+FGrYQogx7UIsKdJXGxMb8VVeS
+qLW1UPzHW6kc6rNChWz2jFJlGUUYJkO12OS/CQVDQzZgdLE16o+yLRNvEuBiVgbD
+RQ8oZKZV9qP3kEg2JoOD6cPqc14a+QLw0GkgOSQGs1fIQODV9HLrO9pejDLYIank
+0+Dz5dewne12Bh8Ji42HSIVOxQRhkJH82CowR/vZcHndyPr2qPRiRHTi/4yyg4NE
+/G2xWBb3ML8BJSc9zlWvQrCI1FKCEXCwZYZlZhQwSuiaA3BYgEID/PvpOZF/EwwX
+8rJPk9oj0XSUcTs56skdE78wymqF8mcIMTqbMyFYvm6WULpyzW4Z9US6P6X/8n89
+J168KlTW
+=ASA4
 -----END PGP SIGNATURE-----

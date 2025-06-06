@@ -1,9 +1,24 @@
 @props([
     'products'  // Required: collection of products
 ])
+
     <div class="product-card-grid">
         @foreach($products as $product)
             <a href="{{ route('products.show', $product->slug) }}" class="product-card">
+                @auth
+                <form action="{{ Auth::user()->hasWishlisted($product->id) 
+                    ? route('wishlist.destroy', $product) 
+                    : route('wishlist.store', $product) }}" 
+                    method="POST">
+                    @csrf
+                    @if(Auth::user()->hasWishlisted($product->id))
+                        @method('DELETE')
+                    @endif
+                    <button type="submit" class="product-card-wishlist-button {{ Auth::user()->hasWishlisted($product->id) ? 'active' : '' }}" title="{{ Auth::user()->hasWishlisted($product->id) ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
+                        <span class="product-card-wishlist-heart">❤️</span>
+                    </button>
+                </form>
+                @endauth
                 <div class="product-card-image">
                     <img src="{{ $product->product_picture_url }}" alt="{{ $product->name }}">
                 </div>

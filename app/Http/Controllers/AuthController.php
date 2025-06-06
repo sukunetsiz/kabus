@@ -221,8 +221,6 @@ class AuthController extends Controller
 
     protected function getValidationRules(string $type = 'login'): array
     {
-        $captchaLength = strlen(session('captcha_code', ''));
-        
         $rules = [
             'username' => [
                 'required',
@@ -237,7 +235,7 @@ class AuthController extends Controller
                 'min:8',
                 'max:40',
             ],
-            'captcha' => ['required', 'string', "size:$captchaLength"],
+            'captcha' => ['required', 'string'],
         ];
 
         if ($type === 'register') {
@@ -285,7 +283,6 @@ class AuthController extends Controller
 
     protected function getValidationMessages(): array
     {
-        $captchaLength = strlen(session('captcha_code', ''));
         return [
             'username.required' => 'Username is required.',
             'username.min' => 'Username must be at least 4 characters.',
@@ -299,7 +296,6 @@ class AuthController extends Controller
             'reference_code.required' => 'Reference number is required.',
             'reference_code.size' => 'Reference number must be exactly 16 characters.',
             'captcha.required' => 'CAPTCHA is required.',
-            'captcha.size' => "CAPTCHA must be exactly $captchaLength characters.",
         ];
     }
 
