@@ -96,6 +96,9 @@
                                         name="delivery_text[{{ $item->product_id }}]" 
                                         rows="3" 
                                         class="sales-show-delivery-textarea"
+                                        minlength="8"
+                                        maxlength="800"
+                                        placeholder="Enter delivery details (8-800 characters)"
                                         required>{{ $item->delivery_text }}</textarea>
                                 </div>
                             @endif

@@ -65,7 +65,7 @@ class DisputesController extends Controller
         
         // Validate the request data
         $validated = $request->validate([
-            'reason' => 'required|string|min:10|max:500',
+            'reason' => 'required|string|min:8|max:1600',
         ]);
         
         // Open the dispute
@@ -113,7 +113,7 @@ class DisputesController extends Controller
         
         // Validate the request
         $validated = $request->validate([
-            'message' => 'required|string|min:1|max:1000',
+            'message' => 'required|string|min:4|max:800',
         ]);
         
         // Add the message

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -27,8 +26,6 @@ class SettingsController extends Controller
         if (!Auth::check()) {
             return back()->with('error', 'Unauthorized access.');
         }
-
-        $this->checkRateLimit($request);
 
         $validator = Validator::make($request->all(), [
             'current_password' => ['required', 'string', 'min:8', 'max:40'],
@@ -57,7 +54,6 @@ class SettingsController extends Controller
 
         $validator->after(function ($validator) use ($request) {
             if (!Hash::check($request->current_password, Auth::user()->password)) {
-                RateLimiter::hit($this->throttleKey($request), 60);
                 $validator->errors()->add('current_password', 'The entered password does not match your current password.');
             }
         });
@@ -134,19 +130,6 @@ class SettingsController extends Controller
         }
     }
 
-    private function checkRateLimit(Request $request)
-    {
-        $key = $this->throttleKey($request);
-
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            $seconds = RateLimiter::availableIn($key);
-            throw ValidationException::withMessages([
-                'current_password' => ["Too many password change attempts. Please try again in {$seconds} seconds."],
-            ]);
-        }
-
-        RateLimiter::hit($key, 60);
-    }
 
     /**
      * Update the user's secret phrase.
@@ -206,8 +189,4 @@ class SettingsController extends Controller
         }
     }
 
-    private function throttleKey(Request $request)
-    {
-        return 'password_change|' . $request->ip();
-    }
 }

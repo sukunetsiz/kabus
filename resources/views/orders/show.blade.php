@@ -328,7 +328,7 @@
                     <div class="orders-show-dispute-form-description">
                         Please explain why you are opening this dispute. Be specific and provide any relevant details.
                     </div>
-                    <textarea name="reason" placeholder="Reason for dispute..." required minlength="10" maxlength="500" class="orders-show-dispute-form-textarea"></textarea>
+                    <textarea name="reason" placeholder="Reason for dispute... (8-1600 characters)" required minlength="8" maxlength="1600" class="orders-show-dispute-form-textarea"></textarea>
                     <div class="orders-show-dispute-form-submit">
                         <button type="submit" class="orders-show-dispute-form-button">Submit Dispute</button>
                     </div>
@@ -404,7 +404,7 @@
                                     @csrf
                                     <div class="orders-show-review-field">
                                         <label for="review_text_{{ $item->id }}" class="orders-show-review-label">Your Review</label>
-                                        <textarea id="review_text_{{ $item->id }}" name="review_text" required minlength="3" maxlength="1000" placeholder="Write your review here..." class="orders-show-review-textarea"></textarea>
+                                        <textarea id="review_text_{{ $item->id }}" name="review_text" required minlength="8" maxlength="800" placeholder="Write your review here... (8-800 characters)" class="orders-show-review-textarea"></textarea>
                                     </div>
                                     
                                     <div class="orders-show-review-field">

@@ -167,10 +167,11 @@ class VendorController extends Controller
         
         // Validate the request data
         $request->validate([
-            'delivery_text.*' => 'required|string|max:1000',
+            'delivery_text.*' => 'required|string|min:8|max:800',
         ], [
             'delivery_text.*.required' => 'Delivery information is required for each product.',
-            'delivery_text.*.max' => 'Delivery information cannot exceed 1000 characters.',
+            'delivery_text.*.min' => 'Delivery information must be at least 8 characters.',
+            'delivery_text.*.max' => 'Delivery information cannot exceed 800 characters.',
         ]);
         
         // Update the delivery text for each order item

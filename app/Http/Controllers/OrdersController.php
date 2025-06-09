@@ -383,7 +383,7 @@ class OrdersController extends Controller
 
         // Validate the request
         $validated = $request->validate([
-            'review_text' => 'required|string|min:3|max:1000',
+            'review_text' => 'required|string|min:8|max:800',
             'sentiment' => 'required|in:positive,mixed,negative',
         ]);
 

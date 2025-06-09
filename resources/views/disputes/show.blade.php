@@ -119,8 +119,8 @@
                                 class="disputes-show-textarea"
                                 placeholder="Type your message here..." 
                                 required 
-                                minlength="1" 
-                                maxlength="1000"></textarea>
+                                minlength="4" 
+                                maxlength="800"></textarea>
                         </div>
                         <div>
                             <button type="submit" class="disputes-show-submit-btn">Send Message</button>
