@@ -64,8 +64,8 @@
         </script>
     @endif
     
-    <a href="#top" class="scroll-button scroll-top" title="Scroll to top">˄</a>
-    <a href="#bottom" class="scroll-button scroll-bottom" title="Scroll to bottom">˅</a>
+    <a href="#top" class="scroll-button scroll-top" title="Scroll to top">▲</a>
+    <a href="#bottom" class="scroll-button scroll-bottom" title="Scroll to bottom">▼</a>
     <div id="bottom"></div>
 </body>
 </html>
