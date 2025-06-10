@@ -11,7 +11,7 @@
 
         <div class="guides-index-grid">
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🪙 Monero Guide 🪙</h3>
+                <h3 class="guides-index-item-title">Monero Guide</h3>
                 <p class="guides-index-item-description">
                     Information about creating and safely using a Monero wallet.
                 </p>
@@ -19,7 +19,7 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🧅 Tor Guide 🧅</h3>
+                <h3 class="guides-index-item-title">Tor Guide</h3>
                 <p class="guides-index-item-description">
                     Information about Tor Browser usage and operational security.
                 </p>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">🔑 KeePassXC Guide 🔑</h3>
+                <h3 class="guides-index-item-title">KeePassXC Guide</h3>
                 <p class="guides-index-item-description">
                     Guide for using KeePassXC for secure password management.
                 </p>
@@ -35,7 +35,7 @@
             </div>
 
             <div class="guides-index-item">
-                <h3 class="guides-index-item-title">📧 Kleopatra Guide 📧</h3>
+                <h3 class="guides-index-item-title">Kleopatra Guide</h3>
                 <p class="guides-index-item-description">
                     Guide for using Kleopatra for PGP key management and encryption.
                 </p>

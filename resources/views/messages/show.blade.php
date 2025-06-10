@@ -33,14 +33,8 @@
             </div>
         @endif
 
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
         @if ($conversation->hasReachedMessageLimit())
-            <div class="alert alert-warning">
+            <div class="alert alert-error">
                 Message limit of 40 reached for this conversation. Please delete this conversation and start a new one with the user.
             </div>
         @else

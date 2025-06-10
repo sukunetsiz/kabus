@@ -5,13 +5,6 @@
 <div class="vendors-index-container">
     <div class="vendors-index-card">
         <h1 class="vendors-index-title">Vendor List</h1>
-        
-        @if(session('error'))
-            <div class="vendors-index-error">
-                {{ session('error') }}
-            </div>
-        @endif
-
         @if($vendors->isEmpty())
             <p class="vendors-index-empty">No vendors found.</p>
         @else

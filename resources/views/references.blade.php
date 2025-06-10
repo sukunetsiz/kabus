@@ -4,18 +4,6 @@
 
 
 <div class="references-index-container">
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="references-index-grid">
         <div class="references-index-card">
             <h2>Reference Information</h2>

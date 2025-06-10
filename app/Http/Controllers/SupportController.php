@@ -44,18 +44,24 @@ class SupportController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
                 'title' => 'required|string|min:8|max:160',
                 'message' => 'required|string|min:8|max:4000',
                 'captcha' => 'required|string|min:2|max:8'
             ]);
+            
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $errorMessage = $errors->first();
+                return back()->with('error', $errorMessage)->withInput();
+            }
 
             // Validate CAPTCHA
             $captchaCode = session('captcha_code');
             if (!$captchaCode || !hash_equals(strtoupper($captchaCode), strtoupper($request->captcha))) {
-                return back()->withErrors([
-                    'captcha' => 'Invalid CAPTCHA code.',
-                ])->withInput();
+                return back()
+                    ->with('error', 'Invalid CAPTCHA code.')
+                    ->withInput();
             }
 
             // Clear CAPTCHA from session
@@ -129,17 +135,23 @@ class SupportController extends Controller
                     ->with('error', 'Cannot reply to a closed support request. If you need further assistance, please create a new support request.');
             }
 
-            $request->validate([
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
                 'message' => 'required|string|min:8|max:4000',
                 'captcha' => 'required|string|min:2|max:8'
             ]);
+            
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $errorMessage = $errors->first();
+                return back()->with('error', $errorMessage)->withInput();
+            }
 
             // Validate CAPTCHA
             $captchaCode = session('captcha_code');
             if (!$captchaCode || !hash_equals(strtoupper($captchaCode), strtoupper($request->captcha))) {
-                return back()->withErrors([
-                    'captcha' => 'Invalid CAPTCHA code.',
-                ])->withInput();
+                return back()
+                    ->with('error', 'Invalid CAPTCHA code.')
+                    ->withInput();
             }
 
             // Clear CAPTCHA from session

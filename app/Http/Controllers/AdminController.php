@@ -698,37 +698,43 @@ class AdminController extends Controller
     {
         try {
             // Validate the request
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'price' => 'required|numeric|min:0',
-                'category_id' => 'required|exists:categories,id',
-                'product_picture' => [
-                    'nullable',
-                    'file',
-                    'max:800', // 800KB max size
-                ],
-                'additional_photos.*' => [
-                    'nullable',
-                    'file',
-                    'max:800', // 800KB max size
-                ],
-                'stock_amount' => 'required|integer|min:0|max:999999',
-                'measurement_unit' => [
-                    'required',
-                    Rule::in(array_keys(Product::getMeasurementUnits()))
-                ],
-                'ships_from' => [
-                    'required',
-                    'string',
-                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
-                ],
-                'ships_to' => [
-                    'required',
-                    'string',
-                    Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
-                ],
-            ]);
+            try {
+                $validated = $request->validate([
+                    'name' => 'required|string|max:255',
+                    'description' => 'required|string',
+                    'price' => 'required|numeric|min:0',
+                    'category_id' => 'required|exists:categories,id',
+                    'product_picture' => [
+                        'nullable',
+                        'file',
+                        'max:800', // 800KB max size
+                    ],
+                    'additional_photos.*' => [
+                        'nullable',
+                        'file',
+                        'max:800', // 800KB max size
+                    ],
+                    'stock_amount' => 'required|integer|min:0|max:999999',
+                    'measurement_unit' => [
+                        'required',
+                        Rule::in(array_keys(Product::getMeasurementUnits()))
+                    ],
+                    'ships_from' => [
+                        'required',
+                        'string',
+                        Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                    ],
+                    'ships_to' => [
+                        'required',
+                        'string',
+                        Rule::in(json_decode(file_get_contents(storage_path('app/country.json')), true))
+                    ],
+                ]);
+            } catch (ValidationException $e) {
+                // Convert validation errors to a session error message
+                $errorMessages = collect($e->errors())->flatten()->implode(' ');
+                return redirect()->back()->withInput()->with('error', $errorMessages);
+            }
 
             // Process delivery options
             $deliveryOptions = collect($request->delivery_options ?? [])->map(function ($option) {
@@ -745,29 +751,21 @@ class AdminController extends Controller
 
             // Validate delivery options
             if (empty($deliveryOptions)) {
-                throw ValidationException::withMessages([
-                    'delivery_options' => ["At least one {$deliveryOptionName} option is required."]
-                ]);
+                return redirect()->back()->withInput()->with('error', "At least one {$deliveryOptionName} option is required.");
             }
 
             if (count($deliveryOptions) > 4) {
-                throw ValidationException::withMessages([
-                    'delivery_options' => ["No more than 4 {$deliveryOptionName} options are allowed."]
-                ]);
+                return redirect()->back()->withInput()->with('error', "No more than 4 {$deliveryOptionName} options are allowed.");
             }
 
             // Validate each delivery option
             foreach ($deliveryOptions as $index => $option) {
                 if (strlen($option['description']) > 255) {
-                    throw ValidationException::withMessages([
-                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description cannot exceed 255 characters."]
-                    ]);
+                    return redirect()->back()->withInput()->with('error', "{$deliveryOptionName} description cannot exceed 255 characters.");
                 }
 
                 if ($option['price'] < 0) {
-                    throw ValidationException::withMessages([
-                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price cannot be negative."]
-                    ]);
+                    return redirect()->back()->withInput()->with('error', "{$deliveryOptionName} price cannot be negative.");
                 }
             }
 
@@ -784,23 +782,17 @@ class AdminController extends Controller
             // Validate bulk options
             if (!empty($bulkOptions)) {
                 if (count($bulkOptions) > 4) {
-                    throw ValidationException::withMessages([
-                        'bulk_options' => ['No more than 4 bulk options are allowed.']
-                    ]);
+                    return redirect()->back()->withInput()->with('error', 'No more than 4 bulk options are allowed.');
                 }
 
                 // Validate each bulk option
                 foreach ($bulkOptions as $index => $option) {
                     if ($option['amount'] <= 0) {
-                        throw ValidationException::withMessages([
-                            "bulk_options.{$index}.amount" => ['Amount must be greater than zero.']
-                        ]);
+                        return redirect()->back()->withInput()->with('error', 'Bulk amount must be greater than zero.');
                     }
 
                     if ($option['price'] <= 0) {
-                        throw ValidationException::withMessages([
-                            "bulk_options.{$index}.price" => ['Price must be greater than zero.']
-                        ]);
+                        return redirect()->back()->withInput()->with('error', 'Bulk price must be greater than zero.');
                     }
                 }
             }

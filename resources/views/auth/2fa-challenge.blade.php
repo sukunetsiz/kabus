@@ -4,13 +4,6 @@
 <div class="container">
     <div class="pgp-confirm-container">
         <h1 class="pgp-confirm-title">2-Step PGP Verification</h1>
-
-        @if (session('error'))
-            <div class="pgp-confirm-alert pgp-confirm-alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <div class="pgp-confirm-card">
             <div class="pgp-confirm-card-body">
                 <h5 class="pgp-confirm-card-title text-center">Encrypted Message</h5>

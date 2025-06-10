@@ -4,17 +4,6 @@
 
 <div class="container">
     <div class="settings-index-wrapper">
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger" role="alert">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <!-- Top Row: Password and PGP -->
         <div class="settings-index-layout">
             <!-- Change Password Section -->
@@ -26,21 +15,11 @@
                             @csrf
                             <div class="settings-index-page-form-group">
                                 <label for="current_password">Current Password</label>
-                                <input id="current_password" type="password" class="settings-index-page-form-control @error('current_password') is-invalid @enderror" name="current_password" required minlength="8" maxlength="40" autocomplete="current-password">
-                                @error('current_password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <input id="current_password" type="password" class="settings-index-page-form-control" name="current_password" required minlength="8" maxlength="40" autocomplete="current-password">
                             </div>
                             <div class="settings-index-page-form-group">
                                 <label for="password">New Password</label>
-                                <input id="password" type="password" class="settings-index-page-form-control @error('password') is-invalid @enderror" name="password" required minlength="8" maxlength="40" autocomplete="new-password">
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <input id="password" type="password" class="settings-index-page-form-control" name="password" required minlength="8" maxlength="40" autocomplete="new-password">
                             </div>
                             <div class="settings-index-page-form-group">
                                 <label for="password_confirmation">Confirm New Password</label>
@@ -63,12 +42,7 @@
                             @csrf
                             <div class="settings-index-page-form-group">
                                 <label for="public_key">PGP Public Key</label>
-                                <textarea id="public_key" class="settings-index-page-form-control @error('public_key') is-invalid @enderror" name="public_key" rows="10" required minlength="100" maxlength="8000">{{ old('public_key', $user->pgpKey->public_key ?? '') }}</textarea>
-                                @error('public_key')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <textarea id="public_key" class="settings-index-page-form-control" name="public_key" rows="10" required minlength="100" maxlength="8000">{{ old('public_key', $user->pgpKey->public_key ?? '') }}</textarea>
                             </div>
                             <p>You can check the Guides section to learn about PGP.</p>
                             <button type="submit" class="btn-submit">
@@ -98,11 +72,6 @@
                                 <div>
                                     <label for="secret_phrase">Secret Phrase (4‑16 letters, no numbers)</label>
                                     <input id="secret_phrase" type="text" name="secret_phrase" required minlength="4" maxlength="16">
-                                    @error('secret_phrase')
-                                        <span class="settings-secret-error" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
                                 <p>This is a one‑time setting to help prevent phishing attacks. Your phrase will always be visible on this page.</p>
                                 <button type="submit">Set Secret Phrase</button>

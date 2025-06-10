@@ -59,7 +59,7 @@ class SettingsController extends Controller
         });
 
         if ($validator->fails()) {
-            throw ValidationException::withMessages($validator->errors()->toArray());
+            return back()->withInput()->with('error', $validator->errors()->first());
         }
 
         $user = Auth::user();
@@ -105,7 +105,7 @@ class SettingsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            throw ValidationException::withMessages($validator->errors()->toArray());
+            return back()->withInput()->with('error', $validator->errors()->first());
         }
 
         $user = Auth::user();
@@ -159,7 +159,7 @@ class SettingsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            throw ValidationException::withMessages($validator->errors()->toArray());
+            return back()->withInput()->with('error', $validator->errors()->first());
         }
 
         $user = Auth::user();

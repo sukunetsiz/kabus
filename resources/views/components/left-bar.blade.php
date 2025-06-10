@@ -9,7 +9,7 @@
         <li><a href="{{ route('references.index') }}" class="{{ request()->routeIs('references.*') ? 'active' : '' }}">🤝🏻 References</a></li>
         <li><a href="{{ route('disputes.index') }}" class="{{ request()->routeIs('disputes.*') ? 'active' : '' }}">🎭 Disputes</a></li>
         @if(auth()->user()->isAdmin())
-        <li><a href="{{ route('admin.index') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">👑 AdminPanel</a></li>
+        <li><a href="{{ route('admin.index') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">👑 A-Panel</a></li>
         @endif
     </ul>
 </div>

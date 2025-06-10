@@ -5,7 +5,7 @@
     <div class="messages-create-wrapper">
         <div class="messages-create-card">
             @if (Auth::user()->hasReachedConversationLimit())
-                <div class="alert alert-warning">
+                <div class="alert alert-error">
                     Conversation limit of 16 reached. Please delete other conversations to create a new one.
                 </div>
             @else

@@ -30,12 +30,6 @@
         </div>
     @endif
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            <p>{{ session('success') }}</p>
-        </div>
-    @endif
-
     @if($products->isEmpty())
         <div class="wishlist-index-empty">
             <p class="wishlist-index-empty-text">Your wishlist is empty.</p>

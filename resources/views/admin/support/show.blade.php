@@ -31,12 +31,6 @@
             </a>
         </div>
 
-        @if (session('error'))
-            <div class="alert alert-danger" role="alert">
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
-
         <div class="admin-support-show-messages">
             @foreach($messages as $message)
                 <div class="admin-support-show-message @if($message->is_admin_reply) admin-reply @endif">

@@ -11,13 +11,6 @@
         <span class="cart-checkout-breadcrumb-current">Checkout</span>
     </div>
     
-    {{-- Flash Messages --}}
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    
     {{-- Checkout Details --}}
     <div class="cart-checkout-card">
         <h2 class="cart-checkout-title">Checkout Details</h2>

@@ -6,12 +6,6 @@
     <div class="vendor-panel-appearance-card">
         <h2 class="vendor-panel-appearance-title">Vendor Appearance Settings</h2>
 
-        @if(session('success'))
-            <div class="vendor-panel-appearance-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <form action="{{ route('vendor.appearance.update') }}" method="POST">
             @csrf
             

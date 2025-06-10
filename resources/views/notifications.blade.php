@@ -3,18 +3,6 @@
 @section('content')
 
 <div class="notifications-index-container text-center">
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="notifications-index-card">
         <div class="notifications-index-header">
             <h1 class="notifications-index-title">Your Notifications</h1>

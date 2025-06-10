@@ -6,11 +6,6 @@
     <div class="text-center">
         <h1 class="logs-index-badge">System Logs</h1>
     </div>
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
     <div class="logs-index-grid text-center">
         <div class="logs-index-card logs-index-card-error">
             <h2 class="logs-index-card-title">Error Logs</h2>

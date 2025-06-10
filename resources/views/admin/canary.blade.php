@@ -5,12 +5,6 @@
     <div class="canary-index-card">
         <h2 class="canary-index-title">{{ config('app.name') }} Canary</h2>
 
-        @if (session('success'))
-            <div class="canary-index-alert canary-index-alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <form method="POST" action="{{ route('admin.canary.post') }}" class="canary-index-form">
             @csrf
 

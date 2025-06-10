@@ -10,20 +10,6 @@
         <span>Shopping Cart</span>
     </div>
 
-    {{-- Error Messages --}}
-    @if(session('error'))
-        <div class="cart-index-alert cart-index-alert-error">
-            <p>{{ session('error') }}</p>
-        </div>
-    @endif
-
-    {{-- Success Messages --}}
-    @if(session('success'))
-        <div class="cart-index-alert cart-index-alert-success">
-            <p>{{ session('success') }}</p>
-        </div>
-    @endif
-
     @if($cartItems->isEmpty())
         <div class="cart-index-empty-card">
             <h2 class="cart-index-empty-title">Your Cart is Empty</h2>

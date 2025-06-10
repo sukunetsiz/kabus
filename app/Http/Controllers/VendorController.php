@@ -359,29 +359,21 @@ class VendorController extends Controller
 
             // Validate delivery options
             if (empty($deliveryOptions)) {
-                throw ValidationException::withMessages([
-                    'delivery_options' => ["At least one {$deliveryOptionName} option is required."]
-                ]);
+                return back()->withInput()->with('error', "At least one {$deliveryOptionName} option is required.");
             }
 
             if (count($deliveryOptions) > 4) {
-                throw ValidationException::withMessages([
-                    'delivery_options' => ["No more than 4 {$deliveryOptionName} options are allowed."]
-                ]);
+                return back()->withInput()->with('error', "No more than 4 {$deliveryOptionName} options are allowed.");
             }
 
             // Validate each delivery option
             foreach ($deliveryOptions as $index => $option) {
                 if (strlen($option['description']) < 4 || strlen($option['description']) > 160) {
-                    throw ValidationException::withMessages([
-                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description must be between 4 and 160 characters."]
-                    ]);
+                    return back()->withInput()->with('error', "{$deliveryOptionName} description must be between 4 and 160 characters.");
                 }
 
                 if ($option['price'] < 0 || $option['price'] > 80000) {
-                    throw ValidationException::withMessages([
-                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price must be between 0 and 80000."]
-                    ]);
+                    return back()->withInput()->with('error', "{$deliveryOptionName} price must be between 0 and 80000.");
                 }
             }
 
@@ -398,23 +390,17 @@ class VendorController extends Controller
             // Validate bulk options
             if (!empty($bulkOptions)) {
                 if (count($bulkOptions) > 4) {
-                    throw ValidationException::withMessages([
-                        'bulk_options' => ['No more than 4 bulk options are allowed.']
-                    ]);
+                    return back()->withInput()->with('error', 'No more than 4 bulk options are allowed.');
                 }
 
                 // Validate each bulk option
                 foreach ($bulkOptions as $index => $option) {
                     if ($option['amount'] < 0 || $option['amount'] > 80000) {
-                        throw ValidationException::withMessages([
-                            "bulk_options.{$index}.amount" => ['Amount must be between 0 and 80000.']
-                        ]);
+                        return back()->withInput()->with('error', 'Bulk option amount must be between 0 and 80000.');
                     }
 
                     if ($option['price'] < 0 || $option['price'] > 80000) {
-                        throw ValidationException::withMessages([
-                            "bulk_options.{$index}.price" => ['Price must be between 0 and 80000.']
-                        ]);
+                        return back()->withInput()->with('error', 'Bulk option price must be between 0 and 80000.');
                     }
                 }
             }
@@ -558,29 +544,21 @@ class VendorController extends Controller
 
             // Validate delivery options
             if (empty($deliveryOptions)) {
-                throw ValidationException::withMessages([
-                    'delivery_options' => ["At least one {$deliveryOptionName} option is required."]
-                ]);
+                return back()->withInput()->with('error', "At least one {$deliveryOptionName} option is required.");
             }
 
             if (count($deliveryOptions) > 4) {
-                throw ValidationException::withMessages([
-                    'delivery_options' => ["No more than 4 {$deliveryOptionName} options are allowed."]
-                ]);
+                return back()->withInput()->with('error', "No more than 4 {$deliveryOptionName} options are allowed.");
             }
 
             // Validate each delivery option
             foreach ($deliveryOptions as $index => $option) {
                 if (strlen($option['description']) < 4 || strlen($option['description']) > 160) {
-                    throw ValidationException::withMessages([
-                        "delivery_options.{$index}.description" => ["{$deliveryOptionName} description must be between 4 and 160 characters."]
-                    ]);
+                    return back()->withInput()->with('error', "{$deliveryOptionName} description must be between 4 and 160 characters.");
                 }
 
                 if ($option['price'] < 0 || $option['price'] > 80000) {
-                    throw ValidationException::withMessages([
-                        "delivery_options.{$index}.price" => ["{$deliveryOptionName} price must be between 0 and 80000."]
-                    ]);
+                    return back()->withInput()->with('error', "{$deliveryOptionName} price must be between 0 and 80000.");
                 }
             }
 
@@ -597,23 +575,17 @@ class VendorController extends Controller
             // Validate bulk options
             if (!empty($bulkOptions)) {
                 if (count($bulkOptions) > 4) {
-                    throw ValidationException::withMessages([
-                        'bulk_options' => ['No more than 4 bulk options are allowed.']
-                    ]);
+                    return back()->withInput()->with('error', 'No more than 4 bulk options are allowed.');
                 }
 
                 // Validate each bulk option
                 foreach ($bulkOptions as $index => $option) {
                     if ($option['amount'] < 0 || $option['amount'] > 80000) {
-                        throw ValidationException::withMessages([
-                            "bulk_options.{$index}.amount" => ['Amount must be between 0 and 80000.']
-                        ]);
+                        return back()->withInput()->with('error', 'Bulk option amount must be between 0 and 80000.');
                     }
 
                     if ($option['price'] < 0 || $option['price'] > 80000) {
-                        throw ValidationException::withMessages([
-                            "bulk_options.{$index}.price" => ['Price must be between 0 and 80000.']
-                        ]);
+                        return back()->withInput()->with('error', 'Bulk option price must be between 0 and 80000.');
                     }
                 }
             }

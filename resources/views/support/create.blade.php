@@ -12,24 +12,18 @@
             <div class="support-create-form-group">
                 <label for="title" class="support-create-label">Title</label>
                 <input type="text" name="title" id="title" required
-                    class="support-create-input @error('title') is-invalid @enderror"
+                    class="support-create-input"
                     value="{{ old('title') }}"
                     placeholder="Enter the subject of your support request"
                     minlength="8" maxlength="160">
-                @error('title')
-                    <p class="support-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="support-create-form-group">
                 <label for="message" class="support-create-label">Message</label>
                 <textarea name="message" id="message" required
-                    class="support-create-textarea @error('message') is-invalid @enderror"
+                    class="support-create-textarea"
                     placeholder="Explain your issue in detail"
                     minlength="8" maxlength="4000">{{ old('message') }}</textarea>
-                @error('message')
-                    <p class="support-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="support-create-form-group">
@@ -37,12 +31,9 @@
                     <div class="support-create-captcha-label">CAPTCHA</div>
                     <img class="support-create-captcha-image" src="{{ new Mobicms\Captcha\Image($captchaCode) }}" alt="CAPTCHA">
                     <input type="text" name="captcha" id="captcha" required
-                        class="support-create-captcha-input @error('captcha') is-invalid @enderror"
+                        class="support-create-captcha-input"
                         minlength="2" maxlength="8">
                 </div>
-                @error('captcha')
-                    <p class="support-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="support-create-actions">

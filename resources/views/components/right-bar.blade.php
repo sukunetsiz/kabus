@@ -8,7 +8,7 @@
         <li><a href="{{ route('rules') }}" class="{{ request()->routeIs('rules') ? 'active' : '' }}">Rules ⚖️</a></li>
         <li><a href="{{ route('guides.index') }}" class="{{ request()->routeIs('guides.*') ? 'active' : '' }}">Guides 🧭</a></li>
         @if(auth()->user()->isVendor())
-            <li><a href="{{ route('vendor.index') }}" class="{{ request()->routeIs('vendor.*') ? 'active' : '' }}">VendorShop 🏪</a></li>
+            <li><a href="{{ route('vendor.index') }}" class="{{ request()->routeIs('vendor.*') ? 'active' : '' }}">V-Panel 🏪</a></li>
         @endif
     </ul>
 </div>

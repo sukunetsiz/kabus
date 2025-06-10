@@ -29,9 +29,6 @@
                                 Optional. JPEG, PNG, GIF, WebP. Max 800KB.
                             </p>
                         </div>
-                        @error('product_picture')
-                            <p class="products-common-create-error">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Additional Photos -->
@@ -51,9 +48,6 @@
                                 Optional. Select up to 3 additional photos. JPEG, PNG, GIF, WebP. Max 800KB each.
                             </p>
                         </div>
-                        @error('additional_photos.*')
-                            <p class="products-common-create-error">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
 
@@ -66,9 +60,6 @@
                         class="products-common-create-input"
                         value="{{ old('name') }}"
                         minlength="4" maxlength="240">
-                    @error('name')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Description -->
@@ -79,9 +70,6 @@
                     <textarea name="description" id="description" rows="4" required
                         class="products-common-create-textarea" 
                         minlength="4" maxlength="2400">{{ old('description') }}</textarea>
-                    @error('description')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Price -->
@@ -97,9 +85,6 @@
                             class="products-common-create-price-input"
                             value="{{ old('price') }}">
                     </div>
-                    @error('price')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Category -->
@@ -123,9 +108,6 @@
                             @endforeach
                         @endforeach
                     </select>
-                    @error('category_id')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Stock Amount -->
@@ -136,9 +118,6 @@
                     <input type="number" name="stock_amount" id="stock_amount" required min="0" max="80000"
                         class="products-common-create-input"
                         value="{{ old('stock_amount', 0) }}">
-                    @error('stock_amount')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Measurement Unit -->
@@ -155,9 +134,6 @@
                             </option>
                         @endforeach
                     </select>
-                    @error('measurement_unit')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Shipping Locations -->
@@ -175,9 +151,6 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('ships_from')
-                            <p class="products-common-create-error">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Ships To -->
@@ -193,9 +166,6 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('ships_to')
-                            <p class="products-common-create-error">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
 
@@ -236,9 +206,6 @@
                                             : 'e.g., Pickup near Central Park, NYC within 24 hours, Locker #31 at Union Station') }}"
                                     {{ $i === 0 ? 'required' : '' }}
                                     minlength="4" maxlength="160">
-                                @error('delivery_options.'.$i.'.description')
-                                    <p class="products-common-create-error">{{ $message }}</p>
-                                @enderror
                             </div>
 
                             <!-- Price -->
@@ -261,17 +228,11 @@
                                         value="{{ old('delivery_options.'.$i.'.price') }}"
                                         placeholder="0.00"
                                         {{ $i === 0 ? 'required' : '' }}>
-                                    @error('delivery_options.'.$i.'.price')
-                                        <p class="products-common-create-error">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
                     @endfor
 
-                    @error('delivery_options')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Bulk Options -->
@@ -302,9 +263,6 @@
                                     class="products-common-create-input"
                                     value="{{ old('bulk_options.'.$i.'.amount') }}"
                                     placeholder="Enter bulk quantity">
-                                @error('bulk_options.'.$i.'.amount')
-                                    <p class="products-common-create-error">{{ $message }}</p>
-                                @enderror
                             </div>
 
                             <!-- Price -->
@@ -326,17 +284,11 @@
                                         class="products-common-create-price-input"
                                         value="{{ old('bulk_options.'.$i.'.price') }}"
                                         placeholder="Enter bulk price">
-                                    @error('bulk_options.'.$i.'.price')
-                                        <p class="products-common-create-error">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
                     @endfor
 
-                    @error('bulk_options')
-                        <p class="products-common-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Submit Button -->

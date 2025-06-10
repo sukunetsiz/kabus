@@ -42,7 +42,7 @@ class ReturnAddressController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'monero_address' => [
                 'required',
                 'string',
@@ -53,6 +53,12 @@ class ReturnAddressController extends Controller
                 }),
             ],
         ]);
+        
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $errorMessage = $errors->first();
+            return redirect()->route('return-addresses.index')->with('error', $errorMessage)->withInput();
+        }
 
         // Validate the address using monerophp cryptonote.
         $isValid = false;

@@ -49,7 +49,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
                 'description' => [
                     'required',
                     'string',
@@ -66,6 +66,12 @@ class ProfileController extends Controller
                 'description.regex' => 'Description can only contain letters, numbers, spaces, and punctuation marks.',
                 'profile_picture.max' => 'Profile picture must not be larger than 800KB.',
             ]);
+            
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $errorMessage = $errors->first();
+                return redirect()->route('profile')->with('error', $errorMessage)->withInput();
+            }
 
             $user = Auth::user();
             $profile = $user->profile ?? $user->profile()->create();
@@ -299,7 +305,7 @@ class ProfileController extends Controller
             return redirect()->route('profile')->with('info', 'You do not have an unverified PGP key to confirm.');
         }
 
-        $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'decrypted_message' => [
                 'required',
                 'string',
@@ -308,6 +314,12 @@ class ProfileController extends Controller
         ], [
             'decrypted_message.regex' => 'The decrypted message must be in the correct format (PGP-{number}-KEY).'
         ]);
+        
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $errorMessage = $errors->first();
+            return back()->with('error', $errorMessage)->withInput();
+        }
 
         $originalMessage = session('pgp_confirmation_message');
         $expirationTime = session('pgp_confirmation_expiry');
@@ -328,7 +340,7 @@ class ProfileController extends Controller
                 return redirect()->route('profile')->with('error', 'An error occurred while verifying your PGP key. Please try again or contact support if the problem persists.');
             }
         } else {
-            return back()->with('error', 'The decrypted message does not match. Please try again.');
+            return back()->with('error', 'The decrypted message does not match. Please try again.')->withInput();
         }
     }
 

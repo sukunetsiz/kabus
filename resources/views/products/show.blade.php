@@ -15,19 +15,6 @@
         </div>
     @else
         <div class="products-show-main">
-            {{-- Error Messages --}}
-            @if(session('error'))
-                <div class="alert alert-error">
-                    <p>{{ session('error') }}</p>
-                </div>
-            @endif
-
-            {{-- Success Messages --}}
-            @if(session('success'))
-                <div class="alert alert-success">
-                    <p>{{ session('success') }}</p>
-                </div>
-            @endif
             
             {{-- Product Name Header --}}
             <div class="products-show-header">

@@ -6,35 +6,19 @@
     <div class="return-addresses-disclaimer">
        To shop at {{ config('app.name') }}, you need to add at least one Monero address. Refunds will be made to this address. For your security, use a subaddress instead of your main address and be careful not to share this address elsewhere. Main Monero addresses usually start with "4", while subaddresses start with "8".
     </div>
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    
-    @if (session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
     
     <div class="return-addresses-card">
         <form action="{{ route('return-addresses.store') }}" method="POST">
             @csrf
             <div class="return-addresses-form-group">
                 <input type="text" 
-                       class="return-addresses-input @error('monero_address') is-invalid @enderror" 
+                       class="return-addresses-input" 
                        id="monero_address" 
                        name="monero_address" 
                        placeholder="Enter your Monero refund address"
                        required
                        minlength="40"
                        maxlength="160">
-                @error('monero_address')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
             </div>
             <div class="return-addresses-submit-container">
                 <button type="submit" class="return-addresses-submit-btn">Add Monero Address</button>

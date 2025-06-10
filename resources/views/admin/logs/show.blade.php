@@ -16,7 +16,7 @@
                 </div>
             </div>
         @empty
-            <div class="admin-logs-empty alert alert-info">
+            <div class="admin-logs-empty">
                 <p>
                     @switch($type)
                         @case('error')
