@@ -30,9 +30,6 @@
                 <p class="vendor-panel-appearance-help-text">
                     When enabled, your store will be hidden and customers will see the vacation mode message.
                 </p>
-                @error('vacation_mode')
-                    <p class="vendor-panel-appearance-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="vendor-panel-appearance-form-group">
@@ -56,9 +53,6 @@
                 <p class="vendor-panel-appearance-help-text">
                     When enabled, your store will be hidden from the public, but users who have saved your reference code will still be able to view your products.
                 </p>
-                @error('private_shop_mode')
-                    <p class="vendor-panel-appearance-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="vendor-panel-appearance-form-group">
@@ -73,10 +67,6 @@
                     minlength="8"
                     maxlength="800"
                 >{{ old('description', $vendorProfile->description) }}</textarea>
-                
-                @error('description')
-                    <p class="vendor-panel-appearance-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="vendor-panel-appearance-form-group">
@@ -90,10 +80,6 @@
                     minlength="8"
                     maxlength="1600"
                 >{{ old('vendor_policy', $vendorProfile->vendor_policy) }}</textarea>
-                
-                @error('vendor_policy')
-                    <p class="vendor-panel-appearance-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="vendor-panel-appearance-submit">

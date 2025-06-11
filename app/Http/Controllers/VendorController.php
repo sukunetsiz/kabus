@@ -166,13 +166,19 @@ class VendorController extends Controller
         }
         
         // Validate the request data
-        $request->validate([
-            'delivery_text.*' => 'required|string|min:8|max:800',
-        ], [
-            'delivery_text.*.required' => 'Delivery information is required for each product.',
-            'delivery_text.*.min' => 'Delivery information must be at least 8 characters.',
-            'delivery_text.*.max' => 'Delivery information cannot exceed 800 characters.',
-        ]);
+        try {
+            $request->validate([
+                'delivery_text.*' => 'required|string|min:8|max:800',
+            ], [
+                'delivery_text.*.required' => 'Delivery information is required for each product.',
+                'delivery_text.*.min' => 'Delivery information must be at least 8 characters.',
+                'delivery_text.*.max' => 'Delivery information cannot exceed 800 characters.',
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
+        }
         
         // Update the delivery text for each order item
         foreach ($sale->items as $item) {
@@ -210,20 +216,26 @@ class VendorController extends Controller
      */
     public function updateAppearance(Request $request)
     {
-        $request->validate([
-            'description' => 'required|string|min:8|max:800',
-            'vendor_policy' => 'nullable|string|min:8|max:1600',
-            'vacation_mode' => 'required|in:0,1',
-            'private_shop_mode' => 'required|in:0,1',
-        ], [
-            'description.required' => 'A description is required.',
-            'description.min' => 'Description must be at least 8 characters.',
-            'description.max' => 'Description cannot exceed 800 characters.',
-            'vendor_policy.min' => 'Vendor policy must be at least 8 characters.',
-            'vendor_policy.max' => 'Vendor policy cannot exceed 1600 characters.',
-            'vacation_mode.in' => 'Invalid vacation mode value.',
-            'private_shop_mode.in' => 'Invalid private shop mode value.'
-        ]);
+        try {
+            $request->validate([
+                'description' => 'required|string|min:8|max:800',
+                'vendor_policy' => 'nullable|string|min:8|max:1600',
+                'vacation_mode' => 'required|in:0,1',
+                'private_shop_mode' => 'required|in:0,1',
+            ], [
+                'description.required' => 'A description is required.',
+                'description.min' => 'Description must be at least 8 characters.',
+                'description.max' => 'Description cannot exceed 800 characters.',
+                'vendor_policy.min' => 'Vendor policy must be at least 8 characters.',
+                'vendor_policy.max' => 'Vendor policy cannot exceed 1600 characters.',
+                'vacation_mode.in' => 'Invalid vacation mode value.',
+                'private_shop_mode.in' => 'Invalid private shop mode value.'
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
+        }
 
         $user = Auth::user();
         $vendorProfile = $user->vendorProfile ?? new VendorProfile();
@@ -790,32 +802,38 @@ class VendorController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->withErrors(['product' => 'This product is already being advertised in another slot.']);
+                ->with('error', 'This product is already being advertised in another slot.');
         }
 
-        $validated = $request->validate([
-            'slot_number' => [
-                'required',
-                'integer',
-                'min:1',
-                'max:8',
-                function ($attribute, $value, $fail) use ($request) {
-                    $duration = (int) $request->duration_days;
-                    if ($duration < 1) {
-                        return; // Let the other validation rules handle this
-                    }
-                    if (!Advertisement::isSlotAvailable($value, now(), now()->addDays($duration))) {
-                        $fail('This slot is currently occupied.');
-                    }
-                },
-            ],
-            'duration_days' => [
-                'required',
-                'integer',
-                'min:' . config('monero.advertisement_min_duration', 1),
-                'max:' . config('monero.advertisement_max_duration', 30),
-            ],
-        ]);
+        try {
+            $validated = $request->validate([
+                'slot_number' => [
+                    'required',
+                    'integer',
+                    'min:1',
+                    'max:8',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $duration = (int) $request->duration_days;
+                        if ($duration < 1) {
+                            return; // Let the other validation rules handle this
+                        }
+                        if (!Advertisement::isSlotAvailable($value, now(), now()->addDays($duration))) {
+                            $fail('This slot is currently occupied.');
+                        }
+                    },
+                ],
+                'duration_days' => [
+                    'required',
+                    'integer',
+                    'min:' . config('monero.advertisement_min_duration', 1),
+                    'max:' . config('monero.advertisement_max_duration', 30),
+                ],
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
+        }
 
         try {
             // Calculate required amount

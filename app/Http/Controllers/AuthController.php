@@ -124,9 +124,13 @@ class AuthController extends Controller
         try {
             $user = User::findOrFail($userId);
 
-            $request->validate([
-                'decrypted_message' => 'required|string',
-            ]);
+            try {
+                $request->validate([
+                    'decrypted_message' => 'required|string',
+                ]);
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                return back()->with('error', $e->validator->errors()->first());
+            }
 
             $originalMessage = Session::get('2fa_message');
             $expirationTime = Session::get('2fa_expiry');
@@ -302,17 +306,21 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         // Validate request
-        $validated = $request->validate(
-            $this->getValidationRules('register'),
-            $this->getValidationMessages()
-        );
+        try {
+            $validated = $request->validate(
+                $this->getValidationRules('register'),
+                $this->getValidationMessages()
+            );
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->with('error', $e->validator->errors()->first())
+                ->withInput($request->except('password', 'password_confirmation', 'reference_code'));
+        }
 
         // Validate CAPTCHA
         $captchaCode = session('captcha_code');
         if (!hash_equals(strtoupper($captchaCode), strtoupper($request->captcha))) {
-            return back()->withErrors([
-                'captcha' => 'Invalid CAPTCHA code.',
-            ])->withInput($request->except('password', 'password_confirmation', 'reference_code'));
+            return back()->with('error', 'Invalid CAPTCHA code.')
+                ->withInput($request->except('password', 'password_confirmation', 'reference_code'));
         }
 
         // Clear CAPTCHA from session
@@ -320,9 +328,8 @@ class AuthController extends Controller
 
         $mnemonic = $this->generateMnemonic();
         if ($mnemonic === false) {
-            return back()->withErrors([
-                'mnemonic' => 'Failed to generate mnemonic. Please try again later.',
-            ])->withInput($request->except('password', 'password_confirmation', 'reference_code'));
+            return back()->with('error', 'Failed to generate mnemonic. Please try again later.')
+                ->withInput($request->except('password', 'password_confirmation', 'reference_code'));
         }
 
         $referenceId = $this->generateReferenceId();
@@ -368,17 +375,21 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // Validate request
-        $validated = $request->validate(
-            $this->getValidationRules('login'),
-            $this->getValidationMessages()
-        );
+        try {
+            $validated = $request->validate(
+                $this->getValidationRules('login'),
+                $this->getValidationMessages()
+            );
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->with('error', $e->validator->errors()->first())
+                ->withInput($request->only('username'));
+        }
 
         // Validate CAPTCHA
         $captchaCode = session('captcha_code');
         if (!hash_equals(strtoupper($captchaCode), strtoupper($request->captcha))) {
-            return back()->withErrors([
-                'captcha' => 'Invalid CAPTCHA code.',
-            ])->onlyInput('username');
+            return back()->with('error', 'Invalid CAPTCHA code.')
+                ->onlyInput('username');
         }
 
         // Clear CAPTCHA from session
@@ -388,9 +399,8 @@ class AuthController extends Controller
         $user = User::whereRaw('BINARY username = ?', [$credentials['username']])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors([
-                'username' => 'The provided credentials do not match our records.',
-            ])->onlyInput('username');
+            return back()->with('error', 'The provided credentials do not match our records.')
+                ->onlyInput('username');
         }
 
         if ($user->isBanned()) {
@@ -435,24 +445,28 @@ class AuthController extends Controller
      */
     public function verifyMnemonic(Request $request)
     {
-        $this->validate($request, [
-            'username' => 'required|string|min:4|max:16',
-            'mnemonic' => 'required|string|min:40|max:512',
-        ], [
-            'username.required' => 'Please enter your username.',
-            'username.min' => 'Username must be at least 4 characters.',
-            'username.max' => 'Username cannot be longer than 16 characters.',
-            'mnemonic.required' => 'Please enter your mnemonic phrase.',
-            'mnemonic.min' => 'Mnemonic phrase must be at least 40 characters.',
-            'mnemonic.max' => 'Mnemonic phrase cannot be longer than 512 characters.',
-        ]);
+        try {
+            $request->validate([
+                'username' => 'required|string|min:4|max:16',
+                'mnemonic' => 'required|string|min:40|max:512',
+            ], [
+                'username.required' => 'Please enter your username.',
+                'username.min' => 'Username must be at least 4 characters.',
+                'username.max' => 'Username cannot be longer than 16 characters.',
+                'mnemonic.required' => 'Please enter your mnemonic phrase.',
+                'mnemonic.min' => 'Mnemonic phrase must be at least 40 characters.',
+                'mnemonic.max' => 'Mnemonic phrase cannot be longer than 512 characters.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->with('error', $e->validator->errors()->first())
+                ->withInput($request->only('username'));
+        }
 
         $user = User::whereRaw('BINARY username = ?', [$request->username])->first();
 
         if (!$user || !$this->verifyMnemonicPhrase($request->mnemonic, $user->mnemonic)) {
-            return back()->withErrors([
-                'error' => 'Username or mnemonic phrase is incorrect.',
-            ])->withInput($request->only('username'));
+            return back()->with('error', 'Username or mnemonic phrase is incorrect.')
+                ->withInput($request->only('username'));
         }
 
         $token = Str::random(64);
@@ -497,26 +511,30 @@ class AuthController extends Controller
      */
     public function reset(Request $request)
     {
-        $validated = $request->validate([
-            'token' => 'required',
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'max:40',
-                'confirmed',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]])[A-Za-z\d#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]]{8,}$/',
-            ],
-            'password_confirmation' => ['required', 'string'],
-        ], [
-            'token.required' => 'Reset token is required.',
-            'password.required' => 'Password is required.',
-            'password.min' => 'Password must be at least 8 characters.',
-            'password.max' => 'Password cannot exceed 40 characters.',
-            'password.confirmed' => 'Password confirmation does not match.',
-            'password.regex' => 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
-            'password_confirmation.required' => 'Please confirm your password.',
-        ]);
+        try {
+            $validated = $request->validate([
+                'token' => 'required',
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'max:40',
+                    'confirmed',
+                    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]])[A-Za-z\d#$%&@^`~.,:;"\'\/|_\-<>*+!?={\[\]()\}\]]{8,}$/',
+                ],
+                'password_confirmation' => ['required', 'string'],
+            ], [
+                'token.required' => 'Reset token is required.',
+                'password.required' => 'Password is required.',
+                'password.min' => 'Password must be at least 8 characters.',
+                'password.max' => 'Password cannot exceed 40 characters.',
+                'password.confirmed' => 'Password confirmation does not match.',
+                'password.regex' => 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
+                'password_confirmation.required' => 'Please confirm your password.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->with('error', $e->validator->errors()->first());
+        }
 
         $user = User::where('password_reset_expires_at', '>', now())->get()
             ->first(function ($user) use ($request) {
@@ -524,7 +542,7 @@ class AuthController extends Controller
             });
 
         if (!$user) {
-            return back()->withErrors(['error' => 'This password reset token is invalid or has expired.']);
+            return back()->with('error', 'This password reset token is invalid or has expired.');
         }
 
         $user->password = Hash::make($request->password);

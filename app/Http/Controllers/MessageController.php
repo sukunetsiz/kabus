@@ -121,6 +121,11 @@ class MessageController extends Controller
     public function create(Request $request)
     {
         $username = $request->query('username');
+        
+        if (Auth::user()->hasReachedConversationLimit()) {
+            return redirect()->route('messages.index')->with('error', 'Conversation limit of 16 reached. Please delete other conversations to create a new one.');
+        }
+        
         return view('messages.create', ['username' => $username]);
     }
 
@@ -132,17 +137,17 @@ class MessageController extends Controller
         ]);
 
         if ($validatedData['username'] === Auth::user()->username) {
-            return redirect()->back()->withErrors(['username' => 'You cannot send messages to yourself.'])->withInput();
+            return redirect()->back()->with('error', 'You cannot send messages to yourself.')->withInput();
         }
 
         $otherUser = User::where('username', $validatedData['username'])->first();
 
         if (!$otherUser) {
-            return redirect()->back()->withErrors(['username' => 'The specified user does not exist.'])->withInput();
+            return redirect()->back()->with('error', 'The specified user does not exist.')->withInput();
         }
 
         if ($otherUser->id === Auth::id()) {
-            return redirect()->back()->withErrors(['username' => 'You cannot start a chat with yourself.'])->withInput();
+            return redirect()->back()->with('error', 'You cannot start a chat with yourself.')->withInput();
         }
 
         $existingConversation = Message::findConversation(Auth::id(), $otherUser->id);

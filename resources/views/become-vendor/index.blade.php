@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="become-vendor-index-container">
     <div class="become-vendor-index-card">
         <h1 class="become-vendor-index-title">Become a Vendor</h1>
@@ -71,6 +72,8 @@
 @else
     <a href="{{ route('become.payment') }}" class="become-vendor-index-btn {{ (!$hasPgpVerified || !$hasMoneroAddress) ? 'disabled' : '' }}">Continue to Payment</a>
 @endif
+    <p class="become-vendor-index-highlight-info">Established vendors can receive the vendor role for free by verifying their PGP key and opening a support ticket. You'll be asked to provide proof of prior vendor experience, such as profiles or feedback from other marketplaces. Verification time may vary.</p>
+    <a href="{{ route('support.create') }}" class="become-vendor-index-btn">Apply as Established Vendor</a>
     </div>
 </div>
 @endsection

@@ -59,11 +59,8 @@
                     <div class="admin-support-show-form-group">
                         <label for="message" class="admin-support-show-label text-center">Admin Reply</label>
                         <textarea name="message" id="message" required rows="4"
-                            class="admin-support-show-textarea @error('message') is-invalid @enderror"
+                            class="admin-support-show-textarea"
                             placeholder="Write your reply here">{{ old('message') }}</textarea>
-                        @error('message')
-                            <p class="admin-support-show-error">{{ $message }}</p>
-                        @enderror
                     </div>
                     <div class="admin-support-show-submit">
                         <button type="submit" class="admin-support-show-submit-btn">

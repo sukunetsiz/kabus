@@ -50,10 +50,6 @@
                         </div>
                     @endforeach
                 </div>
-                
-                @error('slot_number')
-                    <p class="advertisement-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="advertisement-create-section">
@@ -68,10 +64,6 @@
                             </option>
                         @endfor
                     </select>
-                    
-                    @error('duration_days')
-                        <p class="advertisement-create-error">{{ $message }}</p>
-                    @enderror
                 </div>
             </div>
 

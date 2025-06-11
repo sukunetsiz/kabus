@@ -16,9 +16,6 @@
                        id="title" 
                        class="bulk-message-create-input"
                        required>
-                @error('title')
-                    <p class="bulk-message-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="bulk-message-create-form-group">
@@ -27,9 +24,6 @@
                           id="message" 
                           class="bulk-message-create-textarea"
                           required></textarea>
-                @error('message')
-                    <p class="bulk-message-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="bulk-message-create-form-group">
@@ -41,9 +35,6 @@
                     <option value="admin">Only Administrators</option>
                     <option value="vendor">Only Vendors</option>
                 </select>
-                @error('target_role')
-                    <p class="bulk-message-create-error">{{ $message }}</p>
-                @enderror
             </div>
 
             <div class="bulk-message-create-actions">

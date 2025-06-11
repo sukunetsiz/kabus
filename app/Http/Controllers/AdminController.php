@@ -41,13 +41,19 @@ class AdminController extends Controller
 
     public function updateCanary(Request $request)
     {
-        $request->validate([
-            'canary' => 'required|string|max:3200',
-        ]);
+        try {
+            $request->validate([
+                'canary' => 'required|string|max:3200',
+            ]);
 
-        Storage::put('public/canary.txt', $request->canary);
+            Storage::put('public/canary.txt', $request->canary);
 
-        return redirect()->route('admin.canary')->with('success', 'Canary updated successfully.');
+            return redirect()->route('admin.canary')->with('success', 'Canary updated successfully.');
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
+        }
     }
 
     public function showLogs()
@@ -221,9 +227,15 @@ class AdminController extends Controller
                 ->with('error', 'Cannot reply to a closed ticket. Please update the ticket status to open or in progress first.');
         }
 
-        $request->validate([
-            'message' => 'required|string|max:5000'
-        ]);
+        try {
+            $request->validate([
+                'message' => 'required|string|max:5000'
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
+        }
 
         // Create the admin reply as a child record
         $supportRequest->messages()->create([
@@ -259,12 +271,18 @@ class AdminController extends Controller
                 ->with('error', 'Invalid support request.');
         }
 
-        $request->validate([
-            'status' => 'required|in:open,in_progress,closed'
-        ]);
+        try {
+            $request->validate([
+                'status' => 'required|in:open,in_progress,closed'
+            ]);
 
-        $oldStatus = $supportRequest->status;
-        $supportRequest->update(['status' => $request->status]);
+            $oldStatus = $supportRequest->status;
+            $supportRequest->update(['status' => $request->status]);
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
+        }
 
         // Only log when ticket is closed
         if ($request->status === 'closed') {
@@ -320,6 +338,11 @@ class AdminController extends Controller
             return redirect()->route('admin.bulk-message.list')
                 ->with('success', 'Bulk message sent successfully.');
 
+        } catch (ValidationException $e) {
+            // Handle validation errors
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
             Log::error('Error sending bulk message: ' . $e->getMessage());
             return redirect()->back()
@@ -407,6 +430,11 @@ class AdminController extends Controller
 
             return redirect()->route('admin.popup.index')
                 ->with('success', 'Pop-up created successfully.');
+        } catch (ValidationException $e) {
+            // Handle validation errors
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
             Log::error('Error creating pop-up: ' . $e->getMessage());
             return redirect()->back()

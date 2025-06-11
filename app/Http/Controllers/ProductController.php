@@ -128,9 +128,12 @@ class ProductController extends Controller
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
+            $errorMessages = $e->validator->errors()->all();
+            $errorMessage = implode(' ', $errorMessages);
+            
             return redirect()
                 ->route('products.index')
-                ->withErrors($e->validator)
+                ->with('error', $errorMessage)
                 ->withInput();
         } catch (\Exception $e) {
             return redirect()

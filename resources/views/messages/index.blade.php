@@ -47,7 +47,7 @@
                     </div>
                 @endforeach
             </div>
-            <div class="pagination-container">
+            <div class="messages-index-pagination">
                 {{ $conversations->links('components.pagination') }}
             </div>
         @endif

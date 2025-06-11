@@ -8,16 +8,10 @@
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" value="{{ old('username') }}" required minlength="4" maxlength="16">
-                @error('username')
-                    <span class="error">{{ $message }}</span>
-                @enderror
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required minlength="8" maxlength="40">
-                @error('password')
-                    <span class="error">{{ $message }}</span>
-                @enderror
             </div>
             <div class="form-group">
                 <label for="password_confirmation">Confirm Password</label>
@@ -36,9 +30,6 @@
                        value="{{ old('reference_code') }}"
                        @if(config('marketplace.require_reference_code', true)) required @endif
                        minlength="12" maxlength="20">
-                @error('reference_code')
-                    <span class="error">{{ $message }}</span>
-                @enderror
             </div>
             <div class="form-group captcha-group">
                 <div class="captcha-container">
@@ -46,9 +37,6 @@
                     <img class="captcha-image" src="{{ new Mobicms\Captcha\Image($captchaCode) }}" alt="CAPTCHA Image">
                     <input type="text" id="captcha" name="captcha" required minlength="2" maxlength="8">
                 </div>
-                @error('captcha')
-                    <span class="error">{{ $message }}</span>
-                @enderror
             </div>
             <button type="submit" class="btn btn-submit">Register</button>
         </form>

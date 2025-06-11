@@ -137,7 +137,7 @@ background-color:#45a049
 background-color:#c62828
 }
 
-.left-icon-btn,.right-icon-btn,.left-bar a,.right-bar a {
+.left-icon-btn,.right-icon-btn {
 text-decoration:none;
 transition:all .3s ease
 }
@@ -156,7 +156,6 @@ margin:0 10px
 }
 
 .left-icon-btn:hover,.right-icon-btn:hover {
-background-color:#3c3c3c;
 transform:translateY(-2px);
 box-shadow:0 2px 8px #bb86fc4d
 }
@@ -171,7 +170,7 @@ margin:0;
 font-size:20px
 }
 
-.left-icon-btn:hover .left-nav-icon,.right-icon-btn:hover .right-nav-icon,.rules-note strong {
+.left-icon-btn:hover .left-nav-icon,.right-icon-btn:hover .right-nav-icon {
 color:#bb86fc
 }
 
@@ -250,6 +249,8 @@ margin-bottom:10px
 
 .left-bar a,.right-bar a {
 display:block;
+text-decoration:none;
+transition:all .3s ease;
 padding:10px 20px;
 color:#e0e0e0
 }
@@ -331,6 +332,7 @@ border-color:#bb86fc
 
 .btn-submit {
 width:100%;
+margin-top:0;
 max-width:300px;
 padding:12px;
 background-color:#bb86fc;
@@ -390,20 +392,14 @@ font-size:14px
 .auth-form .form-group.captcha-group {
 display:flex;
 flex-direction:column;
-align-items:stretch
-}
-
-.auth-form .form-group.captcha-group .error {
+align-items:stretch;
 margin-top:5px;
 font-size:12px;
 color:#ff3838
 }
 
-.card,.footer {
-background-color:#1e1e1e
-}
-
 .footer {
+background-color:#1e1e1e;
 color:#e0e0e0;
 text-align:center;
 padding:20px 0;
@@ -435,35 +431,9 @@ color:#121212;
 transform:translateY(-2px)
 }
 
-.footer-left,.footer-right {
-flex:1
-}
-
-.footer-left {
-text-align:left
-}
-
-.footer-right {
-text-align:right
-}
-
-.card {
-border-radius:8px;
-padding:20px;
-margin-bottom:20px;
-box-shadow:0 4px 6px #0000001a
-}
-
-.table-container {
-overflow-x:auto
-}
-
-.alert,table {
-margin-bottom:20px
-}
-
 table {
 width:100%;
+margin-bottom:20px;
 border-collapse:collapse
 }
 
@@ -644,148 +614,6 @@ color:#bb86fc;
 margin:0
 }
 
-.invalid-feedback {
-color:#ff3838;
-font-size:14px;
-margin-top:5px
-}
-
-.conversation-list {
-display:flex;
-flex-direction:column;
-gap:15px
-}
-
-.conversation-item-wrapper {
-position:relative;
-background-color:#292929;
-border-radius:8px;
-padding:15px;
-transition:all .3s ease
-}
-
-.conversation-item-wrapper:hover {
-background-color:#3c3c3c;
-transform:translateY(-2px)
-}
-
-.conversation-item {
-display:block;
-text-decoration:none;
-color:#e0e0e0
-}
-
-.conversation-header {
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-margin-bottom:10px
-}
-
-.conversation-title {
-margin:0;
-color:#bb86fc
-}
-
-.conversation-time {
-color:#a0a0a0;
-font-size:.8em;
-position:absolute;
-top:15px;
-right:15px
-}
-
-.conversation-preview {
-margin:0;
-color:silver
-}
-
-.delete-conversation-form {
-position:absolute;
-bottom:5px;
-right:5px
-}
-
-.delete-conversation-btn {
-background:0 0;
-border:0;
-color:#ff3838;
-font-size:20px;
-cursor:pointer;
-padding:5px;
-transition:all .3s ease
-}
-
-.delete-conversation-btn:hover {
-color:#ff6060;
-transform:scale(1.1)
-}
-
-.message-container {
-height:420px;
-overflow-y:auto;
-margin-bottom:20px;
-padding:10px;
-background-color:#292929;
-border-radius:8px
-}
-
-.message {
-margin-bottom:10px;
-max-width:70%
-}
-
-.message-sent {
-margin-left:auto
-}
-
-.message-received {
-margin-right:auto
-}
-
-.message-content {
-background-color:#3c3c3c;
-border-radius:8px;
-padding:10px 15px
-}
-
-.message-sent .message-content {
-background-color:#bb86fc;
-color:#121212
-}
-
-.message-info {
-text-align:right;
-font-size:.8em;
-color:#a0a0a0;
-margin-top:5px
-}
-
-.message-form textarea {
-width:80%;
-background-color:#292929;
-border:1px solid #3c3c3c;
-color:#e0e0e0;
-border-radius:4px;
-padding:10px
-}
-
-.message-form .btn-submit {
-margin-top:0
-}
-
-.conversation-container {
-display:flex;
-flex-direction:column-reverse
-}
-
-.new-conversation-button {
-align-self:center;
-width:70%;
-margin-top:-10px;
-padding:6px 20px
-}
-
 .auth-links {
 text-align:center;
 margin-top:20px
@@ -872,6 +700,10 @@ border-radius:8px;
 padding:15px;
 margin-top:30px;
 color:#e0e0e0
+}
+
+.rules-note strong {
+color:#bb86fc
 }
 
 .rules-item {
@@ -1109,6 +941,18 @@ border-right:4px solid #3498db;
 display:flex;
 align-items:flex-start;
 gap:15px
+}
+
+.become-vendor-index-highlight-info {
+color:#e0e0e0;
+text-align:center;
+line-height:1.6;
+background-color:#292929;
+padding:15px 20px;
+border-radius:8px;
+margin:20px 0;
+border-left:4px solid #ffc107;
+border-right:4px solid #ffc107
 }
 
 .become-vendor-index-info-icon {
@@ -1441,13 +1285,6 @@ transition:all .3s ease
 .canary-index-textarea:focus {
 outline:0;
 border-color:#bb86fc
-}
-
-.canary-index-invalid-feedback {
-color:#ff3838;
-font-size:14px;
-margin-top:5px;
-display:block
 }
 
 .canary-index-btn {
@@ -3495,8 +3332,8 @@ color:#a0a0a0;
 font-style:italic;
 margin:10px 0;
 padding-left:15px;
-border-left:3px solid #bb86fc;
-border-right:3px solid #bb86fc;
+border-left:4px solid #bb86fc;
+border-right:4px solid #bb86fc;
 background-color:#292929;
 border-radius:8px;
 text-align:center
@@ -3535,11 +3372,13 @@ font-size:.8rem
 
 .guides-general-highlight {
 color:#e0e0e0;
+text-align:center;
 background-color:#292929;
 padding:10px 15px;
 border-radius:6px;
 margin:10px 0;
-border-left:3px solid #bb86fc
+border-left:4px solid #bb86fc;
+border-right:4px solid #bb86fc
 }
 
 .bulk-message-create-container {
@@ -4176,12 +4015,6 @@ border-color:#bb86fc;
 box-shadow:0 0 0 2px #bb86fc1a
 }
 
-.vendor-panel-appearance-error {
-color:#cf6679;
-font-size:14px;
-margin-top:6px
-}
-
 .vendor-panel-appearance-submit {
 display:flex;
 justify-content:center;
@@ -4651,31 +4484,9 @@ padding:20px
 
 .product-card-header {
 display:flex;
-justify-content:space-between;
+justify-content:center;
 align-items:center;
 margin-bottom:15px
-}
-
-.product-card-type {
-padding:5px 12px;
-border-radius:20px;
-font-size:14px;
-font-weight:700
-}
-
-.product-card-type.type-digital {
-background-color:#004D40;
-color:#e0e0e0
-}
-
-.product-card-type.type-cargo {
-background-color:#CD853F;
-color:#212121
-}
-
-.product-card-type.type-deaddrop {
-background-color:#3D0814;
-color:#e0e0e0
 }
 
 .product-card-price {
@@ -5116,7 +4927,7 @@ padding:0 20px
 .messages-index-card {
 background-color:#1e1e1e;
 border-radius:12px;
-padding:25px;
+padding:25px 25px 10px 25px;
 box-shadow:0 6px 25px #0000004d;
 border:1px solid #3c3c3c
 }
@@ -5237,12 +5048,17 @@ margin:20px 0
 .messages-index-limit-warning {
 background-color:#292929;
 border-left:4px solid #ffc107;
+border-right:4px solid #ffc107;
 color:#e0e0e0;
 padding:15px 20px;
-border-radius:0 8px 8px 0;
+border-radius:8px;
 margin-top:20px;
 font-size:15px;
 text-align:center
+}
+
+.messages-index-pagination {
+margin-top:20px
 }
 
 .messages-create-container {
@@ -5311,16 +5127,6 @@ font-size:14px
 outline:none;
 border-color:#bb86fc;
 box-shadow:0 0 0 2px #bb86fc1a
-}
-
-.messages-create-input-error {
-border-color:#cf6679
-}
-
-.messages-create-error {
-color:#cf6679;
-font-size:14px;
-margin-top:5px
 }
 
 .messages-create-actions {
@@ -9231,13 +9037,6 @@ text-align:center
 .advertisement-create-select:focus {
 outline:none;
 border-color:#bb86fc
-}
-
-.advertisement-create-error {
-color:#cf6679;
-font-size:14px;
-margin-top:8px;
-text-align:center
 }
 
 .advertisement-create-submit {

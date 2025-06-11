@@ -12,42 +12,25 @@
         </div>
 
         <div class="admin-pop-up-create-body">
-            {{-- Error Messages --}}
-            @if($errors->any())
-                <div class="alert alert-error">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             <form action="{{ route('admin.popup.store') }}" method="POST">
                 @csrf
 
                 <div class="admin-pop-up-create-title-field">
                     <label class="admin-pop-up-create-label">Pop-up Title</label>
                     <input type="text" 
-                           class="admin-pop-up-create-input @error('title') is-invalid @enderror" 
+                           class="admin-pop-up-create-input" 
                            name="title" 
                            value="{{ old('title') }}"
                            placeholder="Enter pop-up title"
                            required>
-                    @error('title')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div>
                     <label class="admin-pop-up-create-label">Message Content</label>
-                    <textarea class="admin-pop-up-create-input admin-pop-up-create-textarea @error('message') is-invalid @enderror" 
+                    <textarea class="admin-pop-up-create-input admin-pop-up-create-textarea" 
                               name="message" 
                               placeholder="Write your pop-up message here..."
                               required>{{ old('message') }}</textarea>
-                    @error('message')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="admin-pop-up-create-toggle-group">

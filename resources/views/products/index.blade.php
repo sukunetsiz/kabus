@@ -4,21 +4,6 @@
 
 <div class="products-index-container">
     <div class="products-index-content">
-        {{-- Error Messages --}}
-        @if ($errors->any() || session('error'))
-            <div class="alert alert-error">
-                @if (session('error'))
-                    <p>{{ session('error') }}</p>
-                @else
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-        @endif
-        
         {{-- Search and Filter Form --}}
         <div class="products-index-filter-card">
             <form action="{{ route('products.index') }}" method="GET">
@@ -34,7 +19,7 @@
                                    placeholder="Search vendor 🔎"
                                    minlength="1"
                                    maxlength="16"
-                                   class="products-index-input @error('vendor') is-invalid @enderror">
+                                   class="products-index-input">
                         </div>
                     </div>
                     
@@ -43,7 +28,7 @@
                             <label for="type" class="products-index-label">By Product Type</label>
                             <select name="type" 
                                     id="type" 
-                                    class="products-index-select @error('type') is-invalid @enderror">
+                                    class="products-index-select">
                                 <option value="">All Types</option>
                                 <option value="digital" {{ ($currentType === 'digital') ? 'selected' : '' }}>Digital</option>
                                 <option value="cargo" {{ ($currentType === 'cargo') ? 'selected' : '' }}>Cargo</option>
@@ -55,7 +40,7 @@
                             <label for="category" class="products-index-label">By Category</label>
                             <select name="category" 
                                     id="category" 
-                                    class="products-index-select @error('category') is-invalid @enderror">
+                                    class="products-index-select">
                                 <option value="">All Categories</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ ($filters['category'] ?? '') == $category->id ? 'selected' : '' }}>
@@ -69,7 +54,7 @@
                             <label for="sort_price" class="products-index-label">Sort by Price</label>
                             <select name="sort_price" 
                                     id="sort_price" 
-                                    class="products-index-select @error('sort_price') is-invalid @enderror">
+                                    class="products-index-select">
                                 <option value="">Most Recent</option>
                                 <option value="asc" {{ ($filters['sort_price'] ?? '') === 'asc' ? 'selected' : '' }}>Price: Low to High</option>
                                 <option value="desc" {{ ($filters['sort_price'] ?? '') === 'desc' ? 'selected' : '' }}>Price: High to Low</option>
@@ -89,7 +74,7 @@
                                placeholder="Search by product title 🔎"
                                minlength="1"
                                maxlength="80"
-                               class="products-index-main-search-input @error('search') is-invalid @enderror">
+                               class="products-index-main-search-input">
                     </div>
                 </div>
 

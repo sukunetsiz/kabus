@@ -24,15 +24,6 @@
                 </div>
                 <div class="product-card-content">
                     <div class="product-card-header">
-                        <span class="product-card-type {{ $product->type === 'digital' ? 'type-digital' : ($product->type === 'cargo' ? 'type-cargo' : 'type-deaddrop') }}">
-                            @if($product->type === 'digital')
-                                Digital
-                            @elseif($product->type === 'cargo')
-                                Cargo
-                            @else
-                                Dead Drop
-                            @endif
-                        </span>
                         <span class="product-card-price">
                             ${{ number_format($product->price, 2) }}
                         </span>

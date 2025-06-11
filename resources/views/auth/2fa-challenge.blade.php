@@ -13,12 +13,7 @@
                     @csrf
                     <div class="pgp-confirm-form-group">
                         <label for="decrypted_message" class="pgp-confirm-label text-center">Decrypted Message</label>
-                        <textarea name="decrypted_message" id="decrypted_message" class="pgp-confirm-textarea @error('decrypted_message') pgp-confirm-is-invalid @enderror" rows="1" required autocomplete="off"></textarea>
-                        @error('decrypted_message')
-                            <span class="pgp-confirm-invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <textarea name="decrypted_message" id="decrypted_message" class="pgp-confirm-textarea" rows="1" required autocomplete="off"></textarea>
                     </div>
                     <div class="pgp-confirm-submit-wrapper">
                         <button type="submit" class="pgp-confirm-submit-btn">Complete 2-Step PGP Verification</button>
