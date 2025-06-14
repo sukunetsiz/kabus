@@ -58,7 +58,7 @@ class DashboardController extends Controller
     private function determineUserRole(User $user): string
     {
         if ($user->hasRole('admin') && $user->hasRole('vendor')) {
-            return 'Vendor Admin';
+            return 'Admin & Vendor';
         } elseif ($user->hasRole('admin')) {
             return 'Administrator';
         } elseif ($user->hasRole('vendor')) {

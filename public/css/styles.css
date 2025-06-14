@@ -4161,27 +4161,22 @@ padding:6px 15px;
 border-radius:20px;
 font-size:14px;
 font-weight:700;
+color:#121212;
 text-transform:uppercase;
 letter-spacing:.5px;
 background:#333
 }
 
 .vendors-show-pgp-badge--none {
-background-color:#4a1a1a;
-color:#f44;
-border:1px solid #f44
+background-color:#ff3838
 }
 
 .vendors-show-pgp-badge--unconfirmed {
-background-color:#3d3500;
-color:#ffd700;
-border:1px solid #ffd700
+background-color:#ffc107
 }
 
 .vendors-show-pgp-badge--confirmed {
-background-color:#1d3a1d;
-color:#4CAF50;
-border:1px solid #4CAF50
+background-color:#4caf50
 }
 
 .vendors-show-value {
@@ -4579,6 +4574,32 @@ display:grid;
 grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
 gap:25px;
 padding:10px
+}
+
+.product-card-review-stats {
+position:absolute;
+top:10px;
+right:10px;
+background-color:#1e1e1e;
+border:1px solid #3c3c3c;
+border-radius:13px;
+padding:5px 9px;
+z-index:10;
+display:flex;
+align-items:center;
+gap:3px;
+font-size:12px
+}
+
+.product-card-review-star {
+color:#bb86fc;
+font-size:12px;
+transform:scale(1.2)
+}
+
+.product-card-review-percentage {
+color:#e0e0e0;
+font-weight:600
 }
 
 .wishlist-index-container {
