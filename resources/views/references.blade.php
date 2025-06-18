@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="references-index-container">
     <div class="references-index-grid">
         <div class="references-index-card">
@@ -14,7 +13,7 @@
                 </div>
                 <div class="references-index-ref-info">
                     <div class="references-index-ref-box">
-                        <span>Used Reference Code</span>
+                        <span>Used a Reference Code?</span>
                         <strong>{{ $usedReferenceCode ? 'Yes' : 'No' }}</strong>
                     </div>
                     @if($usedReferenceCode && $referrerUsername)

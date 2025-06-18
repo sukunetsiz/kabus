@@ -22,7 +22,9 @@
         <button type="submit" class="btn btn-submit">Login</button>
     </form>
     <div class="auth-links">
-        <a href="{{ route('password.request') }}" class="forgot-password-link">Forgot Password</a>
+        <a href="{{ route('register') }}" class="auth-link">Create an Account</a>
+            <span>|</span>
+        <a href="{{ route('password.request') }}" class="auth-link">Forgot Password</a>
     </div>
 </div>
 @endsection

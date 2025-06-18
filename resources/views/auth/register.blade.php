@@ -40,6 +40,9 @@
             </div>
             <button type="submit" class="btn btn-submit">Register</button>
         </form>
+        <div class="auth-links">
+            <a href="{{ route('login') }}" class="auth-link">Back to Login</a>
+        </div>
     </div>
 </div>
 @endsection

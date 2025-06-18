@@ -4,8 +4,6 @@
             <div class="navbar-left">
                 @auth
                     <a href="{{ route('home') }}" class="btn-nav btn-home">🏠 Home</a>
-                @else
-                    <a href="{{ route('register') }}" class="btn btn-register">📝 Register</a>
                 @endauth
             </div>
             
@@ -39,8 +37,6 @@
                         @csrf
                         <button type="submit" class="btn-nav btn-logout">Logout 🚪</button>
                     </form>
-                @else
-                    <a href="{{ route('login') }}" class="btn btn-login">Login 💼</a>
                 @endauth
             </div>
         </div>

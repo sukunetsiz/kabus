@@ -103,7 +103,7 @@ height:44px;
 box-sizing:border-box
 }
 
-.btn-home,.btn-login,.btn-register {
+.btn-home {
 background-color:#bb86fc;
 color:#121212
 }
@@ -121,12 +121,8 @@ border-radius:8px;
 cursor:pointer
 }
 
-.btn-home:hover,.btn-login:hover,.btn-logout:hover,.btn-register:hover {
+.btn-home:hover,.btn-logout:hover {
 transform:translateY(-2px)
-}
-
-.btn-login:hover,.btn-register:hover {
-background-color:#96c
 }
 
 .btn-home:hover {
@@ -619,7 +615,7 @@ text-align:center;
 margin-top:20px
 }
 
-.forgot-password-link {
+.auth-link {
 display:inline-block;
 padding:10px;
 color:#bb86fc;
@@ -627,7 +623,7 @@ text-decoration:none;
 transition:color .3s ease
 }
 
-.forgot-password-link:hover {
+.auth-link:hover {
 color:#96c
 }
 
@@ -660,8 +656,7 @@ margin-top:0
 }
 
 .rules-title:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 15px #bb86fc33
+transform:translateY(-2px)
 }
 
 .rules-section {
@@ -1187,6 +1182,7 @@ gap:20px
 
 .a-v-panel-item {
 background-color:#292929;
+border:1px solid #3c3c3c;
 border-radius:8px;
 padding:20px;
 text-align:center;
@@ -1195,7 +1191,7 @@ transition:all .3s ease
 
 .a-v-panel-item:hover {
 transform:translateY(-5px);
-box-shadow:0 6px 12px #bb86fc1a
+border-color:#bb86fc
 }
 
 .a-v-panel-item-title {
@@ -1332,8 +1328,7 @@ margin-top:-20px
 }
 
 .logs-index-badge:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 15px #bb86fc33
+transform:translateY(-2px)
 }
 
 .logs-index-grid {
@@ -1347,13 +1342,7 @@ background-color:#1e1e1e;
 border-radius:8px;
 padding:30px;
 box-shadow:0 4px 20px #0000004d;
-border:1px solid #3c3c3c;
-transition:all .3s ease
-}
-
-.logs-index-card:hover {
-transform:translateY(-5px);
-box-shadow:0 6px 25px #bb86fc33
+border:1px solid #3c3c3c
 }
 
 .logs-index-card-error {
@@ -1465,13 +1454,7 @@ box-shadow:0 6px 25px #0000004d
 background-color:#292929;
 border-radius:8px;
 margin-bottom:20px;
-overflow:hidden;
-transition:all .3s ease
-}
-
-.admin-logs-card:hover {
-transform:translateY(-5px);
-box-shadow:0 6px 25px #bb86fc33
+overflow:hidden
 }
 
 .admin-logs-card-header {
@@ -1576,13 +1559,7 @@ text-transform:uppercase
 }
 
 .user-list-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.user-list-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .user-list-btn {
@@ -2130,13 +2107,7 @@ font-size:.9em
 }
 
 .return-addresses-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.return-addresses-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .return-addresses-table td {
@@ -2229,13 +2200,7 @@ font-size:.9em
 }
 
 .admin-support-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.admin-support-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .admin-support-index-table td {
@@ -2411,13 +2376,7 @@ margin-bottom:20px
 .admin-support-show-message {
 background-color:#292929;
 border-radius:8px;
-padding:15px;
-transition:all .3s ease
-}
-
-.admin-support-show-message:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+padding:15px
 }
 
 .admin-support-show-message.admin-reply {
@@ -2568,8 +2527,7 @@ margin:0
 .admin-support-show-status-btn:hover {
 background-color:#bb86fc;
 color:#121212;
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+transform:translateY(-2px)
 }
 
 .support-index-container {
@@ -2599,8 +2557,7 @@ transition:all .3s ease
 }
 
 .support-index-badge:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 15px #bb86fc33
+transform:translateY(-2px)
 }
 
 .support-index-new-btn {
@@ -2657,13 +2614,7 @@ font-size:.9em
 }
 
 .support-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.support-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .support-index-table td {
@@ -2974,13 +2925,7 @@ margin-bottom:20px
 .support-show-message {
 background-color:#292929;
 border-radius:8px;
-padding:15px;
-transition:all .3s ease
-}
-
-.support-show-message:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+padding:15px
 }
 
 .support-show-message.admin-reply {
@@ -3198,7 +3143,6 @@ text-align:center
 
 .guides-index-item:hover {
 transform:translateY(-5px);
-box-shadow:0 6px 20px #bb86fc33;
 border-color:#bb86fc
 }
 
@@ -3572,13 +3516,7 @@ font-size:.9em
 }
 
 .bulk-message-list-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.bulk-message-list-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .bulk-message-list-table td {
@@ -3861,7 +3799,6 @@ text-decoration:none
 
 .vendors-index-item:hover {
 transform:translateY(-5px);
-box-shadow:0 4px 15px #bb86fc33;
 border-color:#bb86fc
 }
 
@@ -4302,19 +4239,7 @@ border-bottom:2px dashed #3c3c3c
 display:flex;
 flex-direction:column;
 align-items:center;
-margin-bottom:20px;
-position:relative
-}
-
-.vendors-show-review-percentage:after {
-content:"";
-position:absolute;
-bottom:-10px;
-left:50%;
-transform:translateX(-50%);
-width:50%;
-height:1px;
-background:linear-gradient(to right,transparent,#bb86fc,transparent)
+margin-bottom:20px
 }
 
 .vendors-show-review-percentage-value {
@@ -4452,7 +4377,6 @@ position:relative
 
 .product-card:hover {
 transform:translateY(-5px);
-box-shadow:0 4px 15px #bb86fc33;
 border-color:#bb86fc
 }
 
@@ -4997,7 +4921,6 @@ flex-direction:column
 
 .messages-index-item:hover {
 transform:translateY(-2px);
-box-shadow:0 4px 15px #bb86fc33;
 border-color:#bb86fc
 }
 
@@ -5797,7 +5720,6 @@ flex-direction:column
 
 .my-products-index-product-card:hover {
 transform:translateY(-5px);
-box-shadow:0 6px 12px #bb86fc33;
 border-color:#bb86fc
 }
 
@@ -6038,13 +5960,7 @@ text-transform:uppercase
 }
 
 .all-products-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.all-products-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .all-products-index-table td {
@@ -6912,13 +6828,7 @@ font-size:.9em
 }
 
 .admin-pop-up-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.admin-pop-up-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .admin-pop-up-index-table td {
@@ -8421,13 +8331,7 @@ text-align:center
 }
 
 .vendor-applications-index-table tr {
-transition:all .3s ease;
 border-radius:8px
-}
-
-.vendor-applications-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc1a
 }
 
 .vendor-applications-index-status {
@@ -8810,8 +8714,7 @@ margin-top:0
 }
 
 .admin-statistics-title:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 15px #bb86fc33
+transform:translateY(-2px)
 }
 
 .admin-statistics-container {
@@ -9741,13 +9644,7 @@ font-size:.9em
 }
 
 .orders-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.orders-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .orders-index-table td {
@@ -10137,13 +10034,7 @@ gap:20px
 .orders-show-info-item {
 padding:15px;
 border-radius:8px;
-background-color:#292929;
-transition:all .3s ease
-}
-
-.orders-show-info-item:hover {
-transform:translateY(-3px);
-box-shadow:0 4px 12px #bb86fc33
+background-color:#292929
 }
 
 .orders-show-info-label {
@@ -10185,13 +10076,7 @@ justify-content:space-between;
 align-items:flex-start;
 padding:20px;
 border-radius:8px;
-background-color:#292929;
-transition:all .3s ease
-}
-
-.orders-show-item:hover {
-transform:translateY(-3px);
-box-shadow:0 4px 12px #bb86fc33
+background-color:#292929
 }
 
 .orders-show-item-details {
@@ -10634,13 +10519,7 @@ background-color:#ff9800
 padding:15px;
 border-radius:8px;
 background-color:#292929;
-margin-bottom:20px;
-transition:all .3s ease
-}
-
-.orders-show-dispute-info:hover {
-transform:translateY(-3px);
-box-shadow:0 4px 12px #bb86fc33
+margin-bottom:20px
 }
 
 .orders-show-dispute-section-title {
@@ -11129,13 +11008,7 @@ font-size:.9em
 }
 
 .sales-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.sales-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .sales-index-table td {
@@ -11562,13 +11435,7 @@ font-size:.9em
 }
 
 .disputes-index-table tr {
-background-color:#292929;
-transition:all .3s ease
-}
-
-.disputes-index-table tr:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+background-color:#292929
 }
 
 .disputes-index-table td {
@@ -11739,13 +11606,7 @@ margin-bottom:20px
 .disputes-show-info-item {
 background-color:#292929;
 border-radius:8px;
-padding:15px;
-transition:all .3s ease
-}
-
-.disputes-show-info-item:hover {
-transform:translateY(-3px);
-box-shadow:0 4px 12px #bb86fc33
+padding:15px
 }
 
 .disputes-show-info-label {
@@ -11798,8 +11659,7 @@ transition:all .3s ease
 }
 
 .disputes-show-message:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+transform:translateY(-2px)
 }
 
 .disputes-show-message-header {
@@ -11953,13 +11813,7 @@ flex:1;
 min-width:300px;
 background-color:#292929;
 border-radius:8px;
-padding:20px;
-transition:all .3s ease
-}
-
-.admin-disputes-show-form:hover {
-transform:translateY(-3px);
-box-shadow:0 4px 15px #bb86fc33
+padding:20px
 }
 
 .admin-disputes-show-vendor-btn,.admin-disputes-show-buyer-btn {
