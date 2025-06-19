@@ -6057,13 +6057,7 @@ gap:8px
 .notifications-index-item {
 background-color:#292929;
 border-radius:8px;
-padding:12px;
-transition:all .3s ease
-}
-
-.notifications-index-item:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+padding:12px
 }
 
 .notifications-index-item-title {
@@ -6210,13 +6204,7 @@ margin:0 15px;
 border-radius:8px;
 padding:20px;
 display:flex;
-gap:20px;
-transition:all .3s ease
-}
-
-.cart-index-item:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 15px #bb86fc1a
+gap:20px
 }
 
 .cart-index-item-image {

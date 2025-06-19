@@ -10,7 +10,20 @@ class XmrPriceController extends Controller
 {
     public function getXmrPrice()
     {
+        // MANUAL PRICE OVERRIDE (No caching - immediate updates)
+        // 
+        // PRIVACY WARNING: Using API calls may expose your server's IP address and compromise
+        // anonymity. If you are not concerned about this, keep the API section enabled below.
+        // If you want enhanced privacy, uncomment the line below and manually update the 
+        // XMR price value whenever you need to change your server's Monero pricing.
+        //
+        // Uncomment the line below and set your desired XMR price to disable API calls:
+        // return number_format(416.00, 2, '.', ''); // Set your manual XMR price here
+        
         return Cache::remember('xmr_price', 240, function () {
+            
+            // API PRICE FETCHING (Comment out this entire section if using manual price above)
+            // ====================================================================
             $client = new Client();
             
             // First, try CoinGecko API
@@ -53,6 +66,9 @@ class XmrPriceController extends Controller
             
             // If both APIs fail, return 'UNAVAILABLE'
             return 'UNAVAILABLE';
+            // ====================================================================
+            // END API PRICE FETCHING
+            
         });
     }
 }
