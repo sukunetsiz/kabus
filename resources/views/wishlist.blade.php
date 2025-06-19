@@ -15,20 +15,6 @@
             </form>
         @endif
     </div>
-    
-    @if ($errors->any() || session('error'))
-        <div class="alert alert-error">
-            @if (session('error'))
-                <p>{{ session('error') }}</p>
-            @else
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
-    @endif
 
     @if($products->isEmpty())
         <div class="wishlist-index-empty">

@@ -427,6 +427,99 @@ color:#121212;
 transform:translateY(-2px)
 }
 
+.footer-xmr-price {
+position:absolute;
+left:50%;
+transform:translate(-50%,0);
+background-color:#1e1e1e;
+border-radius:8px;
+display:inline-block;
+border:2px solid #bb86fc;
+box-shadow:0 2px 4px #0000001a;
+padding:10px 15px;
+font-weight:700;
+transition:all .3s ease;
+color:#bb86fc;
+text-align:center;
+z-index:1
+}
+
+.footer-xmr-price:hover {
+transform:translate(-50%,-2px);
+box-shadow:0 4px 8px #0003
+}
+
+.footer-xmr-price-label {
+font-size:14px;
+color:#e0e0e0;
+margin-right:5px
+}
+
+.footer-xmr-price-value {
+font-size:16px
+}
+
+.footer-xmr-price-value.unavailable {
+color:#ff3838
+}
+
+.footer-javascript-warning-left {
+display:none;
+align-items:center;
+background-color:#1e1e1e;
+border:2px solid #3c3c3c;
+border-left:4px solid #ff3838;
+border-right:4px solid #ff3838;
+border-radius:8px;
+padding:8px 16px;
+margin-left:auto;
+margin-right:300px;
+transition:all .3s ease
+}
+
+.footer-javascript-warning-right {
+display:none;
+align-items:center;
+background-color:#1e1e1e;
+border:2px solid #3c3c3c;
+border-left:4px solid #ffc107;
+border-right:4px solid #ffc107;
+border-radius:8px;
+padding:8px 16px;
+margin-left:auto;
+margin-right:120px;
+gap:10px;
+transition:all .3s ease
+}
+
+.footer-javascript-warning-left:hover,.footer-javascript-warning-right:hover {
+transform:translateY(-2px)
+}
+
+.footer-javascript-warning-icon {
+height:20px;
+width:auto
+}
+
+.footer-javascript-warning-text-left {
+color:#ff3838;
+font-weight:600;
+font-size:14px;
+letter-spacing:.5px
+}
+
+.footer-javascript-warning-text-right {
+color:#ffc107;
+font-weight:600;
+font-size:14px;
+letter-spacing:.5px
+}
+
+.footer-javascript-warning-gif {
+height:20px;
+width:auto
+}
+
 table {
 width:100%;
 margin-bottom:20px;
@@ -508,7 +601,7 @@ min-width:20px;
 height:20px
 }
 
-.pagination a:hover,.xmr-price {
+.pagination a:hover {
 background-color:#3c3c3c;
 color:#bb86fc;
 text-align:center
@@ -542,46 +635,10 @@ margin-left:5px
 color:#666
 }
 
-.pagination a,.pagination span,.xmr-price {
+.pagination a,.pagination span {
 padding:10px 15px;
 font-weight:700;
 transition:all .3s ease
-}
-
-.xmr-price {
-position:absolute;
-left:50%;
-transform:translate(-50%,0);
-background-color:#1e1e1e;
-border-radius:8px;
-display:inline-block;
-border:2px solid #bb86fc;
-box-shadow:0 2px 4px #0000001a;
-padding:10px 15px;
-font-weight:700;
-transition:all .3s ease;
-color:#bb86fc;
-text-align:center;
-z-index:1
-}
-
-.xmr-price:hover {
-transform:translate(-50%,-2px);
-box-shadow:0 4px 8px #0003
-}
-
-.xmr-price-label {
-font-size:14px;
-color:#e0e0e0;
-margin-right:5px
-}
-
-.xmr-price-value {
-font-size:16px
-}
-
-.xmr-price-value.unavailable {
-color:#ff3838
 }
 
 .mnemonic-container {
@@ -5350,88 +5407,6 @@ transform:translateY(-2px)
 
 .messages-rate-limit-button i {
 font-size:14px
-}
-
-.javascript-warning-left {
-display:none;
-align-items:center;
-background:#2a0000;
-border:2px solid red;
-border-radius:4px;
-padding:8px 15px;
-animation:warning-glow-red 1.5s infinite;
-margin-left:auto;
-margin-right:270px
-}
-
-.javascript-warning-right {
-display:none;
-align-items:center;
-background:#1a1a2e;
-border:2px solid #ff9800;
-border-radius:4px;
-padding:8px 15px;
-animation:warning-glow-orange 1.5s infinite;
-margin-left:auto;
-margin-right:130px;
-gap:10px
-}
-
-.javascript-warning-icon {
-height:24px;
-width:auto
-}
-
-.javascript-warning-text-left {
-color:red;
-font-weight:700;
-text-transform:uppercase;
-letter-spacing:1px;
-font-size:14px;
-text-shadow:0 0 10px #ff000080
-}
-
-.javascript-warning-text-right {
-color:#ff9800;
-font-weight:700;
-text-transform:uppercase;
-letter-spacing:1px;
-font-size:14px;
-text-shadow:0 0 10px #ff980080
-}
-
-.javascript-warning-gif {
-height:24px;
-width:auto;
-margin-left:5px
-}
-
-@keyframes warning-glow-red {
-0% {
-box-shadow:0 0 5px red
-}
-
-50% {
-box-shadow:0 0 20px red
-}
-
-100% {
-box-shadow:0 0 5px red
-}
-}
-
-@keyframes warning-glow-orange {
-0% {
-box-shadow:0 0 5px #ff9800
-}
-
-50% {
-box-shadow:0 0 20px #ff9800
-}
-
-100% {
-box-shadow:0 0 5px #ff9800
-}
 }
 
 .references-index-container {
