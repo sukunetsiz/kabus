@@ -113,8 +113,6 @@ class MessageController extends Controller
             $notification->users()->attach($recipientId, ['read' => false]);
         }
 
-        Log::info('Message sent', ['user_id' => Auth::id(), 'conversation_id' => $conversation->id]);
-
         return redirect()->route('messages.show', $conversation);
     }
 
@@ -196,8 +194,6 @@ class MessageController extends Controller
         $notification->save();
         $notification->users()->attach($otherUser->id, ['read' => false]);
 
-        Log::info('Conversation started or continued', ['user_id' => Auth::id(), 'with_user_id' => $otherUser->id]);
-
         return redirect()->route('messages.show', $conversation);
     }
 
@@ -208,7 +204,6 @@ class MessageController extends Controller
 
         try {
             $conversation->delete(); // This will perform a soft delete
-            Log::info('Conversation soft deleted', ['user_id' => Auth::id(), 'conversation_id' => $conversation->id]);
             return redirect()->route('messages.index')->with('success', 'Chat successfully deleted.');
         } catch (\Exception $e) {
             Log::error('Failed to delete conversation', ['user_id' => Auth::id(), 'conversation_id' => $conversation->id, 'error' => $e->getMessage()]);

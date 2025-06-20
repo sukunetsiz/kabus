@@ -269,7 +269,6 @@ class ProfileController extends Controller
 
                 // Encrypt the message
                 $encryptedMessage = $gpg->encrypt($message);
-                Log::info('Message encrypted successfully');
             } else {
                 throw new Exception("Failed to import the public key. No fingerprint returned.");
             }

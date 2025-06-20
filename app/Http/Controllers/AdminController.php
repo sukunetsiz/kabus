@@ -61,7 +61,7 @@ class AdminController extends Controller
         return view('admin.logs.index');
     }
 
-    private function getFilteredLogs($logTypes)
+    private function getFilteredLogs($logTypes, $searchQuery = null)
     {
         $logPath = storage_path('logs/laravel.log');
         $logs = [];
@@ -74,10 +74,17 @@ class AdminController extends Controller
             foreach ($matches as $match) {
                 $logType = strtolower($match[3]);
                 if (in_array($logType, $logTypes)) {
+                    // If search query is provided, filter logs by message content
+                    if ($searchQuery && stripos($match[4], $searchQuery) === false) {
+                        continue;
+                    }
+                    
                     $logs[] = [
                         'datetime' => $match[1],
                         'type' => $match[3],
                         'message' => $match[4],
+                        // Generate a unique ID for the log based on its content
+                        'id' => md5($match[1] . $match[3] . $match[4])
                     ];
                 }
             }
@@ -86,7 +93,7 @@ class AdminController extends Controller
         return array_reverse($logs);
     }
 
-    public function showLogsByType($type)
+    public function showLogsByType($type, Request $request)
     {
         $logTypes = match($type) {
             'error' => ['error', 'critical', 'alert', 'emergency'],
@@ -95,8 +102,10 @@ class AdminController extends Controller
             default => abort(404)
         };
 
-        $logs = $this->getFilteredLogs($logTypes);
-        return view('admin.logs.show', compact('logs', 'type'));
+        $searchQuery = $request->input('search');
+        $logs = $this->getFilteredLogs($logTypes, $searchQuery);
+        
+        return view('admin.logs.show', compact('logs', 'type', 'searchQuery'));
     }
 
     public function deleteLogs($type)
@@ -124,6 +133,41 @@ class AdminController extends Controller
         }
 
         return redirect()->route('admin.logs')->with('success', ucfirst($type) . ' logs deleted successfully.');
+    }
+    
+    public function deleteSelectedLogs(Request $request, $type)
+    {
+        $selectedLogs = $request->input('selected_logs', []);
+        
+        if (empty($selectedLogs)) {
+            return redirect()->route('admin.logs.show', $type)
+                ->with('error', 'No logs selected for deletion.');
+        }
+        
+        $logPath = storage_path('logs/laravel.log');
+        
+        if (File::exists($logPath)) {
+            $content = File::get($logPath);
+            $pattern = '/\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] (\w+)\.(\w+): (.*?)(\n|\z)/s';
+            preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
+
+            $newContent = '';
+            foreach ($matches as $match) {
+                $logId = md5($match[1] . $match[3] . $match[4]);
+                
+                if (in_array($logId, $selectedLogs)) {
+                    // Skip this log as it's selected for deletion
+                    continue;
+                }
+                
+                $newContent .= $match[0];
+            }
+
+            File::put($logPath, $newContent);
+        }
+
+        return redirect()->route('admin.logs.show', $type)
+            ->with('success', count($selectedLogs) . ' logs deleted successfully.');
     }
 
     public function userList()

@@ -206,6 +206,7 @@ Route::middleware(['auth', CheckBanned::class])->group(function () {
             ->name('admin.logs.show')
             ->where('type', 'error|warning|info');
         Route::delete('/admin/logs/{type}', [AdminController::class, 'deleteLogs'])->name('admin.logs.delete');
+        Route::delete('/admin/logs/{type}/selected', [AdminController::class, 'deleteSelectedLogs'])->name('admin.logs.delete-selected');
         
         // Admin user management
         Route::get('/admin/users', [AdminController::class, 'userList'])->name('admin.users');
