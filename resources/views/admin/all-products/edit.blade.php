@@ -260,10 +260,10 @@
                 <div class="products-common-create-section">
                     <h3 class="products-common-create-section-title">Bulk Options</h3>
                     <p class="products-common-create-section-desc">
-                        Optionally add up to 4 bulk purchase options. Leave empty if not offering bulk pricing.
+                        Optionally add up to 8 bulk purchase options. Leave empty if not offering bulk pricing.
                     </p>
                     
-                    @for ($i = 0; $i < 4; $i++)
+                    @for ($i = 0; $i < 8; $i++)
                         <div class="products-common-create-option-card">
                             <h4 class="products-common-create-option-title">
                                 Bulk Option {{ $i + 1 }}

@@ -401,8 +401,8 @@ class VendorController extends Controller
 
             // Validate bulk options
             if (!empty($bulkOptions)) {
-                if (count($bulkOptions) > 4) {
-                    return back()->withInput()->with('error', 'No more than 4 bulk options are allowed.');
+                if (count($bulkOptions) > 8) {
+                    return back()->withInput()->with('error', 'No more than 8 bulk options are allowed.');
                 }
 
                 // Validate each bulk option
@@ -586,8 +586,8 @@ class VendorController extends Controller
 
             // Validate bulk options
             if (!empty($bulkOptions)) {
-                if (count($bulkOptions) > 4) {
-                    return back()->withInput()->with('error', 'No more than 4 bulk options are allowed.');
+                if (count($bulkOptions) > 8) {
+                    return back()->withInput()->with('error', 'No more than 8 bulk options are allowed.');
                 }
 
                 // Validate each bulk option

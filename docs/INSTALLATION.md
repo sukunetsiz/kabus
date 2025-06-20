@@ -59,6 +59,31 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 ```
 
+## Optional: Frontend Development Tools
+
+Our marketplace includes frontend development configuration files that are not currently being used. These files are set up for modern web development tools, but the marketplace works perfectly without them. However, if you think you might want to enhance your marketplace with modern frontend features in the future, you can install Node.js and npm now:
+
+```bash
+# Install Node.js and npm
+sudo apt install -y nodejs npm
+```
+
+After we clone the repository in the next section, you can optionally run this command to install the development tools:
+```bash
+cd /var/www/kabus
+npm install
+```
+
+This will install development dependencies that you can use later if needed. **This step does not affect how your marketplace works** and is only useful if you plan to use these development tools.
+
+You might want to install these tools if you plan to:
+- Add custom JavaScript functionality to your marketplace
+- Use modern CSS preprocessing tools like SCSS or SASS
+- Set up automatic asset minification and optimization
+- Add modern frontend frameworks like Alpine.js or Vue.js components
+
+**Most users can skip this section entirely.**
+
 ## Verification Steps
 Verify all installations by checking their versions:
 ```bash
