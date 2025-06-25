@@ -4,17 +4,22 @@
 <div class="product-card-grid">
     @foreach($products as $product)
         <a href="{{ route('products.show', $product->slug) }}" class="product-card">
-            <div class="product-card-review-stats">
+            <div class="product-card-info-review">
                 @if($product->getPositiveReviewPercentage() !== null)
                     <span class="product-card-review-star">★</span>
-                    <span class="product-card-review-percentage">
+                    <span class="product-card-info-text">
                         {{ number_format($product->getPositiveReviewPercentage(), 0) }}%
                     </span>
                 @else
-                    <span class="product-card-review-percentage">
+                    <span class="product-card-info-text">
                         No Reviews
                     </span>
                 @endif
+            </div>
+            <div class="product-card-info-username">
+                <span class="product-card-info-text">
+                    {{ $product->user->username }}
+                </span>
             </div>
             @auth
             <form action="{{ Auth::user()->hasWishlisted($product->id) 

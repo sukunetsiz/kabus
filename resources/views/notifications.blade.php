@@ -8,7 +8,6 @@
         </div>
         @if($notifications->isEmpty())
             <div class="notifications-empty">
-                <div class="notifications-empty-icon">📭</div>
                 <p>You don't have any notifications yet.</p>
             </div>
         @else
