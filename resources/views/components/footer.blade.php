@@ -1,5 +1,5 @@
 <footer class="footer">
-    <div class="container">
+    <div class="footer-container">
         <div class="footer-content">
             <a href="{{ route('pgp-key') }}" class="footer-button">PGP Key</a>
             @if(config('marketplace.show_javascript_warning'))

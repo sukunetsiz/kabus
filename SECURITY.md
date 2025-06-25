@@ -66,7 +66,7 @@ Please include the following information in your report:
 - **Description**: Short description of the vulnerability
 - **Steps to Reproduce**: Detailed steps to reproduce the issue
 - **Suggested Fix**: If possible, include your suggested solution
-- **Contact Information**: How we can reach you for follow-up (if needed)
+- **Contact Information**: How I can reach you for follow-up (if needed)
 
 ## Acknowledgments
 

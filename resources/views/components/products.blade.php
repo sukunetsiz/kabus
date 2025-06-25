@@ -31,7 +31,7 @@
                     @method('DELETE')
                 @endif
                 <button type="submit" class="product-card-wishlist-button {{ Auth::user()->hasWishlisted($product->id) ? 'active' : '' }}" title="{{ Auth::user()->hasWishlisted($product->id) ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
-                    <span class="product-card-wishlist-heart">❤️</span>
+                    <img src="{{ asset('icons/wishlist.svg') }}" alt="Wishlist" class="product-card-wishlist-icon">
                 </button>
             </form>
             @endauth
