@@ -13,8 +13,8 @@
             <div class="navbar-center">
                 <span class="navbar-brand">
                     @auth
-                        <a href="{{ route('cart.index') }}" class="navbar-icon-btn">
-                            <span class="navbar-icon">🛒</span>
+                        <a href="{{ route('cart.index') }}" class="navbar-icon-btn {{ request()->routeIs('cart.*') ? 'active' : '' }}">
+                            <img src="{{ asset('icons/cart.svg') }}" alt="Cart" class="navbar-icon-svg">
                             @if(auth()->user()->cartItems()->count() > 0)
                                 <span class="navbar-badge navbar-badge-cart">{{ auth()->user()->cartItems()->count() }}</span>
                             @endif
@@ -24,8 +24,8 @@
                         <img src="{{ asset('images/kabus.png') }}" alt="Logo" class="navbar-brand-logo">
                     </span>
                     @auth
-                        <a href="{{ route('notifications.index') }}" class="navbar-icon-btn">
-                            <span class="navbar-icon">🔔</span>
+                        <a href="{{ route('notifications.index') }}" class="navbar-icon-btn {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+                            <img src="{{ asset('icons/notifications.svg') }}" alt="Notifications" class="navbar-icon-svg">
                             @if(auth()->user()->unread_notifications_count > 0)
                                 <span class="navbar-badge navbar-badge-notification">{{ auth()->user()->unread_notifications_count }}</span>
                             @endif

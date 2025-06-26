@@ -167,19 +167,23 @@ transition:all .3s ease
 }
 
 .navbar-icon-btn:hover {
-transform:translateY(-2px);
-box-shadow:0 2px 8px #bb86fc4d
+transform:translateY(-2px)
 }
 
-.navbar-icon {
-color:#e0e0e0;
-transition:color .3s ease;
-margin:0;
-font-size:20px
+.navbar-icon-svg {
+width:20px;
+height:20px;
+filter:brightness(0) saturate(100%) invert(88%) sepia(8%) saturate(15%) hue-rotate(160deg) brightness(95%) contrast(95%);
+transition:filter .3s ease
 }
 
-.navbar-icon-btn:hover .navbar-icon {
-color:#bb86fc
+.navbar-icon-btn.active {
+background-color:#bb86fc;
+border-color:#3c3c3c
+}
+
+.navbar-icon-btn.active .navbar-icon-svg {
+filter:brightness(0) saturate(100%) invert(7%) sepia(9%) saturate(848%) hue-rotate(205deg) brightness(98%) contrast(92%)
 }
 
 .navbar-badge {
@@ -3891,13 +3895,7 @@ gap:15px
 .categories-index-category {
 background-color:#292929;
 border-radius:8px;
-padding:15px;
-transition:all .3s ease
-}
-
-.categories-index-category:hover {
-transform:translateY(-2px);
-box-shadow:0 4px 10px #bb86fc33
+padding:15px
 }
 
 .categories-index-category-header {
@@ -7026,39 +7024,21 @@ text-align:center
 }
 
 .admin-pop-up-index-status-badge {
-display:inline-flex;
-align-items:center;
-padding:.5rem 1rem;
-border-radius:24px;
-font-size:.875rem;
-font-weight:600;
-justify-content:center;
-transition:all .3s cubic-bezier(0.4,0,0.2,1);
-cursor:default
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-weight:700;
+font-size:.85em;
+color:#121212;
+text-transform:uppercase
 }
 
 .admin-pop-up-index-status-active {
-background:#4caf5026;
-color:#4caf50;
-border:1px solid #4caf504d
-}
-
-.admin-pop-up-index-status-active:hover {
-background:#4caf5033;
-transform:translateY(-1px);
-box-shadow:0 4px 12px #4caf501a
+background:#4caf50
 }
 
 .admin-pop-up-index-status-inactive {
-background:#9e9e9e26;
-color:#9e9e9e;
-border:1px solid #9e9e9e4d
-}
-
-.admin-pop-up-index-status-inactive:hover {
-background:#9e9e9e33;
-transform:translateY(-1px);
-box-shadow:0 4px 12px #9e9e9e1a
+background:#9e9e9e
 }
 
 .admin-pop-up-index-actions {
@@ -7077,7 +7057,7 @@ display:inline-flex;
 align-items:center;
 gap:.5rem;
 border:none;
-font-weight:500;
+font-weight:600;
 cursor:pointer
 }
 
@@ -7088,8 +7068,7 @@ color:#121212
 
 .admin-pop-up-index-action-activate:hover {
 background-color:#45a049;
-transform:translateY(-2px);
-box-shadow:0 4px 10px #4caf504d
+transform:translateY(-2px)
 }
 
 .admin-pop-up-index-action-delete {
