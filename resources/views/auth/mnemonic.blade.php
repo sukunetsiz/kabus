@@ -4,7 +4,7 @@
 <div class="container">
     <div class="mnemonic-container">
         <h2>Your Mnemonic Phrase</h2>
-            <div class="alert alert-error">
+            <div class="mnemonic-warning">
                 <strong>Warning:</strong> This is the only time you will see this mnemonic phrase. Please write it down and store it securely. You will need this to recover your account if you forget your password.
             </div>
 

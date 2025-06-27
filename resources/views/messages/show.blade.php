@@ -23,16 +23,6 @@
             {{ $messages->links() }}
         </div>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         @if ($conversation->hasReachedMessageLimit())
             <div class="alert alert-error">
                 Message limit of 40 reached for this conversation. Please delete this conversation and start a new one with the user.

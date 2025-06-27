@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Product;
 use App\Models\ProductReviews;
+use App\Models\Dispute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -69,6 +70,9 @@ class VendorsController extends Controller
             // Calculate review statistics for all vendor products
             $reviewStats = $this->calculateVendorReviewStatistics($vendor->id);
             
+            // Calculate dispute statistics for this vendor
+            $disputeStats = $this->calculateVendorDisputeStatistics($vendor->id);
+            
             // Get all product IDs for this vendor
             $productIds = Product::where('user_id', $vendor->id)->pluck('id')->toArray();
             
@@ -90,7 +94,11 @@ class VendorsController extends Controller
                 'negativeCount' => $reviewStats['negative'],
                 'totalReviews' => $reviewStats['total'],
                 'positivePercentage' => $reviewStats['positivePercentage'],
-                'allReviews' => $allReviews
+                'allReviews' => $allReviews,
+                'disputesWon' => $disputeStats['won'],
+                'disputesOpen' => $disputeStats['open'],
+                'disputesLost' => $disputeStats['lost'],
+                'totalDisputes' => $disputeStats['total']
             ]);
         } catch (Exception $e) {
             Log::error('Error fetching vendor details: ' . $e->getMessage(), ['username' => $username]);
@@ -144,6 +152,41 @@ class VendorsController extends Controller
             'negative' => $negativeCount,
             'total' => $totalReviews,
             'positivePercentage' => $positivePercentage
+        ];
+    }
+    
+    /**
+     * Calculate dispute statistics for a vendor.
+     *
+     * @param  int  $vendorId
+     * @return array
+     */
+    private function calculateVendorDisputeStatistics($vendorId)
+    {
+        // Get all disputes for this vendor
+        $disputes = Dispute::getVendorDisputes($vendorId);
+        
+        // If no disputes, return zeros
+        if ($disputes->isEmpty()) {
+            return [
+                'won' => 0,
+                'open' => 0,
+                'lost' => 0,
+                'total' => 0
+            ];
+        }
+        
+        // Count disputes by status
+        $wonCount = $disputes->where('status', Dispute::STATUS_VENDOR_PREVAILS)->count();
+        $openCount = $disputes->where('status', Dispute::STATUS_ACTIVE)->count();
+        $lostCount = $disputes->where('status', Dispute::STATUS_BUYER_PREVAILS)->count();
+        $totalDisputes = $disputes->count();
+        
+        return [
+            'won' => $wonCount,
+            'open' => $openCount,
+            'lost' => $lostCount,
+            'total' => $totalDisputes
         ];
     }
 }

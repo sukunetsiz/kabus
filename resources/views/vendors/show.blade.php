@@ -53,35 +53,65 @@
             </div>
 
             {{-- Vendor Review Statistics Section --}}
-            <div class="vendors-show-review-stats">
+            <div class="vendors-show-statistics-stats">
                 <h2>Review Statistics</h2>
                 
                 @if($totalReviews > 0)
-                    <div class="vendors-show-review-percentage">
-                        <span class="vendors-show-review-percentage-value">{{ number_format($positivePercentage, 1) }}%</span>
-                        <span class="vendors-show-review-percentage-label">Positive Reviews</span>
+                    <div class="vendors-show-statistics-percentage">
+                        <span class="vendors-show-statistics-percentage-value">{{ number_format($positivePercentage, 1) }}%</span>
+                        <span class="vendors-show-statistics-percentage-label">Positive Reviews</span>
                     </div>
-                    <div class="vendors-show-review-counts">
-                        <div class="vendors-show-review-count-item">
-                            <span class="vendors-show-review-count-label">Positive</span>
-                            <span class="vendors-show-review-count-value">{{ $positiveCount }}</span>
+                    <div class="vendors-show-statistics-counts">
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Positive</span>
+                            <span class="vendors-show-statistics-count-value">{{ $positiveCount }}</span>
                         </div>
-                        <div class="vendors-show-review-count-item">
-                            <span class="vendors-show-review-count-label">Mixed</span>
-                            <span class="vendors-show-review-count-value">{{ $mixedCount }}</span>
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Mixed</span>
+                            <span class="vendors-show-statistics-count-value">{{ $mixedCount }}</span>
                         </div>
-                        <div class="vendors-show-review-count-item">
-                            <span class="vendors-show-review-count-label">Negative</span>
-                            <span class="vendors-show-review-count-value">{{ $negativeCount }}</span>
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Negative</span>
+                            <span class="vendors-show-statistics-count-value">{{ $negativeCount }}</span>
                         </div>
-                        <div class="vendors-show-review-count-item">
-                            <span class="vendors-show-review-count-label">Total</span>
-                            <span class="vendors-show-review-count-value">{{ $totalReviews }}</span>
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Total</span>
+                            <span class="vendors-show-statistics-count-value">{{ $totalReviews }}</span>
                         </div>
                     </div>
                 @else
-                    <div class="vendors-show-review-empty">
+                    <div class="vendors-show-statistics-empty">
                         <p>No reviews yet for this vendor's products.</p>
+                    </div>
+                @endif
+            </div>
+
+            {{-- Vendor Dispute Statistics Section --}}
+            <div class="vendors-show-statistics-stats">
+                <h2>Dispute Statistics</h2>
+                
+                @if($totalDisputes > 0)
+                    <div class="vendors-show-statistics-counts">
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Won</span>
+                            <span class="vendors-show-statistics-count-value">{{ $disputesWon }}</span>
+                        </div>
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Open</span>
+                            <span class="vendors-show-statistics-count-value">{{ $disputesOpen }}</span>
+                        </div>
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Lost</span>
+                            <span class="vendors-show-statistics-count-value">{{ $disputesLost }}</span>
+                        </div>
+                        <div class="vendors-show-statistics-count-item">
+                            <span class="vendors-show-statistics-count-label">Total</span>
+                            <span class="vendors-show-statistics-count-value">{{ $totalDisputes }}</span>
+                        </div>
+                    </div>
+                @else
+                    <div class="vendors-show-statistics-empty">
+                        <p>No disputes yet for this vendor.</p>
                     </div>
                 @endif
             </div>

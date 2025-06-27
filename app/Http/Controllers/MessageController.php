@@ -69,10 +69,18 @@ class MessageController extends Controller
             return redirect()->back()->with('error', 'Message limit of 40 has been reached for this chat. Please delete this chat and start a new one with the user.');
         }
 
-        $validatedData = $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'content' => 'required|string|min:4|max:1600',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->with('error', $validator->errors()->first())
+                ->withInput();
+        }
+
+        $validatedData = $validator->validated();
+        
         $config = HTMLPurifier_Config::createDefault();
         $config->set('HTML.Allowed', 'p,b,i,u,a[href],ul,ol,li'); // Restrict allowed HTML tags
         $purifier = new HTMLPurifier($config);
@@ -129,11 +137,19 @@ class MessageController extends Controller
 
     public function startConversation(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'username' => 'required|string|alpha_num|max:16',
             'content' => 'required|string|min:4|max:1600',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->with('error', $validator->errors()->first())
+                ->withInput();
+        }
+
+        $validatedData = $validator->validated();
+        
         if ($validatedData['username'] === Auth::user()->username) {
             return redirect()->back()->with('error', 'You cannot send messages to yourself.')->withInput();
         }
