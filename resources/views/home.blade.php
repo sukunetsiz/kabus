@@ -8,13 +8,11 @@
     <div class="pop-up-card">
         <h2 class="pop-up-title">{{ $popup->title }}</h2>
         <div class="pop-up-content">{{ $popup->message }}</div>
-        <form action="{{ route('popup.dismiss') }}" method="POST">
-            @csrf
-            <input type="hidden" name="dismiss_popup" value="1">
-            <button type="submit" class="pop-up-close-btn">
+        <div class="pop-up-button-container">
+            <label for="pop-up-toggle" class="pop-up-close-btn">
                 Acknowledge & Continue
-            </button>
-        </form>
+            </label>
+        </div>
     </div>
 </div>
 @endif

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\XmrPriceController;
@@ -15,18 +13,15 @@ class HomeController extends Controller
      */
     public function index(XmrPriceController $xmrPriceController)
     {
-        $popup = null;
-        // Only show popup if user hasn't dismissed it in this session
-        if (!session()->has('popup_dismissed')) {
-            $popup = \App\Models\Popup::getActive();
-        }
-
+        // Get active popup (always show if available)
+        $popup = \App\Models\Popup::getActive();
+        
         // Get active advertisements
         $advertisements = \App\Models\Advertisement::getActiveAdvertisements();
-
+        
         // Get current XMR price for conversion
         $xmrPrice = $xmrPriceController->getXmrPrice();
-
+        
         // Organize advertisements by slot, skipping ads with deleted products
         $adSlots = [];
         foreach ($advertisements as $ad) {
@@ -58,25 +53,11 @@ class HomeController extends Controller
                 'delivery_options' => $formattedDeliveryOptions
             ];
         }
-
+        
         return view('home', [
             'username' => Auth::user()->username,
             'popup' => $popup,
             'adSlots' => $adSlots
         ]);
-    }
-
-    /**
-     * Dismiss the popup for the current session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function dismissPopup(Request $request)
-    {
-        if ($request->has('dismiss_popup')) {
-            session(['popup_dismissed' => true]);
-        }
-        return redirect()->route('home');
     }
 }

@@ -7306,6 +7306,10 @@ font-size:.95rem;
 text-align:center
 }
 
+.pop-up-button-container {
+text-align:center
+}
+
 .pop-up-close-btn {
 background:#bb86fc;
 color:#121212;
@@ -7317,8 +7321,10 @@ cursor:pointer;
 transition:all .3s ease;
 text-transform:uppercase;
 letter-spacing:1px;
-display:block;
-margin:0 auto
+display:inline-block;
+margin:0 auto;
+text-align:center;
+width:auto
 }
 
 .pop-up-close-btn:hover {

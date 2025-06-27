@@ -3,17 +3,6 @@
 @section('content')
 
 <div class="categories-index-container">
-
-    @if($errors->any())
-        <div class="alert alert-error" role="alert">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <div class="categories-index-header">
         <h1 class="categories-index-title">Category Management</h1>
     </div>

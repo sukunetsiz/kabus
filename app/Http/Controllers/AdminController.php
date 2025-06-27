@@ -544,6 +544,11 @@ class AdminController extends Controller
 
             return redirect()->route('admin.categories')
                 ->with('success', 'Category created successfully.');
+        } catch (ValidationException $e) {
+            // Convert validation errors to session error message
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->validator->errors()->first());
         } catch (\Exception $e) {
             Log::error('Error creating category: ' . $e->getMessage());
             return redirect()->back()

@@ -79,7 +79,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', CheckBanned::class])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::post('/home', [HomeController::class, 'dismissPopup'])->name('popup.dismiss');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
     // Product routes
