@@ -286,7 +286,11 @@ sudo systemctl restart nginx
 ```
 
 Now our Nginx server is configured and is ready to serve our marketplace application.
-You can visit localhost in your browser to test if your marketplace is working properly. Stay tuned for our next guide where we'll show you how to configure Tor and publish your marketplace as a hidden service on the Tor network!
+You can visit localhost in your browser to test if your marketplace is working properly. 
+
+**Important:** Your marketplace requires Tor to function properly. The XMR price fetching feature uses Tor's SOCKS proxy to anonymously retrieve cryptocurrency prices from external APIs. Without Tor configured, your marketplace will display 'UNAVAILABLE' for XMR prices instead of live market data.
+
+The following section will guide you through installing and configuring Tor to enable both the price fetching functionality and publish your marketplace as a hidden service on the Tor network.
 
 ## Installing and Configuring Tor Hidden Service
 
@@ -295,13 +299,14 @@ Install Tor to set up the hidden service functionality:
 sudo apt install -y tor
 ```
 
-Edit the Tor configuration file to specify our hidden service settings:
+Edit the Tor configuration file to specify our hidden service settings and enable SOCKS proxy:
 ```bash
 sudo nano /etc/tor/torrc
 ```
 
-Add the following configuration lines at the beginning of the file to define the hidden service directory and port:
+Add the following configuration lines at the beginning of the file. The SocksPort enables anonymous XMR price fetching, while the HiddenService settings make your marketplace accessible via .onion address:
 ```bash
+SocksPort 9050
 HiddenServiceDir /var/lib/tor/kabus_hidden_service/
 HiddenServicePort 80 127.0.0.1:80
 ```
@@ -314,7 +319,19 @@ sudo systemctl restart tor
 sudo systemctl restart nginx
 ```
 
-After the Tor service has restarted, you can retrieve your hidden service's onion address from the hostname file:
+Let's check if the SOCKS proxy port is listening correctly:
+```bash
+netstat -tlnp | grep 9050
+```
+
+You should see output similar to:
+```
+tcp        0      0 127.0.0.1:9050          0.0.0.0:*               LISTEN
+```
+
+This confirms that Tor's SOCKS proxy is running on port 9050 and ready to handle your marketplace's XMR price requests.
+
+You can now retrieve your hidden service's onion address from the hostname file:
 ```bash
 sudo cat /var/lib/tor/kabus_hidden_service/hostname
 ```

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -12,8 +13,8 @@ class XmrPriceController extends Controller
     {
         // MANUAL PRICE OVERRIDE (No caching - immediate updates)
         // 
-        // PRIVACY WARNING: Using API calls may expose your server's IP address and compromise
-        // anonymity. If you are not concerned about this, keep the API section enabled below.
+        // PRIVACY WARNING: Even with Tor routing, API calls create network traffic patterns.
+        // For maximum privacy, consider using manual price updates instead.
         // If you want enhanced privacy, uncomment the line below and manually update the 
         // XMR price value whenever you need to change your server's Monero pricing.
         //
@@ -22,9 +23,22 @@ class XmrPriceController extends Controller
         
         return Cache::remember('xmr_price', 240, function () {
             
-            // API PRICE FETCHING (Comment out this entire section if using manual price above)
+            // API PRICE FETCHING VIA TOR (Comment out this entire section if using manual price above)
             // ====================================================================
-            $client = new Client();
+            
+            // Create client with Tor SOCKS5 proxy configuration
+            $client = new Client([
+                'proxy' => [
+                    'http' => 'socks5h://127.0.0.1:9050',
+                    'https' => 'socks5h://127.0.0.1:9050',
+                ],
+                'timeout' => 30, // Timeout for Tor
+                'connect_timeout' => 15,
+                'verify' => true, // SSL verification
+                'curl' => [
+                    CURLOPT_PROXYTYPE => CURLPROXY_SOCKS5_HOSTNAME,
+                ]
+            ]);
             
             // First, try CoinGecko API
             try {
@@ -33,14 +47,13 @@ class XmrPriceController extends Controller
                         'ids' => 'monero',
                         'vs_currencies' => 'usd',
                     ],
-                    'timeout' => 5,
+                    'timeout' => 25,
                 ]);
                 $data = json_decode($response->getBody(), true);
                 if (isset($data['monero']['usd'])) {
                     return number_format($data['monero']['usd'], 2, '.', '');
                 }
             } catch (\Exception $e) {
-                Log::warning('CoinGecko API error: ' . $e->getMessage());
             }
             
             // If CoinGecko fails, try CryptoCompare API
@@ -50,21 +63,17 @@ class XmrPriceController extends Controller
                         'fsym' => 'XMR',
                         'tsyms' => 'USD',
                     ],
-                    'timeout' => 5,
+                    'timeout' => 25,
                 ]);
                 $data = json_decode($response->getBody(), true);
                 if (isset($data['USD'])) {
                     return number_format($data['USD'], 2, '.', '');
                 }
-            } catch (ConnectException $e) {
-                Log::error('CryptoCompare API Connection error: ' . $e->getMessage());
-            } catch (RequestException $e) {
-                Log::error('CryptoCompare API Request error: ' . $e->getMessage());
             } catch (\Exception $e) {
-                Log::error('Unexpected error when fetching XMR price: ' . $e->getMessage());
             }
             
-            // If both APIs fail, return 'UNAVAILABLE'
+            // Only log when all APIs fail - this is the critical error
+            Log::error('All XMR price APIs failed via Tor');
             return 'UNAVAILABLE';
             // ====================================================================
             // END API PRICE FETCHING
