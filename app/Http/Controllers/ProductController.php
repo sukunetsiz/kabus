@@ -106,7 +106,8 @@ class ProductController extends Controller
             if (isset($filters['sort_price'])) {
                 $query->orderBy('price', $filters['sort_price']);
             } else {
-                $query->latest();
+                // Randomize the order of products if no specific sorting is requested
+                $query->inRandomOrder();
             }
 
             // Get paginated results and append only non-empty filters

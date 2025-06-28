@@ -21,7 +21,9 @@
                         </a>
                     @endauth
                     <span class="navbar-brand-gap">
-                        <img src="{{ asset('images/kabus.png') }}" alt="Logo" class="navbar-brand-logo">
+                        <a href="{{ route('home') }}" class="navbar-logo-link">
+                            <img src="{{ asset('images/kabus.png') }}" alt="Logo" class="navbar-brand-logo">
+                        </a>
                     </span>
                     @auth
                         <a href="{{ route('notifications.index') }}" class="navbar-icon-btn {{ request()->routeIs('notifications.*') ? 'active' : '' }}">

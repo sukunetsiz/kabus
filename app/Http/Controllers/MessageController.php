@@ -47,7 +47,7 @@ class MessageController extends Controller
         RateLimiter::hit('view-conversation:'.Auth::id());
 
         $this->authorize('view', $conversation);
-        $messages = $conversation->messages()->with('sender')->orderBy('created_at', 'asc')->paginate(40);
+        $messages = $conversation->messages()->with('sender')->orderBy('created_at', 'desc')->paginate(40);
         
         // Mark unread messages as read
         $unreadMessages = $messages->where('is_read', false)->where('sender_id', '!=', Auth::id());

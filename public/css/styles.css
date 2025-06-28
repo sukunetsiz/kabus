@@ -213,6 +213,173 @@ top:-3px;
 right:-3px
 }
 
+.navbar-logo-link {
+display:inline-block;
+text-decoration:none;
+transition:all .3s ease
+}
+
+.navbar-logo-link:hover {
+transform:translateY(-2px)
+}
+
+.pagination-container {
+display:flex;
+justify-content:center;
+margin-top:-4px;
+margin-bottom:12px
+}
+
+.pagination-list {
+display:flex;
+list-style-type:none;
+padding:0;
+margin:0;
+background-color:#292929;
+border-radius:8px;
+overflow:visible;
+position:relative
+}
+
+.pagination-item,.pagination-active,.pagination-disabled {
+margin:0
+}
+
+.pagination-link,.pagination-number,.pagination-prev,.pagination-next,.pagination-ellipsis {
+display:flex;
+align-items:center;
+justify-content:center;
+color:#e0e0e0;
+text-decoration:none;
+padding:10px 15px;
+font-weight:700;
+transition:all .3s ease;
+min-width:20px;
+height:20px
+}
+
+.pagination-link:hover,.pagination-prev:hover,.pagination-next:hover {
+background-color:#242424;
+color:#bb86fc
+}
+
+.pagination-active .pagination-number {
+background-color:#bb86fc;
+color:#121212!important
+}
+
+.pagination-disabled .pagination-prev,.pagination-disabled .pagination-next,.pagination-disabled .pagination-ellipsis {
+color:#666;
+cursor:not-allowed
+}
+
+.pagination-prev,.pagination-next {
+font-size:14px
+}
+
+.pagination-prev::before {
+content:"◀--";
+margin-right:5px
+}
+
+.pagination-next::after {
+content:"--▶";
+margin-left:5px
+}
+
+.pagination-dropdown-container {
+position:relative
+}
+
+.pagination-dropdown-trigger {
+display:flex;
+align-items:center;
+justify-content:center;
+color:#e0e0e0;
+padding:10px 15px;
+font-weight:700;
+cursor:pointer;
+transition:all .3s ease;
+min-width:20px;
+height:20px;
+font-size:14px
+}
+
+.pagination-dropdown-trigger.pagination-dropdown-trigger-active {
+background-color:#bb86fc;
+color:#121212
+}
+
+.pagination-dropdown:hover .pagination-dropdown-trigger:not(.pagination-dropdown-trigger-active) {
+background-color:#242424;
+color:#bb86fc
+}
+
+.pagination-dropdown-arrow {
+font-size:16px!important;
+transition:transform .3s ease
+}
+
+.pagination-dropdown:hover .pagination-dropdown-arrow {
+transform:rotate(180deg)
+}
+
+.pagination-dropdown-menu {
+position:absolute;
+top:100%;
+left:50%;
+transform:translateX(-50%);
+background-color:#292929;
+border-radius:8px;
+box-shadow:0 4px 12px #0000004d;
+z-index:1000;
+min-width:120px;
+max-height:200px;
+overflow-y:auto;
+opacity:0;
+visibility:hidden;
+transition:all .3s ease;
+margin-top:4px;
+pointer-events:none;
+padding-top:8px
+}
+
+.pagination-dropdown-menu::before {
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:5px;
+background:transparent
+}
+
+.pagination-dropdown:hover .pagination-dropdown-menu {
+opacity:1;
+visibility:visible;
+pointer-events:auto
+}
+
+.pagination-dropdown-item {
+display:block;
+padding:10px 15px;
+color:#e0e0e0;
+text-decoration:none;
+transition:all .3s ease;
+text-align:center;
+font-weight:700
+}
+
+.pagination-dropdown-item:hover {
+background-color:#242424;
+color:#bb86fc
+}
+
+.pagination-dropdown-item.pagination-dropdown-active {
+background-color:#bb86fc;
+color:#121212
+}
+
 .content-wrapper {
 display:flex;
 flex:1
@@ -598,77 +765,6 @@ color:#fff
 .alert-info {
 background-color:#0288d1;
 color:#fff
-}
-
-.pagination-container {
-display:flex;
-justify-content:center;
-margin-top:-4px;
-margin-bottom:12px
-}
-
-.pagination {
-display:flex;
-list-style-type:none;
-padding:0;
-margin:0;
-background-color:#292929;
-border-radius:8px;
-overflow:hidden
-}
-
-.pagination li {
-margin:0
-}
-
-.pagination a,.pagination span {
-display:flex;
-align-items:center;
-justify-content:center;
-color:#e0e0e0;
-text-decoration:none;
-min-width:20px;
-height:20px
-}
-
-.pagination a:hover {
-background-color:#3c3c3c;
-color:#bb86fc;
-text-align:center
-}
-
-.pagination li.active span {
-background-color:#bb86fc;
-color:#121212!important
-}
-
-.pagination .disabled {
-color:#666;
-cursor:not-allowed
-}
-
-.pagination .next,.pagination .prev {
-font-size:14px
-}
-
-.pagination .prev::before {
-content:"◀--";
-margin-right:5px
-}
-
-.pagination .next::after {
-content:"--▶";
-margin-left:5px
-}
-
-.pagination .ellipsis {
-color:#666
-}
-
-.pagination a,.pagination span {
-padding:10px 15px;
-font-weight:700;
-transition:all .3s ease
 }
 
 .mnemonic-container {
@@ -10390,6 +10486,11 @@ color:#212121!important
 
 .orders-show-item-type.type-deaddrop {
 background-color:#3D0814
+}
+
+.orders-show-item-type.type-deleted {
+background-color:#9e9e9e;
+color:#212121!important
 }
 
 .orders-show-item-delivery-text-container {

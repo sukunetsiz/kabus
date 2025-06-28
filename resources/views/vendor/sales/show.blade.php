@@ -239,8 +239,10 @@
                                 @endif
                                 
                                 {{-- Display product type pill --}}
-                                <div class="orders-show-item-type {{ $item->product->type === 'digital' ? 'type-digital' : ($item->product->type === 'cargo' ? 'type-cargo' : 'type-deaddrop') }}">
-                                    @if($item->product->type === 'digital')
+                                <div class="orders-show-item-type {{ $item->product ? ($item->product->type === 'digital' ? 'type-digital' : ($item->product->type === 'cargo' ? 'type-cargo' : 'type-deaddrop')) : 'type-deleted' }}">
+                                    @if(!$item->product)
+                                        Product Deleted
+                                    @elseif($item->product->type === 'digital')
                                         Digital
                                     @elseif($item->product->type === 'cargo')
                                         Cargo
@@ -253,7 +255,7 @@
                                 
                                 {{-- Display category pill --}}
                                 <div class="orders-show-item-category">
-                                    {{ $item->product->category->name }}
+                                    {{ $item->product && $item->product->category ? $item->product->category->name : 'Uncategorized' }}
                                 </div>
                             </div>
                         </div>
