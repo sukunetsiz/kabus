@@ -140,6 +140,20 @@
                     </div>
                 </div>
             @endif
+
+            {{-- Vendor PGP Key Section --}}
+            <div class="vendors-show-pgp">
+                <h2>PGP Key</h2>
+                <div class="vendors-show-pgp-key-container">
+                    @if($vendor->pgpKey)
+                        <pre>{{ $vendor->pgpKey->public_key }}</pre>
+                    @else
+                        <div class="vendors-show-pgp-empty">
+                            <p>No PGP key added yet.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
         
         {{-- Vendor's All Reviews Section --}}

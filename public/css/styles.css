@@ -170,7 +170,7 @@ transition:all .3s ease
 transform:translateY(-2px)
 }
 
-.navbar-icon-svg {
+.navbar-icon-png {
 width:20px;
 height:20px;
 filter:brightness(0) saturate(100%) invert(88%) sepia(8%) saturate(15%) hue-rotate(160deg) brightness(95%) contrast(95%);
@@ -182,7 +182,7 @@ background-color:#bb86fc;
 border-color:#3c3c3c
 }
 
-.navbar-icon-btn.active .navbar-icon-svg {
+.navbar-icon-btn.active .navbar-icon-png {
 filter:brightness(0) saturate(100%) invert(7%) sepia(9%) saturate(848%) hue-rotate(205deg) brightness(98%) contrast(92%)
 }
 
@@ -4692,6 +4692,65 @@ transform:translateY(-1px)
 
 .vendors-show-product-link:hover::after {
 width:100%
+}
+
+.vendors-show-pgp {
+margin-top:30px;
+background-color:#292929;
+border-radius:12px;
+padding:25px;
+border:1px solid #3c3c3c;
+box-shadow:0 4px 20px #0000004d;
+width:50%;
+margin-left:auto;
+margin-right:auto
+}
+
+.vendors-show-pgp h2 {
+color:#bb86fc;
+font-size:24px;
+margin-top:0;
+margin-bottom:20px;
+text-align:center;
+padding-bottom:10px;
+border-bottom:2px dashed #3c3c3c
+}
+
+.vendors-show-pgp-key-container {
+background-color:#1e1e1e;
+border-radius:8px;
+border:1px solid #3c3c3c;
+overflow:hidden
+}
+
+.vendors-show-pgp-key-container pre {
+background-color:#1e1e1e;
+color:#e0e0e0;
+padding:20px;
+margin:0;
+font-size:13px;
+line-height:1.4;
+white-space:pre-wrap;
+word-wrap:break-word;
+overflow-x:auto;
+border:none;
+max-height:200px;
+overflow-y:auto
+}
+
+.vendors-show-pgp-empty {
+background-color:#1e1e1e;
+border-radius:8px;
+padding:30px;
+text-align:center;
+border:1px solid #3c3c3c
+}
+
+.vendors-show-pgp-empty p {
+color:#a0a0a0;
+font-size:16px;
+margin:0;
+font-style:italic
 }
 
 .product-card {

@@ -4,7 +4,7 @@
             <div class="navbar-left">
                 @auth
                     <a href="{{ route('home') }}" class="navbar-btn navbar-btn-home">
-                        <img src="{{ asset('icons/home.svg') }}" alt="Home" class="navbar-btn-icon">
+                        <img src="{{ asset('icons/home.png') }}" alt="Home" class="navbar-btn-icon">
                         Home
                     </a>
                 @endauth
@@ -14,7 +14,7 @@
                 <span class="navbar-brand">
                     @auth
                         <a href="{{ route('cart.index') }}" class="navbar-icon-btn {{ request()->routeIs('cart.*') ? 'active' : '' }}">
-                            <img src="{{ asset('icons/cart.svg') }}" alt="Cart" class="navbar-icon-svg">
+                            <img src="{{ asset('icons/cart.png') }}" alt="Cart" class="navbar-icon-png">
                             @if(auth()->user()->cartItems()->count() > 0)
                                 <span class="navbar-badge navbar-badge-cart">{{ auth()->user()->cartItems()->count() }}</span>
                             @endif
@@ -27,7 +27,7 @@
                     </span>
                     @auth
                         <a href="{{ route('notifications.index') }}" class="navbar-icon-btn {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
-                            <img src="{{ asset('icons/notifications.svg') }}" alt="Notifications" class="navbar-icon-svg">
+                            <img src="{{ asset('icons/notifications.png') }}" alt="Notifications" class="navbar-icon-png">
                             @if(auth()->user()->unread_notifications_count > 0)
                                 <span class="navbar-badge navbar-badge-notification">{{ auth()->user()->unread_notifications_count }}</span>
                             @endif
@@ -42,7 +42,7 @@
                         @csrf
                         <button type="submit" class="navbar-btn navbar-btn-logout">
                             Logout
-                            <img src="{{ asset('icons/logout.svg') }}" alt="Logout" class="navbar-btn-icon navbar-btn-icon-logout">
+                            <img src="{{ asset('icons/logout.png') }}" alt="Logout" class="navbar-btn-icon navbar-btn-icon-logout">
                         </button>
                     </form>
                 @endauth
