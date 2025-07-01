@@ -442,6 +442,22 @@ class Product extends Model
     }
     
     /**
+     * Get the featured status for this product.
+     */
+    public function featuredProduct()
+    {
+        return $this->hasOne(FeaturedProduct::class);
+    }
+    
+    /**
+     * Check if the product is featured.
+     */
+    public function isFeatured(): bool
+    {
+        return $this->featuredProduct()->exists();
+    }
+    
+    /**
      * Get the percentage of positive reviews for this product.
      * 
      * @return float|null

@@ -737,6 +737,70 @@ class AdminController extends Controller
                 ->with('error', 'Error deleting product. Please try again.');
         }
     }
+    
+    /**
+     * Feature a product.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function featureProduct(Product $product)
+    {
+        try {
+            // Check if product is already featured
+            if ($product->isFeatured()) {
+                return redirect()->route('admin.all-products')
+                    ->with('info', 'Product is already featured.');
+            }
+            
+            // Create the featured product record
+            \App\Models\FeaturedProduct::create([
+                'product_id' => $product->id,
+                'admin_id' => auth()->id()
+            ]);
+            
+            // Log the action
+            Log::info("Product featured by admin: {$product->id}");
+
+            return redirect()->route('admin.all-products')
+                ->with('success', 'Product featured successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error featuring product: ' . $e->getMessage());
+            return redirect()->route('admin.all-products')
+                ->with('error', 'Error featuring product. Please try again.');
+        }
+    }
+    
+    /**
+     * Unfeature a product.
+     *
+     * @param  \App\Models\Product  $product
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unfeatureProduct(Product $product)
+    {
+        try {
+            // Delete the featured product record
+            $featured = $product->featuredProduct;
+            
+            if (!$featured) {
+                return redirect()->route('admin.all-products')
+                    ->with('info', 'Product is not currently featured.');
+            }
+            
+            $featured->delete();
+            
+            // Log the action
+            Log::info("Product unfeatured by admin: {$product->id}");
+
+            return redirect()->route('admin.all-products')
+                ->with('success', 'Product unfeatured successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error unfeaturing product: ' . $e->getMessage());
+            return redirect()->route('admin.all-products')
+                ->with('error', 'Error unfeaturing product. Please try again.');
+        }
+    }
 
     /**
      * Show the form for editing a product.

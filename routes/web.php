@@ -256,6 +256,8 @@ Route::middleware(['auth', CheckBanned::class])->group(function () {
         Route::get('/admin/products/{product}/edit', [AdminController::class, 'editProduct'])->name('admin.products.edit');
         Route::patch('/admin/products/{product}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
         Route::delete('/admin/products/{product}', [AdminController::class, 'destroyProduct'])->name('admin.products.destroy');
+        Route::post('/admin/products/{product}/feature', [AdminController::class, 'featureProduct'])->name('admin.products.feature');
+        Route::post('/admin/products/{product}/unfeature', [AdminController::class, 'unfeatureProduct'])->name('admin.products.unfeature');
     });
 
     // -------------------------------------------------------------------------

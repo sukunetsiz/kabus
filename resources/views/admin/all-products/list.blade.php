@@ -124,8 +124,25 @@
                                 </td>
                                 <td class="all-products-index-actions">
                                     <a href="{{ route('admin.products.edit', $product) }}" class="all-products-index-btn all-products-index-btn-edit">Edit</a>
-                                    <form action="{{ route('admin.products.destroy', $product) }}" method="POST" style="display: inline;">
-                                        @csrf
+    
+                                    @if($product->isFeatured())
+                                        <form action="{{ route('admin.products.unfeature', $product) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="all-products-index-btn all-products-index-btn-unfeature">
+                                                Unfeature
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('admin.products.feature', $product) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="all-products-index-btn all-products-index-btn-feature">
+                                                Feature
+                                            </button>
+                                        </form>
+                                    @endif
+    
+                                    <form action="{{ route('admin.products.destroy', $product) }}" method="POST">
+                                       @csrf
                                         @method('DELETE')
                                         <button type="submit" class="all-products-index-btn all-products-index-btn-delete">
                                             Delete

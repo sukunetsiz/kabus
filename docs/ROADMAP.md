@@ -36,5 +36,5 @@ Following the v1.0 release, development will continue with additional milestones
 - [ ] Vendor experience (leveling) system.
 - [X] Direct‐message button on the product details page.
 - [X] All Reviews section on vendor profiles.
-- [ ] Add featured products section and admin panel control.
+- [X] Add featured products section and admin panel control.
 - [X] Vendor refund policy on both vendor and product details page.

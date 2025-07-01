@@ -54,10 +54,45 @@ class HomeController extends Controller
             ];
         }
         
+        // Get featured products
+        $featuredProducts = \App\Models\FeaturedProduct::getAllFeaturedProducts();
+        
+        // Format featured products similar to advertisements
+        $formattedFeaturedProducts = [];
+        foreach ($featuredProducts as $featured) {
+            // Skip featured products where product is soft-deleted
+            if (!$featured->product || $featured->product->trashed()) {
+                continue;
+            }
+            
+            // Get the formatted measurement unit
+            $measurementUnits = \App\Models\Product::getMeasurementUnits();
+            $formattedMeasurementUnit = $measurementUnits[$featured->product->measurement_unit] ?? $featured->product->measurement_unit;
+            
+            // Format product price in XMR
+            $productXmrPrice = (is_numeric($xmrPrice) && $xmrPrice > 0) 
+                ? $featured->product->price / $xmrPrice 
+                : null;
+            
+            // Get formatted options with XMR price
+            $formattedBulkOptions = $featured->product->getFormattedBulkOptions($xmrPrice);
+            $formattedDeliveryOptions = $featured->product->getFormattedDeliveryOptions($xmrPrice);
+            
+            $formattedFeaturedProducts[] = [
+                'product' => $featured->product,
+                'vendor' => $featured->product->user,
+                'measurement_unit' => $formattedMeasurementUnit,
+                'xmr_price' => $productXmrPrice,
+                'bulk_options' => $formattedBulkOptions,
+                'delivery_options' => $formattedDeliveryOptions
+            ];
+        }
+        
         return view('home', [
             'username' => Auth::user()->username,
             'popup' => $popup,
-            'adSlots' => $adSlots
+            'adSlots' => $adSlots,
+            'featuredProducts' => $formattedFeaturedProducts
         ]);
     }
 }

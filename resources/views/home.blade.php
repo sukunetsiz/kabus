@@ -19,76 +19,76 @@
 
 <div class="home-container">
     @if(count($adSlots) > 0)
-        <div class="home-advertisement-title-wrapper">
-            <h2 class="home-advertisement-heading">Advertised Products</h2>
+        <div class="home-highlight-title-wrapper">
+            <h2 class="home-highlight-heading">Advertised Products</h2>
         </div>
-        <div class="home-advertisement-container">
+        <div class="home-highlight-container">
             @for($i = 1; $i <= 8; $i++)
                 @if(isset($adSlots[$i]))
-                    <div class="home-advertisement-card">
+                    <div class="home-highlight-card">
                         {{-- Product Image --}}
-                        <div class="home-advertisement-image">
+                        <div class="home-highlight-image">
                             <img src="{{ $adSlots[$i]['product']->product_picture_url }}" 
                                  alt="{{ $adSlots[$i]['product']->name }}">
                         </div>
 
                         {{-- Product Details --}}
-                        <div class="home-advertisement-content">
-                            <div class="home-advertisement-header">
-                                <div class="home-advertisement-title-section">
-                                    <h3 class="home-advertisement-title">{{ $adSlots[$i]['product']->name }}</h3>
-                                    <div class="home-advertisement-badges">
-                                    <span class="home-advertisement-type home-advertisement-type-{{ $adSlots[$i]['product']->type }}">
+                        <div class="home-highlight-content">
+                            <div class="home-highlight-header">
+                                <div class="home-highlight-title-section">
+                                    <h3 class="home-highlight-title">{{ $adSlots[$i]['product']->name }}</h3>
+                                    <div class="home-highlight-badges">
+                                    <span class="home-highlight-type home-highlight-type-{{ $adSlots[$i]['product']->type }}">
                                         {{ ucfirst($adSlots[$i]['product']->type) }}
                                     </span>
-                                        <span class="home-advertisement-vendor">
-                                            <a href="{{ route('vendors.show', ['username' => $adSlots[$i]['vendor']->username]) }}" class="home-advertisement-vendor-link">
+                                        <span class="home-highlight-vendor">
+                                            <a href="{{ route('vendors.show', ['username' => $adSlots[$i]['vendor']->username]) }}" class="home-highlight-vendor-link">
                                                 {{ $adSlots[$i]['vendor']->username }}
                                             </a>
                                         </span>
-                                        <span class="home-advertisement-badge home-advertisement-category">
+                                        <span class="home-highlight-badge home-highlight-category">
                                             {{ $adSlots[$i]['product']->category->name }}
                                         </span>
                                     </div>
                                 </div>
                                 
-                                <div class="home-advertisement-price-section">
-                                    <div class="home-advertisement-price">
+                                <div class="home-highlight-price-section">
+                                    <div class="home-highlight-price">
                                         ${{ number_format($adSlots[$i]['product']->price, 2) }}
                                     </div>
                                     @if($adSlots[$i]['xmr_price'] !== null)
-                                        <div class="home-advertisement-xmr">
+                                        <div class="home-highlight-xmr">
                                             ≈ ɱ{{ number_format($adSlots[$i]['xmr_price'], 4) }}
                                         </div>
                                     @endif
                                 </div>
                             </div>
 
-                            <div class="home-advertisement-details">
-                                <div class="home-advertisement-info">
-                                    <div class="home-advertisement-stock">
+                            <div class="home-highlight-details">
+                                <div class="home-highlight-info">
+                                    <div class="home-highlight-stock">
                                         {{ number_format($adSlots[$i]['product']->stock_amount) }} 
                                         {{ $adSlots[$i]['measurement_unit'] }}
                                     </div>
 
-                                    <div class="home-advertisement-shipping">
+                                    <div class="home-highlight-shipping">
                                         {{ $adSlots[$i]['product']->ships_from }} ➜ {{ $adSlots[$i]['product']->ships_to }}
                                     </div>
 
                                     @if(!empty($adSlots[$i]['bulk_options']))
-                                        <div class="home-advertisement-bulk-preview">
+                                        <div class="home-highlight-bulk-preview">
                                             {{ count($adSlots[$i]['bulk_options']) }} Bulk Offers
                                         </div>
                                     @endif
 
-                                        <div class="home-advertisement-delivery-preview">
+                                        <div class="home-highlight-delivery-preview">
                                             {{ count($adSlots[$i]['delivery_options']) }} Delivery Options
                                         </div>
                                 </div>
 
-                                <div class="home-advertisement-action">
+                                <div class="home-highlight-action">
                                     <a href="{{ route('products.show', $adSlots[$i]['product']) }}" 
-                                       class="home-advertisement-button">
+                                       class="home-highlight-button">
                                         View Product
                                     </a>
                                 </div>
@@ -100,7 +100,87 @@
         </div>
     @endif
 
-    @if(count($adSlots) === 0)
+    @if(count($featuredProducts) > 0)
+        <div class="home-highlight-title-wrapper">
+            <h2 class="home-highlight-heading">Featured Products</h2>
+        </div>
+        <div class="home-highlight-container">
+            @foreach($featuredProducts as $featured)
+                <div class="home-highlight-card">
+                    {{-- Product Image --}}
+                    <div class="home-highlight-image">
+                        <img src="{{ $featured['product']->product_picture_url }}" 
+                             alt="{{ $featured['product']->name }}">
+                    </div>
+
+                    {{-- Product Details --}}
+                    <div class="home-highlight-content">
+                        <div class="home-highlight-header">
+                            <div class="home-highlight-title-section">
+                                <h3 class="home-highlight-title">{{ $featured['product']->name }}</h3>
+                                <div class="home-highlight-badges">
+                                <span class="home-highlight-type home-highlight-type-{{ $featured['product']->type }}">
+                                    {{ ucfirst($featured['product']->type) }}
+                                </span>
+                                    <span class="home-highlight-vendor">
+                                        <a href="{{ route('vendors.show', ['username' => $featured['vendor']->username]) }}" class="home-highlight-vendor-link">
+                                            {{ $featured['vendor']->username }}
+                                        </a>
+                                    </span>
+                                    <span class="home-highlight-badge home-highlight-category">
+                                        {{ $featured['product']->category->name }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="home-highlight-price-section">
+                                <div class="home-highlight-price">
+                                    ${{ number_format($featured['product']->price, 2) }}
+                                </div>
+                                @if($featured['xmr_price'] !== null)
+                                    <div class="home-highlight-xmr">
+                                        ≈ ɱ{{ number_format($featured['xmr_price'], 4) }}
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="home-highlight-details">
+                            <div class="home-highlight-info">
+                                <div class="home-highlight-stock">
+                                    {{ number_format($featured['product']->stock_amount) }} 
+                                    {{ $featured['measurement_unit'] }}
+                                </div>
+
+                                <div class="home-highlight-shipping">
+                                    {{ $featured['product']->ships_from }} ➜ {{ $featured['product']->ships_to }}
+                                </div>
+
+                                @if(!empty($featured['bulk_options']))
+                                    <div class="home-highlight-bulk-preview">
+                                        {{ count($featured['bulk_options']) }} Bulk Offers
+                                    </div>
+                                @endif
+
+                                    <div class="home-highlight-delivery-preview">
+                                        {{ count($featured['delivery_options']) }} Delivery Options
+                                    </div>
+                            </div>
+
+                            <div class="home-highlight-action">
+                                <a href="{{ route('products.show', $featured['product']) }}" 
+                                   class="home-highlight-button">
+                                    View Product
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    @if(count($adSlots) === 0 && count($featuredProducts) === 0)
     <div class="home-welcome-message">
         <h1 class="home-title">Welcome to Kabus</h1>
     
