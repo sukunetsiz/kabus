@@ -29,7 +29,7 @@
             <div class="support-create-form-group">
                 <div class="support-create-captcha-container">
                     <div class="support-create-captcha-label">CAPTCHA</div>
-                    <img class="support-create-captcha-image" src="{{ new Mobicms\Captcha\Image($captchaCode) }}" alt="CAPTCHA">
+                    <img class="support-create-captcha-image" src="{{ $captchaImage }}" alt="CAPTCHA">
                     <input type="text" name="captcha" id="captcha" required
                         class="support-create-captcha-input"
                         minlength="2" maxlength="8">

@@ -219,8 +219,12 @@ class AuthController extends Controller
     public function showRegisterForm()
     {
         $captchaCode = $this->captchaService->generateCode();
+        $captchaImage = $this->captchaService->generateImage($captchaCode);
         session(['captcha_code' => $captchaCode]);
-        return view('auth.register', ['captchaCode' => $captchaCode]);
+        return view('auth.register', [
+            'captchaCode' => $captchaCode,
+            'captchaImage' => $captchaImage
+        ]);
     }
 
     protected function getValidationRules(string $type = 'login'): array
@@ -368,8 +372,12 @@ class AuthController extends Controller
     public function showLoginForm()
     {
         $captchaCode = $this->captchaService->generateCode();
+        $captchaImage = $this->captchaService->generateImage($captchaCode);
         session(['captcha_code' => $captchaCode]);
-        return view('auth.login', ['captchaCode' => $captchaCode]);
+        return view('auth.login', [
+            'captchaCode' => $captchaCode,
+            'captchaImage' => $captchaImage
+        ]);
     }
 
     public function login(Request $request)

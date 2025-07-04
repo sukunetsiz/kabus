@@ -24,8 +24,6 @@ Built with PHP 8.3 and Laravel 11.
 - **Product Purchasing**: Integrated Monero payment system for secure and anonymous product transactions
 - **Return Address System**: Validation for user's Monero return addresses
 
-![Vendor Registration Payment](docs/1.png)
-
 ### Marketplace Functions
 - **User Dashboard**: Comprehensive control panel for account management
 - **Vendor Profiles**: Vendor pages with product listings
@@ -45,37 +43,37 @@ Built with PHP 8.3 and Laravel 11.
 - **Mnemonic Recovery**: Built-in mnemonic phrase generation for key recovery
 - **No JavaScript**: Built entirely with pure PHP and does not utilize JavaScript in any capacity
 
-### Other Screenshots
+### Screenshots
 
-![Products Page](docs/2.png)
+![Products Page](docs/1.png)
 ---
-![AdminPanel's User Page](docs/3.png)
+![AdminPanel's User Page](docs/2.png)
 ---
-![Account Page](docs/4.png)
+![Account Page](docs/3.png)
 ---
-![Support Page 1](docs/5.png)
+![Support Page 1](docs/4.png)
 ---
-![Support Page 2](docs/6.png)
+![Support Page 2](docs/5.png)
 ---
-![Products Page](docs/7.png)
+![Products Page](docs/6.png)
 ---
-![Cart Page](docs/8.png)
+![Cart Page](docs/7.png)
 ---
-![Return Addresses Page](docs/9.png)
+![Return Addresses Page](docs/8.png)
 ---
-![Sales Page](docs/10.png)
+![Sales Page](docs/9.png)
 ---
-![Advertisements Page](docs/11.png)
+![Advertisements Page](docs/10.png)
 ---
-![Vendors Page](docs/12.png)
+![Vendors Page](docs/11.png)
 ---
-![Settings Page](docs/13.png)
+![Settings Page](docs/12.png)
 ---
-![Messages Page](docs/14.png)
+![Messages Page](docs/13.png)
 ---
-![Create Pop-up Page](docs/15.png)
+![Create Pop-up Page](docs/14.png)
 ---
-![Dispute Details Page](docs/16.png)
+![Dispute Details Page](docs/15.png)
 ---
 <div align="center">
   <h1><a href="docs/ROADMAP.md">View the Roadmap</a></h1>

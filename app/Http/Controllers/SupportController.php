@@ -37,8 +37,12 @@ class SupportController extends Controller
     public function create()
     {
         $captchaCode = $this->captchaService->generateCode();
+        $captchaImage = $this->captchaService->generateImage($captchaCode);
         session(['captcha_code' => $captchaCode]);
-        return view('support.create', ['captchaCode' => $captchaCode]);
+        return view('support.create', [
+            'captchaCode' => $captchaCode,
+            'captchaImage' => $captchaImage
+        ]);
     }
 
     public function store(Request $request)
@@ -106,9 +110,10 @@ class SupportController extends Controller
 
             $messages = $supportRequest->messages()->with('user')->get();
             $captchaCode = $this->captchaService->generateCode();
+            $captchaImage = $this->captchaService->generateImage($captchaCode);
             session(['captcha_code' => $captchaCode]);
             
-            return view('support.show', compact('supportRequest', 'messages', 'captchaCode'));
+            return view('support.show', compact('supportRequest', 'messages', 'captchaCode', 'captchaImage'));
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             return redirect()->route('support.index')
                 ->with('error', 'You do not have permission to view this support request.');

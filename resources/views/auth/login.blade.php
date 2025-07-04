@@ -15,7 +15,7 @@
         <div class="form-group captcha-group">
             <div class="captcha-container">
                 <div class="captcha-label">CAPTCHA</div>
-                <img class="captcha-image" src="{{ new Mobicms\Captcha\Image($captchaCode) }}" alt="CAPTCHA Image">
+                <img class="captcha-image" src="{{ $captchaImage }}" alt="CAPTCHA Image">
                 <input type="text" id="captcha" name="captcha" required minlength="2" maxlength="8">
             </div>
         </div>

@@ -63,7 +63,7 @@
 
                     <div class="support-show-captcha-container">
                         <span class="support-show-captcha-label">CAPTCHA</span>
-                        <img class="support-show-captcha-image" src="{{ new Mobicms\Captcha\Image($captchaCode) }}" alt="CAPTCHA">
+                        <img class="support-show-captcha-image" src="{{ $captchaImage }}" alt="CAPTCHA">
                         <input type="text" name="captcha" id="captcha" required
                             class="support-show-captcha-input"
                             minlength="2" maxlength="8">
