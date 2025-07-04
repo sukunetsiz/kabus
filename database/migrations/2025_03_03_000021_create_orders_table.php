@@ -43,6 +43,8 @@ return new class extends Migration
             $table->decimal('buyer_refund_amount', 18, 12)->nullable();
             $table->string('buyer_refund_address')->nullable();
             $table->timestamp('buyer_refund_at')->nullable();
+            $table->boolean('payment_queued')->default(false);
+            $table->timestamp('payment_queued_at')->nullable();
         });
 
         Schema::create('order_items', function (Blueprint $table) {
