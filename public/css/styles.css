@@ -2036,7 +2036,7 @@ border-radius:8px;
 padding:20px;
 margin-top:20px;
 color:#e0e0e0;
-line-height:1.6;
+white-space:pre-wrap;
 text-align:center
 }
 
@@ -4481,7 +4481,6 @@ margin:0 auto
 
 .vendors-show-description-content p {
 color:#e0e0e0;
-line-height:1.6;
 white-space:pre-wrap
 }
 
@@ -4541,7 +4540,6 @@ text-align:center
 
 .vendors-show-policy-content p {
 color:#e0e0e0;
-line-height:1.6;
 white-space:pre-wrap
 }
 
@@ -5501,7 +5499,7 @@ transform:translateY(-2px)
 }
 
 .messages-show-container {
-max-width:800px;
+max-width:1000px;
 margin:20px auto;
 padding:0 20px
 }
@@ -5552,6 +5550,7 @@ background-color:#bb86fc
 .messages-show-text {
 color:#e0e0e0;
 margin:0;
+white-space:pre-wrap;
 line-height:1.4;
 font-size:15px
 }
@@ -5640,25 +5639,6 @@ margin:0 auto
 .messages-show-submit:hover {
 background-color:#96c;
 transform:translateY(-2px)
-}
-
-.messages-show-messages::-webkit-scrollbar {
-width:8px
-}
-
-.messages-show-messages::-webkit-scrollbar-track {
-background:#1e1e1e;
-border-radius:4px
-}
-
-.messages-show-messages::-webkit-scrollbar-thumb {
-background-color:#bb86fc;
-border-radius:4px;
-border:2px solid #1e1e1e
-}
-
-.messages-show-messages::-webkit-scrollbar-thumb:hover {
-background-color:#96c
 }
 
 .messages-rate-limit-wrapper {
@@ -7861,7 +7841,6 @@ position:relative
 
 .products-show-description-content {
 color:#e0e0e0;
-line-height:1.6;
 text-align:center;
 margin-top:5px
 }
@@ -8226,7 +8205,6 @@ border-radius:8px;
 padding:20px;
 border:1px solid #3c3c3c;
 color:#e0e0e0;
-line-height:1.6;
 text-align:center
 }
 
