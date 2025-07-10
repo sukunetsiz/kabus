@@ -1,26 +1,30 @@
-@extends('layouts.app')
-
+@extends('layouts.auth')
 @section('content')
-<div class="container">
-    <div class="pgp-confirm-container">
-        <h1 class="pgp-confirm-title">2-Step PGP Verification</h1>
-        <div class="pgp-confirm-card">
-            <div class="pgp-confirm-card-body">
-                <h5 class="pgp-confirm-card-title text-center">Encrypted Message</h5>
-                <pre class="pgp-confirm-encrypted-message">{{ $encryptedMessage }}</pre>
-                <p class="pgp-confirm-instruction text-center">Please decrypt this message using your private key and enter the decrypted message below.</p>
-                <form method="POST" action="{{ route('pgp.2fa.verify') }}" class="pgp-confirm-form">
-                    @csrf
-                    <div class="pgp-confirm-form-group">
-                        <label for="decrypted_message" class="pgp-confirm-label text-center">Decrypted Message</label>
-                        <textarea name="decrypted_message" id="decrypted_message" class="pgp-confirm-textarea" rows="1" required autocomplete="off"></textarea>
-                    </div>
-                    <div class="pgp-confirm-submit-wrapper">
-                        <button type="submit" class="pgp-confirm-submit-btn">Complete 2-Step PGP Verification</button>
-                    </div>
-                </form>
+<div class="auth-two-fa-container">
+    <div class="auth-two-fa-inner">
+        <h1 class="auth-two-fa-title">2-Step PGP Verification</h1>
+        <div class="auth-two-fa-content">
+            <div class="auth-two-fa-message-section">
+                <h5 class="auth-two-fa-message-title">Encrypted Message</h5>
+                <pre class="auth-two-fa-encrypted-message">{{ $encryptedMessage }}</pre>
+                <p class="auth-two-fa-instruction">Please decrypt this message using your private key and enter the decrypted message below.</p>
             </div>
+            
+            <form method="POST" action="{{ route('pgp.2fa.verify') }}" class="auth-two-fa-form">
+                @csrf
+                <div class="auth-two-fa-form-group">
+                    <label for="decrypted_message" class="auth-two-fa-label">Decrypted Message</label>
+                    <textarea name="decrypted_message" id="decrypted_message" rows="1" required autocomplete="off" class="auth-two-fa-textarea"></textarea>
+                </div>
+                <div class="auth-two-fa-submit-group">
+                    <button type="submit" class="auth-two-fa-submit-btn">Complete 2-Step PGP Verification</button>
+                </div>
+                <div class="auth-two-fa-links">
+                    <a href="{{ route('login') }}">Back to Login</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 @endsection

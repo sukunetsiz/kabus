@@ -483,8 +483,7 @@ class AuthController extends Controller
             'password_reset_expires_at' => now()->addMinutes(60),
         ]);
 
-        return redirect()->route('password.reset', ['token' => $token])
-            ->with('status', 'Please reset your password.');
+        return redirect()->route('password.reset', ['token' => $token]);
     }
 
     /**
