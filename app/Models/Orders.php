@@ -535,65 +535,105 @@ class Orders extends Model
      * 
      * @return bool
      */
-    public function processVendorPayment()
-    {
-        // Only process payment if we have received Monero for this order
-        if (!$this->total_received_xmr || $this->total_received_xmr <= 0) {
-            \Illuminate\Support\Facades\Log::error("Order {$this->id} has no received XMR to pay vendor");
-            return false;
-        }
-
-        try {
-            // Calculate vendor payment amount (total received minus commission)
-            // Commission is subtotal * commission_percentage, but we have it already calculated in the order
-            $commissionRatio = $this->commission / $this->subtotal;
-            $vendorPaymentAmount = $this->total_received_xmr * (1 - $commissionRatio);
-
-            // Get vendor
-            $vendor = $this->vendor;
-            if (!$vendor) {
-                \Illuminate\Support\Facades\Log::error("Order {$this->id} has no associated vendor");
-                return false;
-            }
-
-            // Get a random return address for the vendor
-            $returnAddress = $vendor->returnAddresses()->inRandomOrder()->first();
-            if (!$returnAddress) {
-                \Illuminate\Support\Facades\Log::error("Vendor {$vendor->id} has no return addresses for payment");
-                return false;
-            }
-
-            // Initialize Monero wallet RPC
-            $config = config('monero');
-            $walletRPC = new \MoneroIntegrations\MoneroPhp\walletRPC(
-                $config['host'],
-                $config['port'],
-                $config['ssl'],
-                30000  // 30 second timeout
-            );
-
-            // Process payment to vendor
-            $result = $walletRPC->transfer([
-                'address' => $returnAddress->monero_address,
-                'amount' => $vendorPaymentAmount,
-                'priority' => 1
-            ]);
-
-            // Log successful payment
-            \Illuminate\Support\Facades\Log::info("Vendor payment processed: Order {$this->id}, Amount: {$vendorPaymentAmount} XMR, Address: {$returnAddress->monero_address}");
-
-            // Update order with payment details
-            $this->vendor_payment_amount = $vendorPaymentAmount;
-            $this->vendor_payment_address = $returnAddress->monero_address;
-            $this->vendor_payment_at = now();
-            $this->save();
-
-            return true;
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("Error processing vendor payment for order {$this->id}: " . $e->getMessage());
-            return false;
-        }
+   public function processVendorPayment()
+{
+    if (!$this->total_received_xmr || $this->total_received_xmr <= 0) {
+        \Log::error("Order {$this->id} has no received XMR");
+        return false;
     }
+
+    try {
+        $commissionRatio = $this->commission / $this->subtotal;
+        $vendorPaymentAmount = $this->total_received_xmr * (1 - $commissionRatio);
+
+        $vendor = $this->vendor;
+        if (!$vendor) {
+            \Log::error("Order {$this->id} has no vendor");
+            return false;
+        }
+
+        $returnAddress = $vendor->returnAddresses()->inRandomOrder()->first();
+        if (!$returnAddress) {
+            \Log::error("Vendor {$vendor->id} has no return addresses");
+            return false;
+        }
+
+        $config = config('monero');
+        $walletRPC = new \MoneroIntegrations\MoneroPhp\walletRPC(
+            $config['host'],
+            $config['port'],
+            $config['ssl'],
+            30000
+        );
+
+        // Add 1% fee buffer
+        $feeBuffer = 0.01;
+        $maxRetries = 3;
+        $retryDelay = 5; // seconds
+
+        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+            try {
+                $balance = $walletRPC->get_balance();
+                $unlockedBalance = $balance['unlocked_balance'] / 1e12;
+                
+                // Check if sufficient balance exists (amount + buffer)
+                if ($unlockedBalance < ($vendorPaymentAmount + $feeBuffer)) {
+                    \Log::warning("Insufficient balance. Required: " 
+                        . ($vendorPaymentAmount + $feeBuffer) 
+                        . " XMR, Available: $unlockedBalance XMR");
+                    
+                    // Try partial payment if possible
+                    if ($unlockedBalance > $feeBuffer) {
+                        $vendorPaymentAmount = $unlockedBalance - $feeBuffer;
+                        \Log::info("Attempting partial payment: $vendorPaymentAmount XMR");
+                    } else {
+                        throw new \Exception("Insufficient funds even for partial payment");
+                    }
+                }
+
+                $result = $walletRPC->transfer([
+                    'address' => $returnAddress->monero_address,
+                    'amount' => $vendorPaymentAmount,
+                    'priority' => 1
+                ]);
+
+                // Log success and update order
+                \Log::info("Vendor payment successful", [
+                    'order' => $this->id,
+                    'amount' => $vendorPaymentAmount,
+                    'address' => $returnAddress->monero_address
+                ]);
+
+                $this->update([
+                    'vendor_payment_amount' => $vendorPaymentAmount,
+                    'vendor_payment_address' => $returnAddress->monero_address,
+                    'vendor_payment_at' => now()
+                ]);
+
+                return true;
+            } catch (\Exception $e) {
+                \Log::error("Payment attempt $attempt failed: " . $e->getMessage());
+                
+                if ($attempt < $maxRetries) {
+                    sleep($retryDelay);
+                    // Refresh balance before retry
+                    $balance = $walletRPC->get_balance();
+                } else {
+                    // Queue for later processing if final attempt fails
+                    \App\Jobs\ProcessVendorPayment::dispatch($this)
+                        ->delay(now()->addMinutes(30));
+                    
+                    \Log::info("Payment queued for order {$this->id}");
+                }
+            }
+        }
+        
+        return false;
+    } catch (\Exception $e) {
+        \Log::error("Payment processing failed: " . $e->getMessage());
+        return false;
+    }
+}
 
     /**
      * Process automatic refund to buyer when an order is cancelled.
