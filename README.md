@@ -94,9 +94,6 @@ For more information about Kabus-X, including services, custom development, and 
 ---
 ![Create Cargo Product Page](docs/16.png)
 ---
-<div align="center">
-  <h1><a href="docs/ROADMAP.md">View the Roadmap</a></h1>
-</div>
 
 <div align="center">
   <h1><a href="docs/CONNECTING-MONERO-RPC.md">Monero Wallet RPC Guide</a></h1>
